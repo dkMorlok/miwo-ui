@@ -5344,13 +5344,14 @@ module.exports = PopoverSubmit;
 
 
 },{"../../buttons/Button":6,"../../tip/Popover":79}],54:[function(require,module,exports){
+(function (global){
 var MiwoUi;
 
-MiwoUi = {
-  version: 1.0
-};
+miwo.registerExtension('miwoui', require('./DiExtension'));
 
-window.MiwoUi = MiwoUi;
+MiwoUi = {};
+
+global.MiwoUi = MiwoUi;
 
 MiwoUi.DiExtension = require('./DiExtension');
 
@@ -5383,6 +5384,7 @@ MiwoUi.Grid = MiwoUi.grid.Grid;
 MiwoUi.utils = require('./utils');
 
 
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./DiExtension":1,"./buttons":9,"./dropdown":13,"./form":36,"./grid":50,"./input":66,"./selection":73,"./tabs":76,"./utils":87,"./window":93}],55:[function(require,module,exports){
 var Checkbox,
   __hasProp = {}.hasOwnProperty,

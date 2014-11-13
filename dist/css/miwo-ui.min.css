@@ -38,12 +38,13 @@ template{display:none}
 .colorfield .form-control{width:60px;padding:2px 5px;float:left}
 .colorfield .btn{margin-left:5px;float:left}
 .checkboxlist .checkbox-inline,.radiolist .radio-inline{padding-right:20px;margin-left:0;margin-right:10px}
-.form-control.has-error{border-color:#a94442!important;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);color:#a94442}
+.form-control.has-error{border-color:#ebccd1!important;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);color:#a94442}
 .form-group .help-block.has-error{color:#a94442}
 .form-group.input-fill input{width:100%}
 .form-horizontal .checkbox,.form-horizontal .radio{margin-bottom:15px;margin-left:-15px;padding-top:0}
 .form-horizontal .checkbox label,.form-horizontal .radio label{padding-left:0}
 .form-horizontal .checkbox .checker,.form-horizontal .radio .checker{margin-left:-4px}
+.form-horizontal .control-label-required{position:absolute;right:0;color:#a94442}
 .form-inline .form-group{padding-right:5px;margin-bottom:5px}
 .form-inline .form-group .control-label{display:none}
 .tooltip{display:none;z-index:100000;margin:0!important}
@@ -67,9 +68,6 @@ template{display:none}
 .grid-col-actions .btn{margin-left:5px}
 .grid-popover-submit .btn{margin-bottom:5px}
 .window{position:absolute}
-.margin-no{margin:0!important}
-.screen-off{width:1px!important;height:1px!important;clip:rect(0 0 0 0)!important;border:0!important;margin:0!important;padding:0!important;overflow:hidden!important;position:absolute!important;outline:0!important;left:0!important;top:0!important}
-.screen-mask{position:fixed;top:0;right:0;left:0;bottom:0;min-height:100%;min-width:100%;height:auto;width:auto;opacity:0;z-index:1000}
 .colorpicker{position:relative;height:260px}
 .colorpicker-bar,.colorpicker-map,.colorpicker-utils{float:left;position:relative;text-align:center;height:256px}
 .colorpicker-map{width:256px}
@@ -80,3 +78,6 @@ template{display:none}
 .colorpicker-preview{width:70px;height:70px;padding:0;margin:0;border:1px solid #aaa;box-shadow:0 0 5px #ddd}
 .colorpicker-utils input{margin-top:20px;width:75px;text-transform:lowercase}
 .colorpicker-utils .btn{position:absolute;bottom:0;right:0;width:75px}
+.margin-no{margin:0!important}
+.screen-off{width:1px!important;height:1px!important;clip:rect(0 0 0 0)!important;border:0!important;margin:0!important;padding:0!important;overflow:hidden!important;position:absolute!important;outline:0!important;left:0!important;top:0!important}
+.screen-mask{position:fixed;top:0;right:0;left:0;bottom:0;min-height:100%;min-width:100%;height:auto;width:auto;opacity:0;z-index:1000}
