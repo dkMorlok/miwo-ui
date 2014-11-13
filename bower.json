@@ -9,7 +9,8 @@
 		"dist/css/miwo-ui.min.css",
 		"dist/js/miwo-ui.js",
 		"dist/js/miwo-ui.min.js",
-		"dist/img/**/*.*"
+		"dist/img/colorpicker/bar.png",
+		"dist/img/colorpicker/map.png"
 	],
 	"ignore": [
 		"node_modules",
