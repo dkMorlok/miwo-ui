@@ -1,0 +1,3 @@
+[submodule "examples/miwo"]
+	path = examples/miwo
+	url = https://github.com/dkMorlok/miwo.git

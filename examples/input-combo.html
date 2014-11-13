@@ -4,12 +4,11 @@
 	<title>Combo element</title>
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/miwo/dist/miwo.css">
-	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
-	<link rel="stylesheet" href="/demo/demo.css">
+	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="examples.css">
 
 	<script src="/mootools/mootools-core.js"></script>
 	<script src="/mootools/mootools-more.js"></script>
@@ -146,9 +145,7 @@
 	}
 
 	miwo.ready(function() {
-		var configurator = miwo.createConfigurator();
-		configurator.setExtension('miwoui', new MiwoUi.DiExtension());
-		var injector = configurator.createInjector();
+		miwo.init();
 
 
 		var combo1 = createCombo({id:'combo1a', multiple: true, placeholder:'Select item'});

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Horizontal</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="examples.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+</head>
+<body id="body">
+
+<div class="container">
+	<div id="form" style="max-width: 600px; margin: auto;">
+
+	</div>
+</div>
+
+<script>
+miwo.ready(function() {
+	miwo.init();
+
+	var window = new Miwo.FormWindow({
+		title: 'Form Window'
+	});
+	window.form.addText('name', 'Username');
+	window.form.addText('email', 'Email', {required: true});
+	window.form.addCheckbox('check', 'I want to be checked');
+	window.addCloseButton('Cancel');
+	window.addSubmitButton('Save');
+	window.show();
+
+	window.on('success', function(win, form) {
+		window.close();
+		var values = form.getValues();
+		miwo.dialog.alert('Form Success', 'Your email was: '+values.email);
+	});
+});
+</script>
+
+</body>
+</html>

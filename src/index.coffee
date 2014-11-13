@@ -1,5 +1,7 @@
-MiwoUi = {version:1.0}
-window.MiwoUi = MiwoUi
+miwo.registerExtension('miwoui', require './DiExtension')
+
+MiwoUi = {}
+global.MiwoUi = MiwoUi
 
 # di
 MiwoUi.DiExtension = require './DiExtension'

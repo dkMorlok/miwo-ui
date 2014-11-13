@@ -4,11 +4,11 @@
 	<title>Form Horizontal</title>
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/miwo/dist/miwo.css">
-	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="examples.css">
 
 	<script src="/mootools/mootools-core.js"></script>
 	<script src="/mootools/mootools-more.js"></script>
@@ -25,9 +25,7 @@
 
 <script>
 miwo.ready(function() {
-	var configurator = miwo.createConfigurator();
-	configurator.setExtension('miwoui', new MiwoUi.DiExtension());
-	var injector = configurator.createInjector();
+	miwo.init();
 
 	var form = new Miwo.Form({
 		rendererType: 'inline'

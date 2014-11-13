@@ -4,17 +4,15 @@
 	<title>Form Horizontal</title>
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/flags/flags.css">
-	<link rel="stylesheet" href="/miwo/dist/miwo.css">
-	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
-	<link rel="stylesheet" href="/demo/demo.css">
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="fontawesome/css/font-awesome.css">
+	<link rel="stylesheet" href="miwo/dist/miwo.css">
+	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="examples.css">
 
-	<script src="/mootools/mootools-core.js"></script>
-	<script src="/mootools/mootools-more.js"></script>
-	<script src="/miwo/dist/miwo.js"></script>
-	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+	<script src="mootools/mootools-core.js"></script>
+	<script src="miwo/dist/miwo.js"></script>
+	<script src="../dist/js/miwo-ui.js"></script>
 </head>
 <body>
 
@@ -29,10 +27,7 @@
 
 <script>
 miwo.ready(function() {
-	var configurator = miwo.createConfigurator();
-	configurator.setExtension('miwoui', new MiwoUi.DiExtension());
-	configurator.setConfig({params:{baseUrl: '/miwo-ui'}});
-	var injector = configurator.createInjector();
+	miwo.init();
 
 	var form = new MiwoUi.Form();
 	form.addText('name', {

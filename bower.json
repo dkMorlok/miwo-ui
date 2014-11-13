@@ -4,6 +4,9 @@
 	"version": "0.0.1",
 	"keywords": ["framework", "mvc", "coffeescript", "components"],
 	"homepage": "http://www.miwojs.com/components/ui",
+	"authors": [
+		"Dusan Kmet <morlokdk@gmail.com>"
+	],
 	"main": [
 		"dist/css/miwo-ui.css",
 		"dist/css/miwo-ui.min.css",
