@@ -9,17 +9,17 @@
 		"dist/css/miwo-ui.min.css",
 		"dist/js/miwo-ui.js",
 		"dist/js/miwo-ui.min.js",
-		"dist/img/colorpicker/bar.png",
-		"dist/img/colorpicker/map.png"
+		"dist/img/**/*.*"
 	],
 	"ignore": [
-		"**/.*",
 		"node_modules",
 		"bower_components",
 		"less",
 		"src",
 		"img",
-		"tests"
+		"tests",
+		"gulpfile.js",
+		"package.json"
 	],
 	"dependencies": {
 		"bootstrap": "latest",
