@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Combo element</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="/demo/demo.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+	<h1>Combo Element</h1>
+	<hr>
+	<div style="max-width: 500px;">
+		<h2>Multiple value select</h2>
+		<div class="example">
+			<h4>Combo with prompt false</h4>
+			<div class="example-body"><select id="combo1a"></select></div>
+		</div>
+		<div class="example">
+			<h4>Combo with prompt true</h4>
+			<div class="example-body"><select id="combo1b"></select></div>
+		</div>
+		<div class="example">
+			<h4>Combo disabled</h4>
+			<div class="example-body"><select id="combo1c"></select></div>
+		</div>
+		<div class="example">
+			<h4>Combo with custom height <code>80px</code>. <br/>You can set <code>auto</code> for auto-input resize</h4>
+			<div class="example-body"><select id="combo1d"></select></div>
+		</div>
+
+		<h2>Single value select</h2>
+		<div class="example">
+			<h4>Combo with prompt false</h4>
+			<div class="example-body"><select id="combo2a"></select></div>
+		</div>
+		<div class="example">
+			<h4>Combo with prompt true</h4>
+			<div class="example-body"><select id="combo2b"></select></div>
+		</div>
+		<div class="example">
+			<h4>Combo disabled</h4>
+			<div class="example-body"><select id="combo2c"></select></div>
+		</div>
+
+		<h2>Value not set prompt true/false</h2>
+		<div class="example">
+			<h4>Combo with prompt true, no value set, visible placeholder</h4>
+			<div class="example-body"><select id="combo3a"></select></div>
+		</div>
+		<div class="example">
+			<h4>Combo with prompt false, no value set - auto initialized with first value</h4>
+			<div class="example-body"><select id="combo3b"></select></div>
+		</div>
+
+		<h2>Input Groups</h2>
+		<div class="example">
+			<h4>Combo with addons</h4>
+			<div class="example-body">
+				<div class="input-group">
+					<div class="input-group-addon">@</div>
+					<select id="combo4a"></select>
+					<span class="input-group-btn">
+						<button id="combo4aBtn"></button>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="example">
+			<h4>Combo with dropdown button</h4>
+			<div class="example-body">
+				<div class="input-group">
+					<div class="input-group-btn">
+						<button id="combo4bBtn"></button>
+					</div>
+					<select id="combo4b"></select>
+				</div>
+			</div>
+		</div>
+
+		<h2>With labels</h2>
+		<div class="example">
+			<h4>Combo with label</h4>
+			<div class="example-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Email</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">@</div>
+								<select id="combo5a"></select>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<h2>Validation states</h2>
+		<div class="example">
+			<h4>Success combo</h4>
+			<div class="example-body">
+				<div class="form-group has-success">
+					<select id="combo6a"></select>
+				</div>
+			</div>
+		</div>
+		<div class="example">
+			<h4>Warning combo</h4>
+			<div class="example-body">
+				<div class="form-group has-warning">
+					<select id="combo6b"></select>
+				</div>
+			</div>
+		</div>
+		<div class="example">
+			<h4>Error combo</h4>
+			<div class="example-body">
+				<div class="form-group has-error">
+					<select id="combo6c"></select>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function createCombo(options) {
+		var combo = new MiwoUi.input.Combo(options);
+		combo.addOption('combo', 'Combo box', '<b>SUPER</b> combo box');
+		combo.addOption('select', 'Select box');
+		combo.addOption('text', 'Text input');
+		combo.addOption('textarea', 'Text area');
+		return combo
+	}
+
+	miwo.ready(function() {
+		var configurator = miwo.createConfigurator();
+		configurator.setExtension('miwoui', new MiwoUi.DiExtension());
+		var injector = configurator.createInjector();
+
+
+		var combo1 = createCombo({id:'combo1a', multiple: true, placeholder:'Select item'});
+		combo1.setValue(['combo', 'text']);
+		combo1.replace();
+
+
+		var combo1b = createCombo({id:'combo1b', multiple: true, placeholder:'Select item', prompt: true});
+		combo1b.setValue(['combo', 'text']);
+		combo1b.replace();
+
+
+		var combo1c = createCombo({id:'combo1c', multiple: true, placeholder:'Select item', prompt: true, disabled: true});
+		combo1c.setValue(['combo', 'text']);
+		combo1c.replace();
+
+
+		var combo1c = createCombo({id:'combo1d', multiple: true, placeholder:'Select item', prompt: true, height: 80});
+		combo1c.setValue(['combo', 'text']);
+		combo1c.replace();
+
+
+		var combo2 = createCombo({id:'combo2a', placeholder:'Select item'});
+		combo2.setValue('textarea');
+		combo2.replace();
+
+
+		var combo2b = createCombo({id:'combo2b', placeholder:'Select item', prompt:true});
+		combo2b.setValue('combo');
+		combo2b.replace();
+
+
+		var combo2c = createCombo({id:'combo2c', placeholder:'Select item', disabled: true});
+		combo2c.setValue('combo');
+		combo2c.replace();
+
+
+		var combo3a = createCombo({id:'combo3a', placeholder:'Select item', prompt: true});
+		combo3a.replace();
+
+
+		var combo3b = createCombo({id:'combo3b', placeholder:'Select item', prompt: false});
+		combo3b.replace();
+
+
+		var combo4a = new createCombo({id:'combo4a', placeholder:'Select item', prompt: false});
+		combo4a.replace();
+
+		var combo4aBtn = new MiwoUi.buttons.Button({id:'combo4aBtn', icon:'search'});
+		combo4aBtn.on('click', function() {
+			combo4a.open();
+		});
+		combo4aBtn.replace();
+
+
+		var combo4b = createCombo({id:'combo4b', placeholder:'Select item', prompt: false});
+		combo4b.replace();
+
+		var combo4bBtn = new MiwoUi.buttons.DropdownButton({id:'combo4bBtn', text:'Action'});
+		combo4bBtn.addItem('action', 'Action');
+		combo4bBtn.addItem('action2', 'Another action');
+		combo4bBtn.addDivider();
+		combo4bBtn.addItem('action3', 'Something else here');
+		combo4bBtn.replace();
+
+
+		var combo5a = createCombo({id:'combo5a', placeholder:'Select item', prompt: false});
+		combo5a.replace();
+
+
+		var combo6a = createCombo({id:'combo6a', placeholder:'Select item', prompt: false});
+		combo6a.replace();
+
+		var combo6b = createCombo({id:'combo6b', placeholder:'Select item', prompt: false});
+		combo6b.replace();
+
+		var combo6c = createCombo({id:'combo6c', placeholder:'Select item', prompt: false});
+		combo6c.replace();
+	});
+</script>
+
+</body>
+</html>

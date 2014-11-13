@@ -1,0 +1,66 @@
+/* Grids */
+.grid {
+	width: 100%;
+	max-width: 100%;
+	.grid-headers {
+		th {
+			padding: 8px;
+			line-height: 1.4;
+			vertical-align: top;
+			font-size: 13px;
+		}
+	}
+	.grid-body {
+		margin-bottom: 5px;
+	}
+	.grid-rows {
+		td {
+			padding: 8px;
+			line-height: 1.4;
+			vertical-align: top;
+			border-top: 1px solid #ddd;
+			font-size: 12px;
+		}
+	}
+	.checkbox {
+		margin-top: -6px;
+		margin-bottom: 0px;
+		.checker {
+			height: 20px;
+		}
+		label {
+			padding-left: 0px;
+		}
+	}
+}
+.grid-nowrap {
+	.grid-rows {
+		td {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+}
+.grid-selected {
+	td {
+		background-color: #d9edf7;
+	}
+}
+.grid-operations {
+	select {
+		width: 140px;
+		float: left;
+		margin-right: 10px;
+	}
+}
+.grid-col-actions {
+	.btn {
+		margin-left: 5px;
+	}
+}
+.grid-popover-submit {
+	.btn {
+		margin-bottom: 5px;
+	}
+}

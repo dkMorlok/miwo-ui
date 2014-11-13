@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tabs</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+
+	<style>
+		.tab-pane {padding: 15px;}
+	</style>
+</head>
+<body>
+
+<script>
+	miwo.ready(function() {
+		var configurator = miwo.createConfigurator();
+		configurator.setExtension('miwoui', new MiwoUi.DiExtension());
+		var injector = configurator.createInjector();
+
+
+		// create by js
+		var tabs = new Miwo.Tabs({
+			align: 'horizontal'
+		});
+		tabs.addPanel('tab1', {
+			title: 'Tab 1',
+			template: '#tabs1Tpl'
+		});
+		tabs.addPanel('tab2', {
+			title: 'Tab 2',
+			template: '#tabs2Tpl'
+		});
+		tabs.render('tabs1');
+
+
+		// create layout from template
+		var tabs2 = new Miwo.Tabs({
+			id: 'tabs2',
+			active: 'tab2'
+		});
+		tabs2.addPanel('tab1', {
+			title: 'Tab 1',
+			template: '#tabs1Tpl'
+		});
+		tabs2.addPanel('tab2', {
+			title: 'Tab 2',
+			template: '#tabs2Tpl'
+		});
+		tabs2.render('tabs2');
+
+	});
+</script>
+
+
+<template id="tabs1Tpl">
+	Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+	Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.
+</template>
+
+<template id="tabs2Tpl">
+	Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua,
+	retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica.
+	Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry
+	richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+</template>
+
+
+<div class="container">
+	<h2>Horizontal Tabs</h2>
+	<div id="tabs1"></div>
+	<h2>Vertical Tabs</h2>
+	<div id="tabs2"></div>
+</div>
+
+</body>
+</html>

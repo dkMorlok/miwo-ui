@@ -1,0 +1,29 @@
+{
+	"name": "miwo-ui",
+	"description": "UI components based on miwo framework",
+	"version": "0.0.1",
+	"keywords": ["framework", "mvc", "coffeescript", "components"],
+	"homepage": "http://www.miwojs.com/components/ui",
+	"main": [
+		"dist/css/miwo-ui.css",
+		"dist/css/miwo-ui.min.css",
+		"dist/js/miwo-ui.js",
+		"dist/js/miwo-ui.min.js",
+		"dist/img/colorpicker/bar.png",
+		"dist/img/colorpicker/map.png"
+	],
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"less",
+		"src",
+		"img",
+		"tests"
+	],
+	"dependencies": {
+		"bootstrap": "latest",
+		"fontawesome": "latest",
+		"miwo": "latest"
+	}
+}

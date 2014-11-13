@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Horizontal</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="/demo/demo.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+	<h1>Form Controls</h1>
+	<hr>
+
+	<div class="example">
+		<div id="form" style="max-width: 600px;"></div>
+	</div>
+</div>
+
+<script>
+miwo.ready(function() {
+	var configurator = miwo.createConfigurator();
+	configurator.setExtension('miwoui', new MiwoUi.DiExtension());
+	configurator.setConfig({params:{baseUrl: '/miwo-ui'}});
+	var injector = configurator.createInjector();
+
+	var form = new MiwoUi.Form();
+	form.addText('name', {
+		label: 'Username',
+		required: true
+	});
+	form.addText('email', {
+		label: 'Email',
+		type: 'email',
+		placeholder: 'Your email',
+		prepend: '@'
+	});
+	form.addDate('date', {
+		label: 'Date',
+		type: 'date'
+	});
+	form.addDate('date2', {
+		label: 'Datetime',
+		type: 'datetime'
+	});
+	form.addDate('date3', {
+		label: 'Custom Datetime Short',
+		type: [/*'day',*/ 'month', /*'year',*/ 'time']
+	});
+	form.addDate('date4', {
+		label: 'Custom Datetime Full',
+		type: ['date', 'time']
+	});
+	form.addNumber('number', {
+		label: 'Number',
+		min: 0,
+		max: 1000
+	});
+	form.addSlider('slider', {
+		label: 'Slider',
+		step: 10,
+		min: 0,
+		max: 100,
+		value: 50
+	});
+	form.addCheckbox('check', {
+		label: 'I want to be checked'
+	});
+	form.addTextarea('textarea', {
+		label: 'Textarea',
+		height: 70,
+		resize: 'none'
+	});
+	form.addCombo('combo', {
+		label: 'Combo Select',
+		items: ['one', 'two', 'three', 'four', 'five', 'six'],
+		value: 'two'
+	});
+	form.addCheckboxList('checklist', {
+		label: 'Check List',
+		items: {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'},
+		inline: true,
+		value:['one', 'six']
+	});
+	form.addRadioList('radiolist', {
+		label: 'Radio List',
+		items: {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'},
+		inline: true,
+		value:'two'
+	});
+	form.addButtonGroup('buttongroup', {
+		label: 'button group',
+		items: {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'},
+		value: 'three'
+	});
+	form.addButtonGroup('buttongroup2', {
+		label: 'button group',
+		items: {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'},
+		toggle: 'checkbox',
+		value: ['one', 'two', 'six']
+	});
+	form.addColor('color', {
+		label: 'Select color',
+		value: '#428bca'
+	});
+	form.addColor('colordisabled', {
+		label: 'Select color (disabled)',
+		value: '#428bca',
+		disabled: true
+	});
+	form.addSubmit('submit', {
+		label: 'Submit me!'
+	});
+
+	form.render('form');
+});
+</script>
+
+</body>
+</html>

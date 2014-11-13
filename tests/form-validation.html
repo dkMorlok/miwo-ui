@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Validations</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="/demo/demo.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+	<h1>Form Validations</h1>
+	<hr>
+
+	<div class="example">
+		<div id="form" style="max-width: 600px;"></div>
+	</div>
+</div>
+
+<script>
+miwo.ready(function() {
+	var configurator = miwo.createConfigurator();
+	configurator.setExtension('miwoui', new MiwoUi.DiExtension());
+	var injector = configurator.createInjector();
+
+	var comboItems = ['one', 'two', 'three', 'four', 'five', 'six'];
+	var checkItems = {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'};
+	var radioItems = {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'};
+	var onFormSuccess = function(form) {
+		miwo.dialog.alert('Form Success', 'Your values:'+JSON.stringify(form.getValues()));
+	}
+
+	var form = new MiwoUi.Form();
+	form.addText('name', {
+		label: 'Username',
+		append: '<span class="glyphicon glyphicon-search"></span>',
+		required: true
+	});
+	form.addText('email', {
+		label: 'Email (not required)',
+		type: 'email',
+		placeholder: 'your email',
+		prepend: '@'
+	});
+	form.addCheckbox('check', {
+		required: true,
+		label: 'I want to be checked'
+	});
+	form.addSubmit('submit', {
+		label: 'Submit me!'
+	});
+	form.render('form');
+	form.on('success', onFormSuccess);
+});
+</script>
+
+</body>
+</html>

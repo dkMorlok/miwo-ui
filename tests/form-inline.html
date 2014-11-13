@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Horizontal</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+</head>
+<body id="body">
+
+<div class="container">
+	<div id="form" style="max-width: 600px; margin: auto;">
+
+	</div>
+</div>
+
+<script>
+miwo.ready(function() {
+	var configurator = miwo.createConfigurator();
+	configurator.setExtension('miwoui', new MiwoUi.DiExtension());
+	var injector = configurator.createInjector();
+
+	var form = new Miwo.Form({
+		rendererType: 'inline'
+	});
+	form.addText('name', 'Username')
+	form.addText('email', 'Email');
+	form.addCheckbox('check', 'Check me');
+	form.addSubmit('submit', 'Submit me!');
+	form.render($('form'));
+
+	form.on('success', function(form) {
+		console.log('SUCCESS, values:', form.getValues());
+	});
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grid</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="/demo/demo.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+</head>
+<body>
+
+<script>
+	miwo.ready(function() {
+		var configurator = miwo.createConfigurator();
+		configurator.setExtension('miwoui', new MiwoUi.DiExtension());
+		var injector = configurator.createInjector();
+
+		// create data store
+		var store = new Miwo.Store({
+			name: 'user',
+			fields: {
+				id: {type:'int'},
+				name: {type:'string'},
+				role: {type:'string'}
+			},
+			sort: {
+				role: 'asc'
+			}
+		});
+		store.setData([
+			{id: 1, name: 'Dusan Kmet', role: 'admin'},
+			{id: 2, name: 'Petr Janosik', role: 'agent'},
+			{id: 3, name: 'John Doe', role: 'agent'},
+			{id: 4, name: 'Lorem dawd awd awd awdaw daiw dhaiw dhaiwdh aiwdhai dhaiwd awidh aiwdha iwdha ihwaidmin', role: 'root'},
+			{id: 5, name: 'Miro Kmet', role: 'admin'}
+		]);
+
+
+		// show data in grid
+		var grid = new MiwoUi.Grid({
+			groupBy: 'role'
+		});
+		grid.setStore(store);
+
+		// columns
+		grid.addTextColumn('name', {
+			text: 'Username'
+		});
+		grid.addTextColumn('role', {
+			text: 'Agent Role',
+			align:'right',
+			width: 150
+		});
+
+		// actions
+		grid.addAction('edit', {
+			text: 'Edit',
+			inline: true,
+			callback: function(record) {
+				miwo.dialog.alert('Edit', 'You want to edit record: '+record.id);
+			}
+		});
+		grid.addAction('delete', {
+			text: 'Delete',
+			confirm: true,
+			callback: function(record) {
+				store.remove(record);
+			}
+		});
+		grid.addAction('export', {
+			text: 'Export',
+			divider: true
+			// handled in action event
+		});
+
+		// operations
+		grid.addOperation('delete', {
+			text: 'Delete rows',
+			confirm: true,
+			callback:function(records) {
+				store.remove(records);
+			}
+		});
+		grid.addOperation('export', {
+			text: 'Export rows'
+			// handled in action event
+		});
+
+		grid.on('action', function(grid, name, records) {
+			if(name == 'export') {
+				var ids = [];
+				records.forEach(function(r){ ids.push(r.id) });
+				miwo.dialog.alert('Export', 'You want to export record: '+ids.join(', '));
+			}
+		});
+
+		grid.render('grid');
+	});
+</script>
+
+<div id="grid" style="max-width: 900px; margin: 20px;"></div>
+
+</body>
+</html>

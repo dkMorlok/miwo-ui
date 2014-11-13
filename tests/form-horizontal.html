@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Horizontal</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/flags/flags.css">
+	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="/miwo-ui/dist/css/miwo-ui.css">
+	<link rel="stylesheet" href="/demo/demo.css">
+
+	<script src="/mootools/mootools-core.js"></script>
+	<script src="/mootools/mootools-more.js"></script>
+	<script src="/miwo/dist/miwo.js"></script>
+	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+	<h1>Form Horizontal</h1>
+	<hr>
+
+	<h2>Default inputs</h2>
+	<div class="example">
+		<div id="form" style="max-width: 600px;"></div>
+	</div>
+
+	<h2>Advanced inputs</h2>
+	<div class="example">
+		<div id="form2" style="max-width: 600px;"></div>
+	</div>
+
+	<h2>Custom template</h2>
+	<div class="example">
+		<div id="form3" style="max-width: 600px;"></div>
+		<template id="form3Tpl">
+			<div miwo-group="email" class="form-group">
+
+			</div>
+			<div class="form-group">
+				<div miwo-controls="checklist" class="col-sm-10 col-sm-offset-2">
+
+				</div>
+			</div>
+			<div class="form-group">
+				<label miwo-label="radiolist" class="col-sm-2 control-label">Radio list</label>
+				<div class="col-sm-10">
+					<div miwo-control="radiolist"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label miwo-label="name" class="col-sm-2 control-label">Username</label>
+				<div class="col-sm-10">
+					<div miwo-input="name"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label miwo-label="combo" class="col-sm-4 control-label">Combo Select</label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<div class="input-group-addon">@</div>
+						<input miwo-input="combo">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12" miwo-reference="buttonsEl"></div>
+			</div>
+		</template>
+	</div>
+</div>
+
+<script>
+miwo.ready(function() {
+	var configurator = miwo.createConfigurator();
+	configurator.setExtension('miwoui', new MiwoUi.DiExtension());
+	var injector = configurator.createInjector();
+
+	var comboItems = ['one', 'two', 'three', 'four', 'five', 'six'];
+	var checkItems = {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'};
+	var radioItems = {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'};
+	var onFormSuccess = function(form) {
+		console.log(form.getValues());
+	}
+
+	var form = new MiwoUi.Form();
+	form.addText('name', {
+		label: 'Username',
+		append: '<span class="glyphicon glyphicon-search"></span>'
+	});
+	form.addText('email', {
+		label: 'Email',
+		type: 'email',
+		placeholder: 'your email',
+		prepend: '@'
+	});
+	form.addCheckbox('check', {
+		label: 'I want to be checked'
+	});
+	form.addSelect('select', {
+		label: 'Default Select',
+		items: comboItems,
+		value: 'two'
+	});
+	form.addSubmit('submit', {
+		label: 'Submit me!'
+	});
+	form.render('form');
+	form.on('success', onFormSuccess);
+
+
+	var form2 = new MiwoUi.Form();
+	form2.addText('name', {
+		label: 'Username',
+		buttons: [{
+			text:'Go!'
+		}]
+	});
+	form2.addCombo('combo', {
+		label: 'Combo Select',
+		items: comboItems,
+		value: 'two'
+	});
+	form2.addCheckboxList('checklist', {
+		label: 'Check List',
+		items: checkItems,
+		inline: true,
+		value:['one', 'six']
+	});
+	form2.addRadioList('radiolist', {
+		label: 'Radio List',
+		items: radioItems,
+		inline: true,
+		value:'two'
+	});
+	form2.addSubmit('submit', {
+		label: 'Submit me!'
+	});
+	form2.render('form2');
+	form2.on('success', onFormSuccess);
+
+
+	var form3 = new MiwoUi.Form({
+		template:'#form3Tpl'
+	});
+	form3.addText('email', {
+		label: 'Email address',
+		placeholder: 'Email address',
+		prepend: '@'
+	});
+	form3.addText('name', {
+		label: 'Username',
+		append: '<span class="glyphicon glyphicon-search"></span>'
+	});
+	form3.addCombo('combo', {
+		multiple: true,
+		label: 'Combo Select',
+		items: comboItems,
+		value: ['one', 'two']
+	});
+	form3.addCheckboxList('checklist', {
+		label: 'Check List',
+		items: checkItems,
+		inline: true,
+		value:['one', 'six'],
+		help:'this is some help text for checklist'
+	});
+	form3.addRadioList('radiolist', {
+		label: 'Radio List',
+		items: radioItems,
+		inline: true,
+		value:'two'
+	});
+	form3.addSubmit('submit', {
+		label: 'Submit me!'
+	});
+	form3.render('form3');
+	form3.on('success', onFormSuccess);
+});
+</script>
+
+</body>
+</html>
