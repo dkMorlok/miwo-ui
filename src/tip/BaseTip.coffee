@@ -42,6 +42,7 @@ class BaseTip extends Miwo.Container
 
 	hide: ->
 		if !@visible then return
+		@visible = false
 		@emit('hide', this)
 		@el.hide()
 		return
@@ -49,9 +50,8 @@ class BaseTip extends Miwo.Container
 
 	close: ->
 		if !@visible then return
-		@visible = false
-		@emit('close', this)
 		@hide()
+		@emit('close', this)
 		@destroy()
 		return
 

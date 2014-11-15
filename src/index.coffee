@@ -15,6 +15,9 @@ MiwoUi.dropdown = require './dropdown'
 # inputs
 MiwoUi.input = require './input'
 
+# pickers
+MiwoUi.picker = require './picker'
+
 # form
 MiwoUi.form = require './form'
 MiwoUi.Form = MiwoUi.form.container.Form
@@ -36,4 +39,7 @@ MiwoUi.grid = require './grid'
 MiwoUi.Grid = MiwoUi.grid.Grid
 
 # utils
-MiwoUi.utils = require('./utils')
+MiwoUi.utils = require './utils'
+
+# tips, toolbars, popover
+MiwoUi.tip = require './tip'

@@ -1,6 +1,4 @@
 Button = require '../buttons/Button'
-Popover = require '../tip/Popover'
-ColorPicker = require '../picker/Color'
 
 
 class ColorInput extends Miwo.Component
@@ -66,44 +64,40 @@ class ColorInput extends Miwo.Component
 
 
 	openPicker: ->
-		if @popover then return
-		@popover = @createPicker()
+		@popover = @createPicker()  if !@popover
+		@popover.target = @inputEl
 		@popover.show()
+		picker = @popover.get('picker')
+		picker.setColor(@getValue())
+		@mon picker, 'colorchange', 'onPickerColorChange'
+		@mon picker, 'selected', 'onPickerColorSelected'
 		return
 
 
-	closePicker: () ->
-		if !@popover then return
-		@popover.close()
-		@popover = null
+	hidePicker: () ->
+		@popover.hide()
+		picker = @popover.get('picker')
+		@mun picker, 'colorchange', 'onPickerColorChange'
+		@mun picker, 'selected', 'onPickerColorSelected'
 		return
 
 
 	createPicker: () ->
-		popover = new Popover
-			title: 'Select color'
-			target: @inputEl
-			styles: {maxWidth: 500}
+		# use shared picker from pickerManager
+		return miwo.pickers.get('color')
 
-		popover.on "close", () =>
-			@closePicker()
-			return
 
-		picker = @popover.add('picker', new ColorPicker())
-		picker.setColor(@getValue())
+	onPickerColorChange: (picker, hex) ->
+		@emit("colorchange", this, hex)
+		@setValue("#" + hex)
+		return
 
-		picker.on "colorchange", (picker, hex) =>
-			@emit("colorchange", this, hex)
-			@setValue("#" + hex)
-			return
 
-		picker.on "selected", (picker, hex) =>
-			@emit('changed', this, hex)
-			@setValue("#" + hex)
-			@closePicker()
-			return
-
-		return popover
+	onPickerColorSelected: (picker, hex) ->
+		@emit('changed', this, hex)
+		@setValue("#" + hex)
+		@hidePicker()
+		return
 
 
 	getInputEl: () ->
@@ -112,6 +106,11 @@ class ColorInput extends Miwo.Component
 
 	getInputId: () ->
 		return @id+'-input'
+
+
+	doDestroy: () ->
+		@popover = null
+		super
 
 
 module.exports = ColorInput

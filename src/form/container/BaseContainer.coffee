@@ -10,6 +10,7 @@ class BaseContainer extends Miwo.Container
 
 
 	@registerControl: (controlName, fn) ->
+		if !fn then throw new Error("Error in registry control #{controlName}, constructor is undefined")
 		addMethod = 'add'+controlName.capitalize()
 		@prototype[addMethod] = (name, config = {}) ->
 			return @add(name, new fn(config))

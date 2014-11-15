@@ -15,6 +15,7 @@
     "gulp-newer": "~0.3.0",
     "gulp-imagemin": "~1.2.1",
     "caching-coffeeify": "~0.4.0",
-    "run-sequence": "~1.0.1"
+    "run-sequence": "~1.0.1",
+    "gulp-optimizebrowserify": "~0.0.1"
   }
 }

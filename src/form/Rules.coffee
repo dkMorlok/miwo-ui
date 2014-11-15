@@ -34,7 +34,7 @@ class Rule
 
 		if !@message
 			if Type.isString(@operation)
-				@message = Locale.get("miwo.rules." + @operation) || "Error"
+				@message = miwo.tr("miwo.rules." + @operation) || "Error"
 			else
 				@message = ""
 

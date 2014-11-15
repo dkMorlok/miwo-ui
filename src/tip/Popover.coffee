@@ -9,11 +9,13 @@ class Popover extends BaseTip
 	content: ''
 	baseCls: 'popover'
 	screenMask: null
+	closeMode: 'close'
 
 
 	afterInit: () ->
 		super()
-		@screenMask = new ScreenMask => @close()
+		@screenMask = new ScreenMask =>
+			if @closeMode is 'hide' then @hide() else @close()
 		return
 
 

@@ -23,6 +23,9 @@ RowSelector = require './selection/RowSelector'
 # utils
 Notificator = require './utils/Notificator'
 
+# pickers
+PickerManager = require './picker/Manager'
+
 
 class MiwoUiExtension extends Miwo.InjectorExtension
 
@@ -79,6 +82,10 @@ class MiwoUiExtension extends Miwo.InjectorExtension
 
 		# utils
 		injector.define 'notificator', Notificator
+			.setGlobal()
+
+		# pickers
+		injector.define 'pickers', PickerManager
 			.setGlobal()
 		return
 
