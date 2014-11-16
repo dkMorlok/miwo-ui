@@ -1,7 +1,7 @@
 {
 	"name": "miwo-ui",
 	"description": "UI components based on miwo framework",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"keywords": ["framework", "mvc", "coffeescript", "components"],
 	"homepage": "http://www.miwojs.com/components/ui",
 	"authors": [
