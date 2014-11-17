@@ -159,11 +159,9 @@ Popover = (function(_super) {
     return Popover.__super__.constructor.apply(this, arguments);
   }
 
-  Popover.inject = ['popover'];
-
   Popover.prototype.selector = '[data-toggle="popover"]';
 
-  Popover.prototype.popover = null;
+  Popover.prototype.popover = Popover.inject('popover');
 
   Popover.prototype.init = function(body) {
     body.on("mouseenter:relay(" + this.selector + ")", (function(_this) {
@@ -219,11 +217,9 @@ Tooltip = (function(_super) {
     return Tooltip.__super__.constructor.apply(this, arguments);
   }
 
-  Tooltip.inject = ['tooltip'];
-
   Tooltip.prototype.selector = '[data-toggle="tooltip"]';
 
-  Tooltip.prototype.tooltip = null;
+  Tooltip.prototype.tooltip = Tooltip.inject('tooltip');
 
   Tooltip.prototype.init = function(body) {
     body.on("mouseenter:relay(" + this.selector + ")", (function(_this) {
@@ -8908,7 +8904,7 @@ DialogFactory = (function() {
     okBtn = new Button({
       name: 'ok',
       type: "primary",
-      text: (btnText ? btnText : Locale.get("miwo.ok")),
+      text: (btnText ? btnText : miwo.tr("miwo.dialog.ok")),
       handler: function() {
         if (cb) {
           cb(true);
@@ -8925,7 +8921,7 @@ DialogFactory = (function() {
     okBtn = new Button({
       name: 'ok',
       type: "primary",
-      text: (okBtnText ? okBtnText : Locale.get("miwo.ok")),
+      text: (okBtnText ? okBtnText : miwo.tr("miwo.dialog.ok")),
       handler: function() {
         if (cb) {
           cb(true);
@@ -8936,7 +8932,7 @@ DialogFactory = (function() {
     cancelBtn = new Button({
       name: 'cancel',
       type: 'default',
-      text: (noBtnText ? noBtnText : Locale.get("miwo.cancel")),
+      text: (noBtnText ? noBtnText : miwo.tr("miwo.dialog.cancel")),
       handler: function() {
         if (cb) {
           cb(false);

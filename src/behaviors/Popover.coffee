@@ -1,9 +1,7 @@
 class Popover extends Miwo.Object
 
-	@inject: ['popover']
-
 	selector: '[data-toggle="popover"]'
-	popover: null
+	popover: @inject('popover')
 
 
 	init: (body) ->

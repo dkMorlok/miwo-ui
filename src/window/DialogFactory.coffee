@@ -19,7 +19,7 @@ class DialogFactory
 		okBtn = new Button
 			name: 'ok'
 			type: "primary"
-			text: (if btnText then btnText else Locale.get("miwo.ok"))
+			text: (if btnText then btnText else miwo.tr("miwo.dialog.ok"))
 			handler: ()->
 				if cb then cb(true)
 				dialog.close()
@@ -33,7 +33,7 @@ class DialogFactory
 		okBtn = new Button
 			name: 'ok'
 			type: "primary"
-			text: (if okBtnText then okBtnText else Locale.get("miwo.ok"))
+			text: (if okBtnText then okBtnText else miwo.tr("miwo.dialog.ok"))
 			handler: ()->
 				if cb then cb(true)
 				dialog.close()
@@ -42,7 +42,7 @@ class DialogFactory
 		cancelBtn = new Button
 			name: 'cancel'
 			type: 'default'
-			text: (if noBtnText then noBtnText else Locale.get("miwo.cancel"))
+			text: (if noBtnText then noBtnText else miwo.tr("miwo.dialog.cancel"))
 			handler: ()->
 				if cb then cb(false)
 				dialog.close()

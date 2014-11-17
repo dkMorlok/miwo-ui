@@ -1,9 +1,7 @@
 class Tooltip extends Miwo.Object
 
-	@inject: ['tooltip']
-
 	selector: '[data-toggle="tooltip"]'
-	tooltip: null
+	tooltip: @inject('tooltip')
 
 
 	init: (body) ->
