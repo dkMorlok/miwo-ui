@@ -15,7 +15,7 @@ var newer = require('gulp-newer');
 
 var paths = {
 	css: {
-		src: 'less/miwo-ui.less',
+		src: 'less/index.less',
 		target: 'miwo-ui.css',
 		distDir: './dist/css/'
 	},
@@ -68,6 +68,7 @@ gulp.task('compile-css', function() {
 	return gulp.src(paths.css.src)
 		.pipe(pipes.createPlumber())
 		.pipe(less())
+		.pipe(rename(paths.css.target))
 		.pipe(gulp.dest(paths.css.distDir));
 });
 

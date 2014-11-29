@@ -21,7 +21,7 @@ CheckSelector = require './selection/CheckSelector'
 RowSelector = require './selection/RowSelector'
 
 # utils
-Notificator = require './utils/Notificator'
+Notificator = require './notify/Notificator'
 
 # pickers
 PickerManager = require './picker/Manager'

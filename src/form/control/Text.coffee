@@ -16,4 +16,10 @@ class TextControl extends BaseTextControl
 		return
 
 
+	onSpecialkey: (control, key, e) ->
+		if key is 'enter'
+			@setValue(@getRawValue(), true)
+		return
+
+
 module.exports = TextControl

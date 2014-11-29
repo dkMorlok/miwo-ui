@@ -1,45 +1,47 @@
 miwo.registerExtension('miwoui', require './DiExtension')
 
-MiwoUi = {}
-global.MiwoUi = MiwoUi
+Miwo.ui = {}
 
-# di
-MiwoUi.DiExtension = require './DiExtension'
+# notifications
+Miwo.notify = require './notify'
 
 # buttons
-MiwoUi.buttons = require './buttons'
+Miwo.buttons = require './buttons'
 
 # dropdown
-MiwoUi.dropdown = require './dropdown'
+Miwo.dropdown = require './dropdown'
 
 # inputs
-MiwoUi.input = require './input'
+Miwo.input = require './input'
 
 # pickers
-MiwoUi.picker = require './picker'
+Miwo.picker = require './picker'
 
 # form
-MiwoUi.form = require './form'
-MiwoUi.Form = MiwoUi.form.container.Form
+Miwo.form = require './form'
+Miwo.Form = Miwo.form.container.Form
 
 # window
-MiwoUi.window = require './window'
-MiwoUi.Window = MiwoUi.window.Window
-MiwoUi.FormWindow = MiwoUi.window.FormWindow
+Miwo.window = require './window'
+Miwo.Window = Miwo.window.Window
+Miwo.FormWindow = Miwo.window.FormWindow
 
 # tabs
-MiwoUi.tabs = require './tabs'
-MiwoUi.Tabs = MiwoUi.tabs.Tabs
+Miwo.tabs = require './tabs'
+Miwo.Tabs = Miwo.tabs.Tabs
 
 # selections
-MiwoUi.selection = require './selection'
+Miwo.selection = require './selection'
 
 # grid
-MiwoUi.grid = require './grid'
-MiwoUi.Grid = MiwoUi.grid.Grid
-
-# utils
-MiwoUi.utils = require './utils'
+Miwo.grid = require './grid'
+Miwo.Grid = Miwo.grid.Grid
 
 # tips, toolbars, popover
-MiwoUi.tip = require './tip'
+Miwo.tip = require './tip'
+
+# di
+Miwo.ui.DiExtension = require './DiExtension'
+
+# utils
+Miwo.ui.utils = require './utils'

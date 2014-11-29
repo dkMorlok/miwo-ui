@@ -30,7 +30,7 @@ class Operations extends Miwo.Component
 		@select.addOption(action.name, action.text)  for name,action of @actions
 
 		@submit = new Button
-			text: Locale.get("miwo.grid.execute") || 'Do'
+			text: miwo.tr("miwo.grid.execute") || 'Do'
 			handler: =>
 				action = @actions[@select.getValue()]
 				@onOperationSubmit(action)
@@ -44,10 +44,10 @@ class Operations extends Miwo.Component
 			@grid.onOperationSubmit(action)
 		else
 			@popover = new PopoverSubmit
-				renderTo: @grid.el
+				renderTo: miwo.body
 				target: @submit.el
-				title: Locale.get("miwo.grid.confirm") || 'Confirm',
-				placement: action.confirmPlacement
+				title: miwo.tr("miwo.grid.confirm") || 'Confirm'
+				placement: action.confirmPlacement || 'top'
 				onSubmit: () => @grid.onOperationSubmit(action)
 			@popover.show()
 		return

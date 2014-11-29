@@ -4,10 +4,10 @@
 	max-width: 100%;
 	.grid-headers {
 		th {
-			padding: 8px;
+			padding: @grid-cell-padding;
 			line-height: 1.4;
 			vertical-align: top;
-			font-size: 13px;
+			font-size: @grid-th-size;
 		}
 	}
 	.grid-body {
@@ -15,11 +15,11 @@
 	}
 	.grid-rows {
 		td {
-			padding: 8px;
+			padding: @grid-cell-padding;
 			line-height: 1.4;
 			vertical-align: top;
-			border-top: 1px solid #ddd;
-			font-size: 12px;
+			border-top: 1px solid @grid-border-color;
+			font-size: @grid-td-size;
 		}
 	}
 	.checkbox {
@@ -44,10 +44,11 @@
 }
 .grid-selected {
 	td {
-		background-color: #d9edf7;
+		background-color: @grid-selected-bg;
 	}
 }
 .grid-operations {
+	margin-left: 15px;
 	select {
 		width: 140px;
 		float: left;
@@ -56,11 +57,11 @@
 }
 .grid-col-actions {
 	.btn {
-		margin-left: 5px;
+		margin-left: @grid-action-indent;
 	}
 }
 .grid-popover-submit {
 	.btn {
-		margin-bottom: 5px;
+		margin-bottom: @grid-action-indent;
 	}
 }

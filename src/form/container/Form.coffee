@@ -12,10 +12,19 @@ class Form extends BaseContainer
 	rendererOptions: null
 
 
-	beforeInit: () ->
+	beforeInit: ->
 		super
 		@form = this
 		@el = 'form'
+		return
+
+
+	afterInit: ->
+		super
+		@keyListener = new Miwo.utils.KeyListener(@el, 'keydown')
+		@keyListener.on 'enter', =>
+			@submit()
+			return true
 		return
 
 
@@ -140,6 +149,7 @@ class Form extends BaseContainer
 		for el in @getElements("[miwo-controls]")
 			control = @get(el.getAttribute("miwo-controls"), true)
 			control.controlsEl = el
+			control.labelRendered = true
 			@detectControlGroupEl(control, el, contentEl)
 
 		# find rendered input control
@@ -183,7 +193,7 @@ class Form extends BaseContainer
 		return
 
 
-	getButtonsEl: () ->
+	getButtonsEl: ->
 		if !@buttonsEl
 			ct = new Element 'div',
 				parent: @getContentEl()
@@ -195,11 +205,15 @@ class Form extends BaseContainer
 		return @buttonsEl
 
 
-	getRenderer: () ->
+	getRenderer: ->
 		if !@renderer
 			@renderer = miwo.service('formRendererFactory').create(@rendererType, @rendererOptions)
 		return @renderer
 
+
+	doDestroy: ->
+		@keyListener.destroy()
+		super
 
 
 module.exports = Form

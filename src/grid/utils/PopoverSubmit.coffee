@@ -6,6 +6,7 @@ class PopoverSubmit extends Popover
 
 	onSubmit: null
 	onCancel: null
+	width: 140
 
 	doInit: () ->
 		super()

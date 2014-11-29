@@ -3,6 +3,7 @@ Button = require '../buttons/Button'
 
 class Window extends Miwo.Container
 
+	isWindow: true
 	xtype: 'window'
 	closeMode: 'hide'
 	closeOnClickOut: true
@@ -11,6 +12,7 @@ class Window extends Miwo.Container
 	minimizable: false
 	title: ''
 	autoCenter: true
+	preventAutoRender: true
 
 	# True to make the window modal and mask everything behind it when displayed, false
 	# to display it without restricting access to other UI elements.

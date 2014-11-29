@@ -4,7 +4,15 @@ body {
 template {
   display: none;
 }
-/* Forms */
+.colorfield .form-control {
+  width: 60px;
+  padding: 2px 5px;
+  float: left;
+}
+.colorfield .btn {
+  margin-left: 5px;
+  float: left;
+}
 .checkbox .checker,
 .radio .checker {
   width: 24px;
@@ -45,48 +53,15 @@ template {
 .radio.disabled .checker {
   color: #cccccc;
 }
-.slider {
-  position: relative;
-  padding-top: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
-  cursor: pointer;
+.checkboxlist .checkbox-inline {
+  padding-right: 20px;
+  margin-left: 0px;
+  margin-right: 10px;
 }
-.slider .slider-track {
-  height: 12px;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
-  background: white;
-}
-.slider .slider-selection {
-  width: 0px;
-  height: 10px;
-  border-radius: 4px;
-  background: #eeeeee;
-}
-.slider .slider-knob {
-  position: absolute;
-  left: 0px;
-  top: 6px;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background: #ffffff;
-  border: 1px solid #cccccc;
-}
-.slider .slider-knob:hover,
-.slider .slider-knob.active {
-  background: #428bca;
-  border-color: #357ebd;
-}
-.slider.disabled {
-  opacity: 0.8;
-  cursor: text;
-}
-.slider.disabled .slider-knob:hover,
-.slider.disabled .slider-knob.active {
-  background: #ffffff;
-  border: 1px solid #cccccc;
+.radiolist .radio-inline {
+  padding-right: 20px;
+  margin-left: 0px;
+  margin-right: 10px;
 }
 .combo {
   -webkit-transition: border-color ease-in-out 0.15s;
@@ -209,24 +184,48 @@ template {
 .combo.disabled .combo-value i {
   color: #777777;
 }
-.colorfield .form-control {
-  width: 60px;
-  padding: 2px 5px;
-  float: left;
+.slider {
+  position: relative;
+  padding-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: pointer;
 }
-.colorfield .btn {
-  margin-left: 5px;
-  float: left;
+.slider .slider-track {
+  height: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background: white;
 }
-.checkboxlist .checkbox-inline {
-  padding-right: 20px;
-  margin-left: 0px;
-  margin-right: 10px;
+.slider .slider-selection {
+  width: 0px;
+  height: 10px;
+  border-radius: 4px;
+  background: #eeeeee;
 }
-.radiolist .radio-inline {
-  padding-right: 20px;
-  margin-left: 0px;
-  margin-right: 10px;
+.slider .slider-knob {
+  position: absolute;
+  left: 0px;
+  top: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+}
+.slider .slider-knob:hover,
+.slider .slider-knob.active {
+  background: #428bca;
+  border-color: #357ebd;
+}
+.slider.disabled {
+  opacity: 0.8;
+  cursor: text;
+}
+.slider.disabled .slider-knob:hover,
+.slider.disabled .slider-knob.active {
+  background: #ffffff;
+  border: 1px solid #cccccc;
 }
 .form-control.has-error {
   border-color: #ebccd1 !important;
@@ -242,7 +241,6 @@ template {
 .form-horizontal .radio,
 .form-horizontal .checkbox {
   margin-bottom: 15px;
-  margin-left: -15px;
   padding-top: 0px;
 }
 .form-horizontal .radio label,
@@ -257,6 +255,10 @@ template {
   position: absolute;
   right: 0px;
   color: #a94442;
+}
+.form-horizontal .checkbox-inline,
+.form-horizontal .radio-inline {
+  margin-left: -15px;
 }
 .form-inline .form-group {
   padding-right: 5px;
@@ -278,7 +280,7 @@ template {
   margin-left: 5px;
 }
 /* Tabs */
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .tabs-horizontal .nav-tabs {
     border-bottom: 0;
   }
@@ -292,15 +294,15 @@ template {
   }
   .tabs-horizontal .nav-tabs > li.active a,
   .tabs-horizontal .nav-tabs > li.active a:hover {
-    background: #FFF;
-    border: 1px solid #DDD;
-    border-right-color: #FFF;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-right-color: #ffffff;
     margin-right: -1px;
     position: relative;
     z-index: 1;
   }
   .tabs-horizontal .tab-content {
-    border-left: 1px solid #DDD;
+    border-left: 1px solid #dddddd;
     margin-left: -31px;
     min-height: 20em;
     position: relative;
@@ -316,7 +318,7 @@ template {
   padding: 8px;
   line-height: 1.4;
   vertical-align: top;
-  font-size: 13px;
+  font-size: 12px;
 }
 .grid .grid-body {
   margin-bottom: 5px;
@@ -325,7 +327,7 @@ template {
   padding: 8px;
   line-height: 1.4;
   vertical-align: top;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #dddddd;
   font-size: 12px;
 }
 .grid .checkbox {
@@ -344,7 +346,10 @@ template {
   white-space: nowrap;
 }
 .grid-selected td {
-  background-color: #d9edf7;
+  background-color: #e1edf7;
+}
+.grid-operations {
+  margin-left: 15px;
 }
 .grid-operations select {
   width: 140px;

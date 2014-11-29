@@ -66,6 +66,12 @@ class HorizontalRenderer
 		if !controlsEl.getPrevious('.control-label')
 			controlsEl.addClass('col-sm-offset-'+(12-@options.baseColSize))
 
+		if control.help
+			helpEl = new Element "span",
+				parent: controlsEl
+				cls: "help-inline"
+				html: control.help
+
 		@renderControl(control, controlsEl)
 
 		if control.tip
@@ -73,12 +79,6 @@ class HorizontalRenderer
 				parent: controlsEl
 				cls: "help-inline"
 				html: '<i class="glyphicon glyphicon-question-sign" data-behavior="tooltip" data-placement="top" data-title="'+control.tip+'" />'
-
-		if control.help
-			helpEl = new Element "span",
-				parent: controlsEl
-				cls: "help-inline"
-				html: control.help
 
 		if control.desc
 			descEl = new Element "div",

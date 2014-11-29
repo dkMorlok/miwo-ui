@@ -5,7 +5,7 @@ class Action extends Miwo.Object
 	callback: null
 	inline: false
 	confirm: false
-	confirmPlacement: 'top'
+	confirmPlacement: null
 	divider: false
 
 module.exports = Action

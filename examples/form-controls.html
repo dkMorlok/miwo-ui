@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Form Horizontal</title>
+	<title>Form Controls</title>
 	<meta charset='utf-8'>
 
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="fontawesome/css/font-awesome.css">
 	<link rel="stylesheet" href="css/examples.css">
-	<link rel="stylesheet" href="miwo/dist/miwo.css">
+	<link rel="stylesheet" href="miwo/dist/css/miwo.css">
 	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
 
 	<script src="mootools/mootools-core.js"></script>
-	<script src="miwo/dist/miwo.js"></script>
+	<script src="miwo/dist/js/miwo.js"></script>
 	<script src="../dist/js/miwo-ui.js"></script>
 </head>
 <body>
@@ -29,7 +29,7 @@
 miwo.ready(function() {
 	miwo.init();
 
-	var form = new MiwoUi.Form();
+	var form = new Miwo.Form();
 	form.addText('name', {
 		label: 'Username',
 		required: true
@@ -42,11 +42,13 @@ miwo.ready(function() {
 	});
 	form.addDate('date', {
 		label: 'Date',
-		type: 'date'
+		type: 'date',
+		placeholder: 'dd.mm.yy'
 	});
 	form.addDate('date2', {
 		label: 'Datetime',
-		type: 'datetime'
+		type: 'datetime',
+		placeholder: 'dd.mm.yy'
 	});
 	form.addDate('date3', {
 		label: 'Custom Datetime Short',

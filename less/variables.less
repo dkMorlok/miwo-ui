@@ -8,5 +8,16 @@
 //
 // highlights
 //
-@highlight-color: white;
-@highlight-bg: #428bca;
+@highlight-color: @component-active-color;
+@highlight-bg: @component-active-bg;
+
+
+//
+// grids
+//
+@grid-border-color: @table-border-color;
+@grid-cell-padding: 8px;
+@grid-th-size: @font-size-small;
+@grid-td-size: @font-size-small;
+@grid-selected-bg: lighten(@brand-primary, 40%);
+@grid-action-indent: 5px;

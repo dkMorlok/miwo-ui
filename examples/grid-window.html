@@ -4,16 +4,15 @@
 	<title>Grid</title>
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="fontawesome/css/font-awesome.css">
+	<link rel="stylesheet" href="css/examples.css">
+	<link rel="stylesheet" href="miwo/dist/css/miwo.css">
 	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
-	<link rel="stylesheet" href="examples.css">
 
-	<script src="/mootools/mootools-core.js"></script>
-	<script src="/mootools/mootools-more.js"></script>
-	<script src="/miwo/dist/miwo.js"></script>
-	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+	<script src="mootools/mootools-core.js"></script>
+	<script src="miwo/dist/js/miwo.js"></script>
+	<script src="../dist/js/miwo-ui.js"></script>
 </head>
 <body>
 
@@ -42,7 +41,7 @@ miwo.ready(function() {
 
 
 	// show data in grid
-	var grid = new MiwoUi.Grid({
+	var grid = new Miwo.Grid({
 		actionBtnSize: 'xs'
 	});
 	grid.setStore(store);
@@ -78,7 +77,7 @@ miwo.ready(function() {
 
 
 	// create edit window
-	var win = new MiwoUi.FormWindow({title: 'Edit user'});
+	var win = new Miwo.FormWindow({title: 'Edit user'});
 	win.form.addText('name', {
 		label: 'Username'
 	});

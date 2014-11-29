@@ -31,7 +31,7 @@ CheckSelector = require('./selection/CheckSelector');
 
 RowSelector = require('./selection/RowSelector');
 
-Notificator = require('./utils/Notificator');
+Notificator = require('./notify/Notificator');
 
 PickerManager = require('./picker/Manager');
 
@@ -114,7 +114,7 @@ MiwoUiExtension = (function(_super) {
 module.exports = MiwoUiExtension;
 
 
-},{"./behaviors/BehaviorManager":2,"./behaviors/Popover":3,"./behaviors/Tabs":4,"./behaviors/Tooltip":5,"./form/render/FormRendererFactory":37,"./form/render/HorizontalRenderer":38,"./form/render/InlineRenderer":39,"./picker/Manager":69,"./selection/CheckSelector":74,"./selection/RowSelector":75,"./selection/SelectorFactory":77,"./tip/PopoverManager":85,"./tip/TooltipManager":87,"./utils/Notificator":91,"./window/DialogFactory":95,"./window/WindowManager":98}],2:[function(require,module,exports){
+},{"./behaviors/BehaviorManager":2,"./behaviors/Popover":3,"./behaviors/Tabs":4,"./behaviors/Tooltip":5,"./form/render/FormRendererFactory":37,"./form/render/HorizontalRenderer":38,"./form/render/InlineRenderer":39,"./notify/Notificator":67,"./picker/Manager":71,"./selection/CheckSelector":76,"./selection/RowSelector":77,"./selection/SelectorFactory":79,"./tip/PopoverManager":87,"./tip/TooltipManager":89,"./window/DialogFactory":96,"./window/WindowManager":99}],2:[function(require,module,exports){
 var BehaviorManager;
 
 BehaviorManager = (function() {
@@ -1529,6 +1529,17 @@ Form = (function(_super) {
     this.el = 'form';
   };
 
+  Form.prototype.afterInit = function() {
+    Form.__super__.afterInit.apply(this, arguments);
+    this.keyListener = new Miwo.utils.KeyListener(this.el, 'keydown');
+    this.keyListener.on('enter', (function(_this) {
+      return function() {
+        _this.submit();
+        return true;
+      };
+    })(this));
+  };
+
   Form.prototype.addedComponentDeep = function(component) {
     Form.__super__.addedComponentDeep.call(this, component);
     if (component.isFormControl || component.isFormContainer) {
@@ -1650,6 +1661,7 @@ Form = (function(_super) {
       el = _ref2[_k];
       control = this.get(el.getAttribute("miwo-controls"), true);
       control.controlsEl = el;
+      control.labelRendered = true;
       this.detectControlGroupEl(control, el, contentEl);
     }
     _ref3 = this.getElements("[miwo-control]");
@@ -1723,6 +1735,11 @@ Form = (function(_super) {
       this.renderer = miwo.service('formRendererFactory').create(this.rendererType, this.rendererOptions);
     }
     return this.renderer;
+  };
+
+  Form.prototype.doDestroy = function() {
+    this.keyListener.destroy();
+    return Form.__super__.doDestroy.apply(this, arguments);
   };
 
   return Form;
@@ -3350,6 +3367,12 @@ TextControl = (function(_super) {
     }
   };
 
+  TextControl.prototype.onSpecialkey = function(control, key, e) {
+    if (key === 'enter') {
+      this.setValue(this.getRawValue(), true);
+    }
+  };
+
   return TextControl;
 
 })(BaseTextControl);
@@ -3571,19 +3594,19 @@ HorizontalRenderer = (function() {
     if (!controlsEl.getPrevious('.control-label')) {
       controlsEl.addClass('col-sm-offset-' + (12 - this.options.baseColSize));
     }
+    if (control.help) {
+      helpEl = new Element("span", {
+        parent: controlsEl,
+        cls: "help-inline",
+        html: control.help
+      });
+    }
     this.renderControl(control, controlsEl);
     if (control.tip) {
       tipEl = new Element("span", {
         parent: controlsEl,
         cls: "help-inline",
         html: '<i class="glyphicon glyphicon-question-sign" data-behavior="tooltip" data-placement="top" data-title="' + control.tip + '" />'
-      });
-    }
-    if (control.help) {
-      helpEl = new Element("span", {
-        parent: controlsEl,
-        cls: "help-inline",
-        html: control.help
       });
     }
     if (control.desc) {
@@ -3634,7 +3657,7 @@ InlineRenderer = (function() {
     }
   };
 
-  InlineRenderer.prototype.renderControl = function(control, ct) {
+  InlineRenderer.prototype.renderGroup = function(control, ct) {
     if (!control.groupEl) {
       control.groupEl = control.el;
       control.groupEl.inject(ct);
@@ -3713,7 +3736,7 @@ Action = (function(_super) {
 
   Action.prototype.confirm = false;
 
-  Action.prototype.confirmPlacement = 'top';
+  Action.prototype.confirmPlacement = null;
 
   Action.prototype.divider = false;
 
@@ -4092,7 +4115,7 @@ Grid = (function(_super) {
 module.exports = Grid;
 
 
-},{"../selection/SelectionModel":76,"../utils/LoadMask":90,"./Operations":42,"./column/ActionColumn":43,"./column/CheckColumn":44,"./column/CheckerColumn":45,"./column/DateColumn":47,"./column/NumberColumn":48,"./column/TextColumn":49,"./renderer/GridRenderer":51}],42:[function(require,module,exports){
+},{"../selection/SelectionModel":78,"../utils/LoadMask":92,"./Operations":42,"./column/ActionColumn":43,"./column/CheckColumn":44,"./column/CheckerColumn":45,"./column/DateColumn":47,"./column/NumberColumn":48,"./column/TextColumn":49,"./renderer/GridRenderer":51}],42:[function(require,module,exports){
 var Action, Button, Operations, PopoverSubmit, Select,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -4142,7 +4165,7 @@ Operations = (function(_super) {
       this.select.addOption(action.name, action.text);
     }
     this.submit = new Button({
-      text: Locale.get("miwo.grid.execute") || 'Do',
+      text: miwo.tr("miwo.grid.execute") || 'Do',
       handler: (function(_this) {
         return function() {
           action = _this.actions[_this.select.getValue()];
@@ -4158,10 +4181,10 @@ Operations = (function(_super) {
       this.grid.onOperationSubmit(action);
     } else {
       this.popover = new PopoverSubmit({
-        renderTo: this.grid.el,
+        renderTo: miwo.body,
         target: this.submit.el,
-        title: Locale.get("miwo.grid.confirm") || 'Confirm',
-        placement: action.confirmPlacement,
+        title: miwo.tr("miwo.grid.confirm") || 'Confirm',
+        placement: action.confirmPlacement || 'top',
         onSubmit: (function(_this) {
           return function() {
             return _this.grid.onOperationSubmit(action);
@@ -4305,10 +4328,10 @@ ActionColumn = (function(_super) {
     } else {
       this.closePopover();
       this.popover = new PopoverSubmit({
-        renderTo: this.getGrid().el,
+        renderTo: miwo.body,
         target: btn.el,
-        title: 'Confirm',
-        placement: action.confirmPlacement,
+        title: miwo.tr("miwo.grid.confirm") || 'Confirm',
+        placement: action.confirmPlacement || 'left',
         onSubmit: (function(_this) {
           return function() {
             return _this.getGrid().onActionSubmit(action, record);
@@ -5309,6 +5332,8 @@ PopoverSubmit = (function(_super) {
 
   PopoverSubmit.prototype.onCancel = null;
 
+  PopoverSubmit.prototype.width = 140;
+
   PopoverSubmit.prototype.doInit = function() {
     var buttonNo, buttonYes;
     PopoverSubmit.__super__.doInit.call(this);
@@ -5348,53 +5373,49 @@ PopoverSubmit = (function(_super) {
 module.exports = PopoverSubmit;
 
 
-},{"../../buttons/Button":6,"../../tip/Popover":84}],54:[function(require,module,exports){
-(function (global){
-var MiwoUi;
-
+},{"../../buttons/Button":6,"../../tip/Popover":86}],54:[function(require,module,exports){
 miwo.registerExtension('miwoui', require('./DiExtension'));
 
-MiwoUi = {};
+Miwo.ui = {};
 
-global.MiwoUi = MiwoUi;
+Miwo.notify = require('./notify');
 
-MiwoUi.DiExtension = require('./DiExtension');
+Miwo.buttons = require('./buttons');
 
-MiwoUi.buttons = require('./buttons');
+Miwo.dropdown = require('./dropdown');
 
-MiwoUi.dropdown = require('./dropdown');
+Miwo.input = require('./input');
 
-MiwoUi.input = require('./input');
+Miwo.picker = require('./picker');
 
-MiwoUi.picker = require('./picker');
+Miwo.form = require('./form');
 
-MiwoUi.form = require('./form');
+Miwo.Form = Miwo.form.container.Form;
 
-MiwoUi.Form = MiwoUi.form.container.Form;
+Miwo.window = require('./window');
 
-MiwoUi.window = require('./window');
+Miwo.Window = Miwo.window.Window;
 
-MiwoUi.Window = MiwoUi.window.Window;
+Miwo.FormWindow = Miwo.window.FormWindow;
 
-MiwoUi.FormWindow = MiwoUi.window.FormWindow;
+Miwo.tabs = require('./tabs');
 
-MiwoUi.tabs = require('./tabs');
+Miwo.Tabs = Miwo.tabs.Tabs;
 
-MiwoUi.Tabs = MiwoUi.tabs.Tabs;
+Miwo.selection = require('./selection');
 
-MiwoUi.selection = require('./selection');
+Miwo.grid = require('./grid');
 
-MiwoUi.grid = require('./grid');
+Miwo.Grid = Miwo.grid.Grid;
 
-MiwoUi.Grid = MiwoUi.grid.Grid;
+Miwo.tip = require('./tip');
 
-MiwoUi.utils = require('./utils');
+Miwo.ui.DiExtension = require('./DiExtension');
 
-MiwoUi.tip = require('./tip');
+Miwo.ui.utils = require('./utils');
 
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./DiExtension":1,"./buttons":9,"./dropdown":13,"./form":36,"./grid":50,"./input":66,"./picker":72,"./selection":78,"./tabs":81,"./tip":88,"./utils":93,"./window":99}],55:[function(require,module,exports){
+},{"./DiExtension":1,"./buttons":9,"./dropdown":13,"./form":36,"./grid":50,"./input":66,"./notify":68,"./picker":74,"./selection":80,"./tabs":83,"./tip":90,"./utils":94,"./window":100}],55:[function(require,module,exports){
 var Checkbox,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -5835,6 +5856,7 @@ Combo = (function(_super) {
   function Combo(config) {
     Combo.__super__.constructor.call(this, config);
     this.items = [];
+    return;
   }
 
   Combo.prototype.afterInit = function() {
@@ -5942,6 +5964,7 @@ Combo = (function(_super) {
           return;
         }
         _this.close();
+        return true;
       };
     })(this));
     this.keyListener.on('up', (function(_this) {
@@ -5951,6 +5974,7 @@ Combo = (function(_super) {
         }
         _this.open();
         _this.activatePrevItem();
+        return true;
       };
     })(this));
     this.keyListener.on('down', (function(_this) {
@@ -5960,6 +5984,7 @@ Combo = (function(_super) {
         }
         _this.open();
         _this.activateNextItem();
+        return true;
       };
     })(this));
     this.keyListener.on('left', (function(_this) {
@@ -5970,6 +5995,7 @@ Combo = (function(_super) {
         if (_this.multiple) {
           _this.activatePrevValue();
         }
+        return true;
       };
     })(this));
     this.keyListener.on('right', (function(_this) {
@@ -5980,6 +6006,28 @@ Combo = (function(_super) {
         if (_this.multiple) {
           _this.activateNextValue();
         }
+        return true;
+      };
+    })(this));
+    this.keyListener.on('backspace', (function(_this) {
+      return function() {
+        var item, val;
+        if (_this.disabled) {
+          return;
+        }
+        if (!_this.opened) {
+          if ((item = _this.getActiveValue())) {
+            val = item.get('data-value');
+            _this.setValue(_this.getValue().erase(val));
+          } else {
+            _this.activeteLastValue();
+            if ((item = _this.getActiveValue())) {
+              val = item.get('data-value');
+              _this.setValue(_this.getValue().erase(val));
+            }
+          }
+        }
+        return true;
       };
     })(this));
     this.keyListener.on('enter', (function(_this) {
@@ -6002,27 +6050,7 @@ Combo = (function(_super) {
             _this.open();
           }
         }
-      };
-    })(this));
-    this.keyListener.on('backspace', (function(_this) {
-      return function(event) {
-        var item, val;
-        if (_this.disabled) {
-          return;
-        }
-        event.stop();
-        if (!_this.opened) {
-          if ((item = _this.getActiveValue())) {
-            val = item.get('data-value');
-            _this.setValue(_this.getValue().erase(val));
-          } else {
-            _this.activeteLastValue();
-            if ((item = _this.getActiveValue())) {
-              val = item.get('data-value');
-              _this.setValue(_this.getValue().erase(val));
-            }
-          }
-        }
+        return true;
       };
     })(this));
     this.keyListener.pause();
@@ -6040,7 +6068,7 @@ Combo = (function(_super) {
     this.active = true;
     this.el.addClass('active');
     if (!silent) {
-      this.inputEl.setFocus();
+      this.el.setFocus();
     }
     this.keyListener.resume();
     miwo.body.on('click', this.bound('onBodyClick'));
@@ -6050,14 +6078,14 @@ Combo = (function(_super) {
     this.active = false;
     this.el.removeClass('active');
     if (!silent) {
-      this.inputEl.blur();
+      this.el.blur();
     }
     this.keyListener.pause();
     miwo.body.un('click', this.bound('onBodyClick'));
   };
 
   Combo.prototype.setValue = function(value) {
-    var content, i, inputValue, item, v, _i, _j, _len, _len1, _ref;
+    var content, i, inputValue, item, selected, v, _i, _j, _len, _len1, _ref;
     if (value === void 0 || value === null) {
       value = '';
     }
@@ -6087,7 +6115,9 @@ Combo = (function(_super) {
       _ref = this.items;
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
         item = _ref[_j];
-        item.setVisible(value.indexOf(item.get('data-value')) < 0);
+        selected = value.indexOf(item.get('data-value')) >= 0;
+        item.setVisible(!selected);
+        item.toggleClass('selected', selected);
       }
     }
     this.resetEl.setVisible(!this.disabled && this.prompt && value[0] !== void 0 && value[0] !== '');
@@ -6210,11 +6240,34 @@ Combo = (function(_super) {
   };
 
   Combo.prototype.activatePrevItem = function() {
-    this.activateItem(Math.max(0, this.activeItemIndex - 1));
+    var activateIndex, index, item, _i, _len, _ref;
+    activateIndex = null;
+    _ref = this.items;
+    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+      item = _ref[index];
+      if (!item.hasClass('selected') && index < this.activeItemIndex) {
+        activateIndex = index;
+      }
+    }
+    if (activateIndex !== null) {
+      this.activateItem(activateIndex);
+    }
   };
 
   Combo.prototype.activateNextItem = function() {
-    this.activateItem(Math.min(this.items.length - 1, this.activeItemIndex + 1));
+    var activateIndex, index, item, _i, _len, _ref;
+    activateIndex = null;
+    _ref = this.items;
+    for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+      item = _ref[index];
+      if (!item.hasClass('selected') && index > this.activeItemIndex) {
+        activateIndex = index;
+        break;
+      }
+    }
+    if (activateIndex !== null) {
+      this.activateItem(activateIndex);
+    }
   };
 
   Combo.prototype.getValueElAt = function(index) {
@@ -6284,7 +6337,7 @@ Combo = (function(_super) {
 module.exports = Combo;
 
 
-},{"../utils/ScreenMask":92}],59:[function(require,module,exports){
+},{"../utils/ScreenMask":93}],59:[function(require,module,exports){
 var Date,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -6861,7 +6914,7 @@ Slider = (function(_super) {
 module.exports = Slider;
 
 
-},{"../tip/Tooltip":86}],64:[function(require,module,exports){
+},{"../tip/Tooltip":88}],64:[function(require,module,exports){
 var Text,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7018,6 +7071,96 @@ module.exports = {
 
 
 },{"./Checkbox":55,"./CheckboxList":56,"./Color":57,"./Combo":58,"./Date":59,"./Radio":60,"./RadioList":61,"./Select":62,"./Slider":63,"./Text":64,"./TextArea":65}],67:[function(require,module,exports){
+var Notification, Notificator,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Notification = window.Notification;
+
+Notificator = (function(_super) {
+  __extends(Notificator, _super);
+
+  function Notificator() {
+    return Notificator.__super__.constructor.apply(this, arguments);
+  }
+
+  Notificator.prototype.notification = null;
+
+  Notificator.prototype.initialize = function(config) {
+    Notificator.__super__.initialize.call(this, config);
+    window.on("beforeunload", (function(_this) {
+      return function() {
+        if (_this.notification) {
+          _this.notification.close();
+        }
+      };
+    })(this));
+  };
+
+  Notificator.prototype.requestPermission = function() {
+    if (Notification && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  };
+
+  Notificator.prototype.notify = function(config) {
+    var notification;
+    if (!Notification || Notification.permission !== "granted") {
+      return null;
+    }
+    notification = new Notification(config.title, {
+      body: config.message,
+      icon: config.icon
+    });
+    notification.handler = config.callback;
+    notification.onclick = (function(_this) {
+      return function() {
+        if (config.callback) {
+          config.callback();
+        }
+        notification.close();
+      };
+    })(this);
+    notification.onshow = (function(_this) {
+      return function() {
+        if (_this.notification === notification) {
+          _this.notification.close();
+        }
+        _this.notification = notification;
+      };
+    })(this);
+    notification.onclose = (function(_this) {
+      return function() {
+        if (_this.notification === notification) {
+          delete _this.notification;
+        }
+      };
+    })(this);
+    if (config.timeout) {
+      setTimeout((function(_this) {
+        return function() {
+          notification.close();
+        };
+      })(this), this.timeout);
+    }
+    this.notification = notification;
+    return notification;
+  };
+
+  return Notificator;
+
+})(Miwo.Object);
+
+module.exports = Notificator;
+
+
+},{}],68:[function(require,module,exports){
+module.exports = {
+  Notificator: require('./Notificator')
+};
+
+
+},{"./Notificator":67}],69:[function(require,module,exports){
 var Color, ColorPicker,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7193,11 +7336,11 @@ ColorPicker = (function(_super) {
 module.exports = ColorPicker;
 
 
-},{"../utils/Color":89}],68:[function(require,module,exports){
+},{"../utils/Color":91}],70:[function(require,module,exports){
 
 
 
-},{}],69:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 var ColorPicker, PickerManager, Popover;
 
 Popover = require('../tip/Popover');
@@ -7249,15 +7392,15 @@ PickerManager = (function() {
 module.exports = PickerManager;
 
 
-},{"../tip/Popover":84,"./Color":67}],70:[function(require,module,exports){
+},{"../tip/Popover":86,"./Color":69}],72:[function(require,module,exports){
 
 
 
-},{}],71:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 
 
 
-},{}],72:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 module.exports = {
   Manager: require('./Manager'),
   Color: require('./Color'),
@@ -7267,7 +7410,7 @@ module.exports = {
 };
 
 
-},{"./Color":67,"./Date":68,"./Manager":69,"./Month":70,"./Time":71}],73:[function(require,module,exports){
+},{"./Color":69,"./Date":70,"./Manager":71,"./Month":72,"./Time":73}],75:[function(require,module,exports){
 var BaseSelector,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7323,7 +7466,7 @@ BaseSelector = (function(_super) {
 module.exports = BaseSelector;
 
 
-},{}],74:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 var CheckSelector, RowSelector,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7410,7 +7553,7 @@ CheckSelector = (function(_super) {
 module.exports = CheckSelector;
 
 
-},{"./RowSelector":75}],75:[function(require,module,exports){
+},{"./RowSelector":77}],77:[function(require,module,exports){
 var BaseSelector, RowSelector,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7466,7 +7609,7 @@ RowSelector = (function(_super) {
 module.exports = RowSelector;
 
 
-},{"./BaseSelector":73}],76:[function(require,module,exports){
+},{"./BaseSelector":75}],78:[function(require,module,exports){
 var SelectionModel,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7757,7 +7900,7 @@ SelectionModel = (function(_super) {
 module.exports = SelectionModel;
 
 
-},{}],77:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 var SelectorFactory;
 
 SelectorFactory = (function() {
@@ -7785,7 +7928,7 @@ SelectorFactory = (function() {
 module.exports = SelectorFactory;
 
 
-},{}],78:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 module.exports = {
   SelectorFactory: require('./SelectorFactory'),
   BaseSelector: require('./BaseSelector'),
@@ -7795,7 +7938,7 @@ module.exports = {
 };
 
 
-},{"./BaseSelector":73,"./CheckSelector":74,"./RowSelector":75,"./SelectionModel":76,"./SelectorFactory":77}],79:[function(require,module,exports){
+},{"./BaseSelector":75,"./CheckSelector":76,"./RowSelector":77,"./SelectionModel":78,"./SelectorFactory":79}],81:[function(require,module,exports){
 var Panel,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7837,7 +7980,7 @@ Panel = (function(_super) {
 module.exports = Panel;
 
 
-},{}],80:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 var Panel, Tabs,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7934,14 +8077,14 @@ Tabs = (function(_super) {
 module.exports = Tabs;
 
 
-},{"./Panel":79}],81:[function(require,module,exports){
+},{"./Panel":81}],83:[function(require,module,exports){
 module.exports = {
   Tabs: require('./Tabs'),
   Panel: require('./Panel')
 };
 
 
-},{"./Panel":79,"./Tabs":80}],82:[function(require,module,exports){
+},{"./Panel":81,"./Tabs":82}],84:[function(require,module,exports){
 var BaseTip,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8073,7 +8216,7 @@ BaseTip = (function(_super) {
 module.exports = BaseTip;
 
 
-},{}],83:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 var BaseTipManager,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8164,7 +8307,7 @@ BaseTipManager = (function(_super) {
 module.exports = BaseTipManager;
 
 
-},{}],84:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 var BaseTip, Popover, ScreenMask,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8272,7 +8415,7 @@ Popover = (function(_super) {
 module.exports = Popover;
 
 
-},{"../utils/ScreenMask":92,"./BaseTip":82}],85:[function(require,module,exports){
+},{"../utils/ScreenMask":93,"./BaseTip":84}],87:[function(require,module,exports){
 var BaseTipManager, Popover, PopoverManager,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8325,7 +8468,7 @@ PopoverManager = (function(_super) {
 module.exports = PopoverManager;
 
 
-},{"./BaseTipManager":83,"./Popover":84}],86:[function(require,module,exports){
+},{"./BaseTipManager":85,"./Popover":86}],88:[function(require,module,exports){
 var BaseTip, Tooltip,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8373,7 +8516,7 @@ Tooltip = (function(_super) {
 module.exports = Tooltip;
 
 
-},{"./BaseTip":82}],87:[function(require,module,exports){
+},{"./BaseTip":84}],89:[function(require,module,exports){
 var BaseTipManager, Tooltip, TooltipManager,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8418,7 +8561,7 @@ TooltipManager = (function(_super) {
 module.exports = TooltipManager;
 
 
-},{"./BaseTipManager":83,"./Tooltip":86}],88:[function(require,module,exports){
+},{"./BaseTipManager":85,"./Tooltip":88}],90:[function(require,module,exports){
 module.exports = {
   BaseTip: require('./BaseTip'),
   Popover: require('./Popover'),
@@ -8426,7 +8569,7 @@ module.exports = {
 };
 
 
-},{"./BaseTip":82,"./Popover":84,"./Tooltip":86}],89:[function(require,module,exports){
+},{"./BaseTip":84,"./Popover":86,"./Tooltip":88}],91:[function(require,module,exports){
 var Color;
 
 Color = (function() {
@@ -8680,7 +8823,7 @@ Color.intToHex = function(dec) {
 module.exports = Color;
 
 
-},{}],90:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 var LoadMask,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8701,91 +8844,7 @@ LoadMask = (function(_super) {
 module.exports = LoadMask;
 
 
-},{}],91:[function(require,module,exports){
-var Notification, Notificator,
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-Notification = window.Notification;
-
-Notificator = (function(_super) {
-  __extends(Notificator, _super);
-
-  function Notificator() {
-    return Notificator.__super__.constructor.apply(this, arguments);
-  }
-
-  Notificator.prototype.notification = null;
-
-  Notificator.prototype.initialize = function(config) {
-    Notificator.__super__.initialize.call(this, config);
-    window.on("beforeunload", (function(_this) {
-      return function() {
-        if (_this.notification) {
-          _this.notification.close();
-        }
-      };
-    })(this));
-  };
-
-  Notificator.prototype.requestPermission = function() {
-    if (Notification && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
-  };
-
-  Notificator.prototype.notify = function(config) {
-    var notification;
-    if (!Notification || Notification.permission !== "granted") {
-      return null;
-    }
-    notification = new Notification(config.title, {
-      body: config.message,
-      icon: config.icon
-    });
-    notification.handler = config.callback;
-    notification.onclick = (function(_this) {
-      return function() {
-        if (config.callback) {
-          config.callback();
-        }
-        notification.close();
-      };
-    })(this);
-    notification.onshow = (function(_this) {
-      return function() {
-        if (_this.notification === notification) {
-          _this.notification.close();
-        }
-        _this.notification = notification;
-      };
-    })(this);
-    notification.onclose = (function(_this) {
-      return function() {
-        if (_this.notification === notification) {
-          delete _this.notification;
-        }
-      };
-    })(this);
-    if (config.timeout) {
-      setTimeout((function(_this) {
-        return function() {
-          notification.close();
-        };
-      })(this), this.timeout);
-    }
-    this.notification = notification;
-    return notification;
-  };
-
-  return Notificator;
-
-})(Miwo.Object);
-
-module.exports = Notificator;
-
-
-},{}],92:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 var ScreenMask;
 
 ScreenMask = (function() {
@@ -8822,16 +8881,15 @@ ScreenMask = (function() {
 module.exports = ScreenMask;
 
 
-},{}],93:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 module.exports = {
   LoadMask: require('./LoadMask'),
   ScreenMask: require('./ScreenMask'),
-  Notificator: require('./Notificator'),
   Color: require('./Color')
 };
 
 
-},{"./Color":89,"./LoadMask":90,"./Notificator":91,"./ScreenMask":92}],94:[function(require,module,exports){
+},{"./Color":91,"./LoadMask":92,"./ScreenMask":93}],95:[function(require,module,exports){
 var Dialog, Window,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8878,7 +8936,7 @@ Dialog = (function(_super) {
 module.exports = Dialog;
 
 
-},{"./Window":97}],95:[function(require,module,exports){
+},{"./Window":98}],96:[function(require,module,exports){
 var Button, Dialog, DialogFactory;
 
 Dialog = require('./Dialog');
@@ -8961,7 +9019,7 @@ DialogFactory = (function() {
 module.exports = DialogFactory;
 
 
-},{"../buttons/Button":6,"./Dialog":94}],96:[function(require,module,exports){
+},{"../buttons/Button":6,"./Dialog":95}],97:[function(require,module,exports){
 var Form, FormWindow, Window,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9030,7 +9088,7 @@ FormWindow = (function(_super) {
 module.exports = FormWindow;
 
 
-},{"../form/container/Form":18,"./Window":97}],97:[function(require,module,exports){
+},{"../form/container/Form":18,"./Window":98}],98:[function(require,module,exports){
 var Button, Window,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9043,6 +9101,8 @@ Window = (function(_super) {
   function Window() {
     return Window.__super__.constructor.apply(this, arguments);
   }
+
+  Window.prototype.isWindow = true;
 
   Window.prototype.xtype = 'window';
 
@@ -9059,6 +9119,8 @@ Window = (function(_super) {
   Window.prototype.title = '';
 
   Window.prototype.autoCenter = true;
+
+  Window.prototype.preventAutoRender = true;
 
   Window.prototype.modal = true;
 
@@ -9269,7 +9331,7 @@ Window = (function(_super) {
 module.exports = Window;
 
 
-},{"../buttons/Button":6}],98:[function(require,module,exports){
+},{"../buttons/Button":6}],99:[function(require,module,exports){
 var WindowManager;
 
 WindowManager = (function() {
@@ -9310,7 +9372,7 @@ WindowManager = (function() {
 module.exports = WindowManager;
 
 
-},{}],99:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 module.exports = {
   Window: require('./Window'),
   FormWindow: require('./FormWindow'),
@@ -9318,4 +9380,4 @@ module.exports = {
 };
 
 
-},{"./Dialog":94,"./FormWindow":96,"./Window":97}]},{},[54])
+},{"./Dialog":95,"./FormWindow":97,"./Window":98}]},{},[54])

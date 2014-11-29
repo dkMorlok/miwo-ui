@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Form Horizontal</title>
+	<title>Form Inline</title>
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="fontawesome/css/font-awesome.css">
+	<link rel="stylesheet" href="css/examples.css">
+	<link rel="stylesheet" href="miwo/dist/css/miwo.css">
 	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
-	<link rel="stylesheet" href="examples.css">
 
-	<script src="/mootools/mootools-core.js"></script>
-	<script src="/mootools/mootools-more.js"></script>
-	<script src="/miwo/dist/miwo.js"></script>
-	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+	<script src="mootools/mootools-core.js"></script>
+	<script src="miwo/dist/js/miwo.js"></script>
+	<script src="../dist/js/miwo-ui.js"></script>
 </head>
 <body id="body">
 
-<div class="container">
-	<div id="form" style="max-width: 600px; margin: auto;">
-
-	</div>
+<div class="container-fluid">
+	<h1>Form Inline</h1>
+	<hr>
+	<div id="form" style="margin: 20px;"></div>
 </div>
 
 <script>
@@ -30,11 +29,19 @@ miwo.ready(function() {
 	var form = new Miwo.Form({
 		rendererType: 'inline'
 	});
-	form.addText('name', 'Username')
-	form.addText('email', 'Email');
-	form.addCheckbox('check', 'Check me');
-	form.addSubmit('submit', 'Submit me!');
-	form.render($('form'));
+	form.addText('name', {
+		placeholder: 'Username'
+	});
+	form.addText('email', {
+		placeholder: 'Email'
+	});
+	form.addCheckbox('check', {
+		label: 'Check me'
+	});
+	form.addSubmit('submit', {
+		label: 'Submit me!'
+	});
+	form.render('form');
 
 	form.on('success', function(form) {
 		console.log('SUCCESS, values:', form.getValues());

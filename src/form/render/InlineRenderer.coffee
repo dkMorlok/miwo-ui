@@ -17,7 +17,7 @@ class InlineRenderer
 		return
 
 
-	renderControl: (control, ct) ->
+	renderGroup: (control, ct) ->
 		if !control.groupEl
 			control.groupEl = control.el
 			control.groupEl.inject(ct)

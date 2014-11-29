@@ -4,16 +4,15 @@
 	<title>Combo element</title>
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/miwo/dist/miwo.css">
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="fontawesome/css/font-awesome.css">
+	<link rel="stylesheet" href="css/examples.css">
+	<link rel="stylesheet" href="miwo/dist/css/miwo.css">
 	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
-	<link rel="stylesheet" href="examples.css">
 
-	<script src="/mootools/mootools-core.js"></script>
-	<script src="/mootools/mootools-more.js"></script>
-	<script src="/miwo/dist/miwo.js"></script>
-	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+	<script src="mootools/mootools-core.js"></script>
+	<script src="miwo/dist/js/miwo.js"></script>
+	<script src="../dist/js/miwo-ui.js"></script>
 </head>
 <body>
 
@@ -136,7 +135,7 @@
 
 <script>
 	function createCombo(options) {
-		var combo = new MiwoUi.input.Combo(options);
+		var combo = new Miwo.input.Combo(options);
 		combo.addOption('combo', 'Combo box', '<b>SUPER</b> combo box');
 		combo.addOption('select', 'Select box');
 		combo.addOption('text', 'Text input');
@@ -194,7 +193,7 @@
 		var combo4a = new createCombo({id:'combo4a', placeholder:'Select item', prompt: false});
 		combo4a.replace();
 
-		var combo4aBtn = new MiwoUi.buttons.Button({id:'combo4aBtn', icon:'search'});
+		var combo4aBtn = new Miwo.buttons.Button({id:'combo4aBtn', icon:'search'});
 		combo4aBtn.on('click', function() {
 			combo4a.open();
 		});
@@ -204,7 +203,7 @@
 		var combo4b = createCombo({id:'combo4b', placeholder:'Select item', prompt: false});
 		combo4b.replace();
 
-		var combo4bBtn = new MiwoUi.buttons.DropdownButton({id:'combo4bBtn', text:'Action'});
+		var combo4bBtn = new Miwo.buttons.DropdownButton({id:'combo4bBtn', text:'Action'});
 		combo4bBtn.addItem('action', 'Action');
 		combo4bBtn.addItem('action2', 'Another action');
 		combo4bBtn.addDivider();

@@ -27,6 +27,7 @@ class Combo extends Miwo.Component
 	constructor: (config) ->
 		super(config)
 		@items = []
+		return
 
 
 	afterInit: () ->
@@ -107,25 +108,37 @@ class Combo extends Miwo.Component
 		@keyListener.on 'esc', () =>
 			if @disabled then return
 			@close()
-			return
+			return true
 		@keyListener.on 'up', () =>
 			if @disabled then return
 			@open()
 			@activatePrevItem()
-			return
+			return true
 		@keyListener.on 'down', () =>
 			if @disabled then return
 			@open()
 			@activateNextItem()
-			return
+			return true
 		@keyListener.on 'left', () =>
 			if @disabled then return
 			@activatePrevValue() if @multiple
-			return
+			return true
 		@keyListener.on 'right', () =>
 			if @disabled then return
 			@activateNextValue() if @multiple
-			return
+			return true
+		@keyListener.on 'backspace', () =>
+			if @disabled then return
+			if !@opened
+				if (item = @getActiveValue())
+					val = item.get('data-value')
+					@setValue(@getValue().erase(val))
+				else
+					@activeteLastValue()
+					if (item = @getActiveValue())
+						val = item.get('data-value')
+						@setValue(@getValue().erase(val))
+			return true
 		@keyListener.on 'enter', () =>
 			if @disabled then return
 			if @opened
@@ -139,20 +152,7 @@ class Combo extends Miwo.Component
 					@setValue(@getValue().erase(val))
 				else
 					@open()
-			return
-		@keyListener.on 'backspace', (event) =>
-			if @disabled then return
-			event.stop()
-			if !@opened
-				if (item = @getActiveValue())
-					val = item.get('data-value')
-					@setValue(@getValue().erase(val))
-				else
-					@activeteLastValue()
-					if (item = @getActiveValue())
-						val = item.get('data-value')
-						@setValue(@getValue().erase(val))
-			return
+			return true
 		@keyListener.pause()
 		return
 
@@ -168,7 +168,7 @@ class Combo extends Miwo.Component
 	setFocus: (silent) ->
 		@active = true
 		@el.addClass('active')
-		@inputEl.setFocus() if !silent
+		@el.setFocus() if !silent
 		@keyListener.resume()
 		miwo.body.on('click', @bound('onBodyClick'))
 		return
@@ -177,7 +177,7 @@ class Combo extends Miwo.Component
 	blur: (silent) ->
 		@active = false
 		@el.removeClass('active')
-		@inputEl.blur() if !silent
+		@el.blur() if !silent
 		@keyListener.pause()
 		miwo.body.un('click', @bound('onBodyClick'))
 		return
@@ -209,10 +209,12 @@ class Combo extends Miwo.Component
 
 		@activeValueIndex = -1
 
-		# update dropdown list selected class
+		# update dropdown list
 		if @hideSelected
 			for item in @items
-				item.setVisible(value.indexOf(item.get('data-value'))<0)
+				selected = value.indexOf(item.get('data-value')) >= 0
+				item.setVisible(!selected)
+				item.toggleClass('selected', selected)
 
 		# show reset button if value set
 		@resetEl.setVisible(!@disabled && @prompt && value[0] isnt undefined && value[0] isnt '')
@@ -314,12 +316,23 @@ class Combo extends Miwo.Component
 
 
 	activatePrevItem: () ->
-		@activateItem(Math.max(0, @activeItemIndex-1))
+		activateIndex = null
+		for item,index in @items
+			if !item.hasClass('selected') && index < @activeItemIndex
+				activateIndex = index
+		if activateIndex isnt null
+			@activateItem(activateIndex)
 		return
 
 
 	activateNextItem: () ->
-		@activateItem(Math.min(@items.length-1, @activeItemIndex+1))
+		activateIndex = null
+		for item,index in @items
+			if !item.hasClass('selected') && index > @activeItemIndex
+				activateIndex = index
+				break
+		if activateIndex isnt null
+			@activateItem(activateIndex)
 		return
 
 
