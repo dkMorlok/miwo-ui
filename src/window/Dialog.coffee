@@ -16,6 +16,7 @@ class Dialog extends Window
 
 	afterRender: ->
 		super()
+		@el.set('role', 'dialog')
 		@keyListener.on 'enter', () =>
 			for button in @buttons
 				if button.type is 'primary'

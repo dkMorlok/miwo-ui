@@ -7,15 +7,23 @@ class DropdownButton extends Button
 	dropdown: null
 
 
-	afterInit: () ->
-		super()
+	afterInit: ->
+		super
 		document.on('click', @bound('onBodyClick'))
+		return
+
+
+	afterRender: ->
+		super
+		@el.set('aria-haspopup', true)
+		@el.set('aria-expanded', false)
 		return
 
 
 	getDropdown: () ->
 		if !@dropdown
 			@dropdown = new DropdownList({target: @el})
+			@dropdown.el.set('aria-labelledby', @id)
 			@dropdown.on 'show', (dropdown)=>
 				DropdownButton.dropdown = dropdown
 			@dropdown.on 'hide', (dropdown)=>

@@ -8,3 +8,6 @@ module.exports =
 	dialog:
 		ok: 'Ok'
 		cancel: 'Cancel'
+	window:
+		close: 'Close window'
+		hide: 'Hide window'

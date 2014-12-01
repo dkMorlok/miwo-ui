@@ -4,6 +4,13 @@ body {
 template {
   display: none;
 }
+.btn-tool {
+  -webkit-appearance: none;
+  padding: 0;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+}
 .colorfield .form-control {
   width: 60px;
   padding: 2px 5px;

@@ -1,4 +1,5 @@
 Button = require '../buttons/Button'
+ToolButton = require '../buttons/ToolButton'
 
 
 class Window extends Miwo.Container
@@ -25,6 +26,7 @@ class Window extends Miwo.Container
 	footerEl: null
 	toolsEl: null
 	keyListener: null
+	tools: null
 
 
 	beforeInit: ->
@@ -37,6 +39,7 @@ class Window extends Miwo.Container
 		@top = 30
 		@renderTo = miwo.body
 		@buttons = new Miwo.utils.Collection()
+		@tools = new Miwo.utils.Collection()
 		return
 
 
@@ -109,11 +112,20 @@ class Window extends Miwo.Container
 			@close()  if @closeOnEsc
 			return
 
+		@el.set('aria-labelledby', @id+'Label')
+		@titleEl.set('id', @id+'Label')
+
 		if @closeable
-			@addTool('close', 'remove', ()=>@close())
+			@addTool 'close',
+				icon: 'remove'
+				text: miwo.tr('miwo.window.close')
+				handler: => @close()
 
 		if @minimizable
-			@addTool('minimize', 'minus', ()=>@hide())
+			@addTool 'hide',
+				icon: 'minus'
+				text: miwo.tr('miwo.window.hide')
+				handler: => @hide()
 
 		if !@modal
 			miwo.body.on('click', @bound('onBodyClick'));
@@ -155,7 +167,7 @@ class Window extends Miwo.Container
 			button = new Button(button)
 		@buttons.set(name, button)
 		button.render(@footerEl) if @footerEl
-		return
+		return button
 
 
 	addCloseButton: (text) ->
@@ -169,12 +181,15 @@ class Window extends Miwo.Container
 
 
 
-	addTool: (name, icon, callback) ->
-		tool = new Element('i')
-		tool.inject(@toolsEl)
-		tool.addClass('glyphicon glyphicon-'+icon)
-		tool.on('click', (e)=>callback(e))
-		return
+	addTool: (name, button) ->
+		button = new ToolButton(button) if !Type.isInstance(button)
+		@tools.set(name, button)
+		button.render(@toolsEl)
+		return button
+
+
+	getTool: (name)->
+		return @tools.get(name)
 
 
 	doDestroy: ->
@@ -182,6 +197,7 @@ class Window extends Miwo.Container
 		miwo.body.un('click', @bound('onBodyClick'))
 		@keyListener.destroy() if @keyListener
 		@buttons.destroy()
+		@tools.destroy()
 		super()
 		return
 

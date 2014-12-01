@@ -7,6 +7,8 @@ class ButtonGroup extends Miwo.Container
 
 	xtype: "buttongroup"
 	toggle: null # checkbox, radio
+	size: null
+	label: null
 
 
 	beforeInit: ->
@@ -84,6 +86,14 @@ class ButtonGroup extends Miwo.Container
 
 	addDropdownButton: (name, config) ->
 		return @add(name, new DropdownButton(config))
+
+
+	afterRender: ->
+		super
+		@el.set('role', 'group')
+		@el.set('aria-label', @label) if @label
+		@el.addClass('btn-group-'+@size) if @size
+		return
 
 
 module.exports = ButtonGroup
