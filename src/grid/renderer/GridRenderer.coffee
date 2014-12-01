@@ -316,6 +316,11 @@ class GridRenderer extends Miwo.Object
 	renderFooter: (footerEl) ->
 		showFooter = false
 
+		if @grid.paginator
+			paginator = @grid.get('paginator')
+			paginator.el.addClass('grid-paginator')
+			paginator.render(footerEl)
+
 		if @grid.operations
 			showFooter = true
 			hasSelection = @grid.getSelectionModel().hasSelection()

@@ -8,6 +8,7 @@ NumberColumn = require './column/NumberColumn'
 ActionColumn = require './column/ActionColumn'
 Operations = require './Operations'
 LoadMask = require '../utils/LoadMask'
+Paginator = require '../nav/Paginator'
 
 
 class Grid extends Miwo.Container
@@ -38,6 +39,7 @@ class Grid extends Miwo.Container
 	selector: "auto"
 	selection: "multi"
 	groupBy: null
+	paginator: false
 	# @cfg string Default action button size. You can set size by bootstrap: 'xs', 'sm', ... Default is 'sm'
 	actionBtnSize: null
 
@@ -295,6 +297,13 @@ class Grid extends Miwo.Container
 
 	createRenderer: (options)->
 		return new GridRenderer(this, options)
+
+
+	createComponentPaginator: ->
+		config = if @paginator is true then {} else @paginator
+		paginator = new Paginator(config)
+		paginator.setStore(@store) if @store
+		return paginator
 
 
 	onRefresh: ->

@@ -348,19 +348,29 @@ template {
 .grid-selected td {
   background-color: #e1edf7;
 }
+.grid-col-actions .btn {
+  margin-left: 5px;
+}
+.grid-popover-submit .btn {
+  margin-bottom: 5px;
+}
+.grid-footer {
+  padding-left: 8px;
+  padding-right: 8px;
+}
 .grid-operations {
-  margin-left: 15px;
+  float: left;
 }
 .grid-operations select {
   width: 140px;
   float: left;
   margin-right: 10px;
 }
-.grid-col-actions .btn {
-  margin-left: 5px;
+.grid-paginator {
+  float: right;
 }
-.grid-popover-submit .btn {
-  margin-bottom: 5px;
+.grid-paginator .pagination {
+  margin: 0px;
 }
 /* Window */
 .window {

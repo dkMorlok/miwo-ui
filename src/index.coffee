@@ -17,6 +17,9 @@ Miwo.input = require './input'
 # pickers
 Miwo.picker = require './picker'
 
+# pickers
+Miwo.nav = require './nav'
+
 # form
 Miwo.form = require './form'
 Miwo.Form = Miwo.form.container.Form

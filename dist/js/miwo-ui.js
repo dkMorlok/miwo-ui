@@ -105,6 +105,11 @@ MiwoUiExtension = (function(_super) {
         });
       };
     })(this));
+    injector.update('translator').setup((function(_this) {
+      return function(service) {
+        service.setTranslates('en', 'miwo', require('./translates'));
+      };
+    })(this));
   };
 
   return MiwoUiExtension;
@@ -114,7 +119,7 @@ MiwoUiExtension = (function(_super) {
 module.exports = MiwoUiExtension;
 
 
-},{"./behaviors/BehaviorManager":2,"./behaviors/Popover":3,"./behaviors/Tabs":4,"./behaviors/Tooltip":5,"./form/render/FormRendererFactory":37,"./form/render/HorizontalRenderer":38,"./form/render/InlineRenderer":39,"./notify/Notificator":67,"./picker/Manager":71,"./selection/CheckSelector":76,"./selection/RowSelector":77,"./selection/SelectorFactory":79,"./tip/PopoverManager":87,"./tip/TooltipManager":89,"./window/DialogFactory":96,"./window/WindowManager":99}],2:[function(require,module,exports){
+},{"./behaviors/BehaviorManager":2,"./behaviors/Popover":3,"./behaviors/Tabs":4,"./behaviors/Tooltip":5,"./form/render/FormRendererFactory":37,"./form/render/HorizontalRenderer":38,"./form/render/InlineRenderer":39,"./notify/Notificator":70,"./picker/Manager":74,"./selection/CheckSelector":79,"./selection/RowSelector":80,"./selection/SelectorFactory":82,"./tip/PopoverManager":90,"./tip/TooltipManager":92,"./translates":94,"./window/DialogFactory":101,"./window/WindowManager":104}],2:[function(require,module,exports){
 var BehaviorManager;
 
 BehaviorManager = (function() {
@@ -3748,7 +3753,7 @@ module.exports = Action;
 
 
 },{}],41:[function(require,module,exports){
-var ActionColumn, CheckColumn, CheckerColumn, DateColumn, Grid, GridRenderer, LoadMask, NumberColumn, Operations, SelectionModel, TextColumn,
+var ActionColumn, CheckColumn, CheckerColumn, DateColumn, Grid, GridRenderer, LoadMask, NumberColumn, Operations, Paginator, SelectionModel, TextColumn,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -3771,6 +3776,8 @@ ActionColumn = require('./column/ActionColumn');
 Operations = require('./Operations');
 
 LoadMask = require('../utils/LoadMask');
+
+Paginator = require('../nav/Paginator');
 
 Grid = (function(_super) {
   __extends(Grid, _super);
@@ -3802,6 +3809,8 @@ Grid = (function(_super) {
   Grid.prototype.selection = "multi";
 
   Grid.prototype.groupBy = null;
+
+  Grid.prototype.paginator = false;
 
   Grid.prototype.actionBtnSize = null;
 
@@ -4087,6 +4096,16 @@ Grid = (function(_super) {
     return new GridRenderer(this, options);
   };
 
+  Grid.prototype.createComponentPaginator = function() {
+    var config, paginator;
+    config = this.paginator === true ? {} : this.paginator;
+    paginator = new Paginator(config);
+    if (this.store) {
+      paginator.setStore(this.store);
+    }
+    return paginator;
+  };
+
   Grid.prototype.onRefresh = function() {
     this.emit("refresh", this);
   };
@@ -4115,7 +4134,7 @@ Grid = (function(_super) {
 module.exports = Grid;
 
 
-},{"../selection/SelectionModel":78,"../utils/LoadMask":92,"./Operations":42,"./column/ActionColumn":43,"./column/CheckColumn":44,"./column/CheckerColumn":45,"./column/DateColumn":47,"./column/NumberColumn":48,"./column/TextColumn":49,"./renderer/GridRenderer":51}],42:[function(require,module,exports){
+},{"../nav/Paginator":68,"../selection/SelectionModel":81,"../utils/LoadMask":96,"./Operations":42,"./column/ActionColumn":43,"./column/CheckColumn":44,"./column/CheckerColumn":45,"./column/DateColumn":47,"./column/NumberColumn":48,"./column/TextColumn":49,"./renderer/GridRenderer":51}],42:[function(require,module,exports){
 var Action, Button, Operations, PopoverSubmit, Select,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -4165,7 +4184,7 @@ Operations = (function(_super) {
       this.select.addOption(action.name, action.text);
     }
     this.submit = new Button({
-      text: miwo.tr("miwo.grid.execute") || 'Do',
+      text: miwo.tr("miwo.grid.execute"),
       handler: (function(_this) {
         return function() {
           action = _this.actions[_this.select.getValue()];
@@ -4183,7 +4202,7 @@ Operations = (function(_super) {
       this.popover = new PopoverSubmit({
         renderTo: miwo.body,
         target: this.submit.el,
-        title: miwo.tr("miwo.grid.confirm") || 'Confirm',
+        title: miwo.tr("miwo.grid.confirm"),
         placement: action.confirmPlacement || 'top',
         onSubmit: (function(_this) {
           return function() {
@@ -4330,7 +4349,7 @@ ActionColumn = (function(_super) {
       this.popover = new PopoverSubmit({
         renderTo: miwo.body,
         target: btn.el,
-        title: miwo.tr("miwo.grid.confirm") || 'Confirm',
+        title: miwo.tr("miwo.grid.confirm"),
         placement: action.confirmPlacement || 'left',
         onSubmit: (function(_this) {
           return function() {
@@ -5091,8 +5110,13 @@ GridRenderer = (function(_super) {
   };
 
   GridRenderer.prototype.renderFooter = function(footerEl) {
-    var hasSelection, showFooter;
+    var hasSelection, paginator, showFooter;
     showFooter = false;
+    if (this.grid.paginator) {
+      paginator = this.grid.get('paginator');
+      paginator.el.addClass('grid-paginator');
+      paginator.render(footerEl);
+    }
     if (this.grid.operations) {
       showFooter = true;
       hasSelection = this.grid.getSelectionModel().hasSelection();
@@ -5373,7 +5397,7 @@ PopoverSubmit = (function(_super) {
 module.exports = PopoverSubmit;
 
 
-},{"../../buttons/Button":6,"../../tip/Popover":86}],54:[function(require,module,exports){
+},{"../../buttons/Button":6,"../../tip/Popover":89}],54:[function(require,module,exports){
 miwo.registerExtension('miwoui', require('./DiExtension'));
 
 Miwo.ui = {};
@@ -5387,6 +5411,8 @@ Miwo.dropdown = require('./dropdown');
 Miwo.input = require('./input');
 
 Miwo.picker = require('./picker');
+
+Miwo.nav = require('./nav');
 
 Miwo.form = require('./form');
 
@@ -5415,7 +5441,7 @@ Miwo.ui.DiExtension = require('./DiExtension');
 Miwo.ui.utils = require('./utils');
 
 
-},{"./DiExtension":1,"./buttons":9,"./dropdown":13,"./form":36,"./grid":50,"./input":66,"./notify":68,"./picker":74,"./selection":80,"./tabs":83,"./tip":90,"./utils":94,"./window":100}],55:[function(require,module,exports){
+},{"./DiExtension":1,"./buttons":9,"./dropdown":13,"./form":36,"./grid":50,"./input":66,"./nav":69,"./notify":71,"./picker":77,"./selection":83,"./tabs":86,"./tip":93,"./utils":99,"./window":105}],55:[function(require,module,exports){
 var Checkbox,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -6337,7 +6363,7 @@ Combo = (function(_super) {
 module.exports = Combo;
 
 
-},{"../utils/ScreenMask":93}],59:[function(require,module,exports){
+},{"../utils/ScreenMask":98}],59:[function(require,module,exports){
 var Date,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -6914,7 +6940,7 @@ Slider = (function(_super) {
 module.exports = Slider;
 
 
-},{"../tip/Tooltip":88}],64:[function(require,module,exports){
+},{"../tip/Tooltip":91}],64:[function(require,module,exports){
 var Text,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7071,6 +7097,300 @@ module.exports = {
 
 
 },{"./Checkbox":55,"./CheckboxList":56,"./Color":57,"./Combo":58,"./Date":59,"./Radio":60,"./RadioList":61,"./Select":62,"./Slider":63,"./Text":64,"./TextArea":65}],67:[function(require,module,exports){
+var Pager, Paginator,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Paginator = require('../utils/Paginator');
+
+Pager = (function(_super) {
+  __extends(Pager, _super);
+
+  function Pager() {
+    return Pager.__super__.constructor.apply(this, arguments);
+  }
+
+  Pager.prototype.el = 'nav';
+
+  Pager.prototype.paginator = null;
+
+  Pager.prototype.navigate = false;
+
+  Pager.prototype.doInit = function() {
+    Pager.__super__.doInit.apply(this, arguments);
+    this.paginator = new Paginator();
+    this.paginator.on('page', (function(_this) {
+      return function() {
+        if (!_this.rendered) {
+          return;
+        }
+        _this.prevEl.toggleClass('disabled', _this.paginator.isFirst());
+        _this.nextEl.toggleClass('disabled', _this.paginator.isLast());
+      };
+    })(this));
+  };
+
+  Pager.prototype.setStore = function(store) {
+    this.store = store;
+    this.mon(store, 'beforeload', (function(_this) {
+      return function() {
+        _this.setDisabled(true);
+      };
+    })(this));
+    this.mon(store, 'load', (function(_this) {
+      return function() {
+        _this.setDisabled(false);
+        _this.syncStore();
+      };
+    })(this));
+    if (store.loading) {
+      this.setDisabled(true);
+    } else if (store.loaded) {
+      this.syncStore();
+    }
+  };
+
+  Pager.prototype.syncStore = function() {
+    this.paginator.setItemsPerPage(this.store.pageSize);
+    this.paginator.setItemCount(this.store.totalCount);
+    this.paginator.setPage(this.store.page);
+  };
+
+  Pager.prototype.doRender = function() {
+    var a, li, text, ul;
+    ul = new Element('ul', {
+      cls: 'pager'
+    }).inject(this.el);
+    text = '<span>' + miwo.tr('miwo.nav.prev') + '</span>';
+    if (this.navigate) {
+      text = '<span aria-hidden="true">&larr;</span> ' + text;
+    }
+    li = new Element('li').inject(ul);
+    li.toggleClass('disabled', this.paginator.isFirst());
+    if (this.navigate) {
+      li.addClass('previous');
+    }
+    a = new Element('a', {
+      html: text,
+      href: '#',
+      'data-page': 'prev'
+    }).inject(li);
+    this.prevEl = li;
+    text = '<span>' + miwo.tr('miwo.nav.next') + '</span>';
+    if (this.navigate) {
+      text = text + ' <span aria-hidden="true">&rarr;</span>';
+    }
+    li = new Element('li').inject(ul);
+    li.setStyle('padding-left', '10px');
+    li.toggleClass('disabled', this.paginator.isLast());
+    if (this.navigate) {
+      li.addClass('next');
+    }
+    a = new Element('a', {
+      html: text,
+      href: '#',
+      'data-page': 'next'
+    }).inject(li);
+    this.nextEl = li;
+  };
+
+  Pager.prototype.afterRender = function() {
+    Pager.__super__.afterRender.apply(this, arguments);
+    this.mon(this.el, 'click:relay(a)', 'onClick');
+  };
+
+  Pager.prototype.onClick = function(event, el) {
+    var page;
+    event.preventDefault();
+    if (this.disabled) {
+      return;
+    }
+    page = el.get('data-page');
+    this.emit('page', this, page);
+    if (this.store) {
+      this.store.loadNestedPage(page);
+    }
+  };
+
+  Pager.prototype.doDestroy = function() {
+    this.paginator.destroy();
+    return Pager.__super__.doDestroy.apply(this, arguments);
+  };
+
+  return Pager;
+
+})(Miwo.Component);
+
+module.exports = Pager;
+
+
+},{"../utils/Paginator":97}],68:[function(require,module,exports){
+var Paginator, UtilPaginator,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+UtilPaginator = require('../utils/Paginator');
+
+Paginator = (function(_super) {
+  __extends(Paginator, _super);
+
+  function Paginator() {
+    return Paginator.__super__.constructor.apply(this, arguments);
+  }
+
+  Paginator.prototype.nestedCount = 2;
+
+  Paginator.prototype.remoteCount = 2;
+
+  Paginator.prototype.size = null;
+
+  Paginator.prototype.el = 'nav';
+
+  Paginator.prototype.paginator = null;
+
+  Paginator.prototype.doInit = function() {
+    Paginator.__super__.doInit.apply(this, arguments);
+    this.paginator = new UtilPaginator();
+    this.paginator.on('page', (function(_this) {
+      return function() {
+        if (!_this.rendered) {
+          return;
+        }
+        _this.renderPages();
+      };
+    })(this));
+  };
+
+  Paginator.prototype.setStore = function(store) {
+    this.store = store;
+    this.mon(store, 'beforeload', (function(_this) {
+      return function() {
+        _this.setDisabled(true);
+      };
+    })(this));
+    this.mon(store, 'load', (function(_this) {
+      return function() {
+        _this.setDisabled(false);
+        _this.syncStore();
+      };
+    })(this));
+    if (store.loading) {
+      this.setDisabled(true);
+    } else if (store.loaded) {
+      this.syncStore();
+    }
+  };
+
+  Paginator.prototype.syncStore = function() {
+    this.paginator.setItemsPerPage(this.store.pageSize);
+    this.paginator.setItemCount(this.store.totalCount);
+    this.paginator.setPage(this.store.page);
+  };
+
+  Paginator.prototype.doRender = function() {
+    this.renderPages();
+  };
+
+  Paginator.prototype.afterRender = function() {
+    Paginator.__super__.afterRender.apply(this, arguments);
+    this.mon(this.el, 'click:relay(a)', 'onClick');
+  };
+
+  Paginator.prototype.renderPages = function() {
+    var a, i, li, max, min, quotient, step, steps, text, ul, _i, _j, _k, _len, _ref, _results;
+    this.el.empty();
+    if (this.paginator.itemCount === null) {
+      return;
+    }
+    if (this.paginator.getPageCount() < 2) {
+      return;
+    }
+    min = Math.max(this.paginator.getFirstPage(), this.page - this.nestedCount);
+    max = Math.min(this.paginator.getLastPage(), this.page + this.nestedCount);
+    steps = (function() {
+      _results = [];
+      for (var _i = min; min <= max ? _i <= max : _i >= max; min <= max ? _i++ : _i--){ _results.push(_i); }
+      return _results;
+    }).apply(this);
+    quotient = (this.paginator.getPageCount() - 1) / this.remoteCount;
+    for (i = _j = 0, _ref = this.remoteCount; 0 <= _ref ? _j <= _ref : _j >= _ref; i = 0 <= _ref ? ++_j : --_j) {
+      steps.include(Math.round(quotient * i) + this.paginator.getFirstPage());
+    }
+    steps.sort(function(a, b) {
+      return a - b;
+    });
+    ul = new Element('ul', {
+      cls: 'pagination'
+    }).inject(this.el);
+    if (this.size) {
+      ul.addClass('pagination-' + this.size);
+    }
+    text = '<span class="sr-only">' + miwo.tr('miwo.nav.prev') + '</span><span aria-hidden="true">&laquo;</span>';
+    li = new Element('li').inject(ul);
+    a = new Element('a', {
+      html: text,
+      href: '#',
+      'data-page': 1
+    }).inject(li);
+    if (this.paginator.isFirst()) {
+      li.addClass('disabled');
+    }
+    for (_k = 0, _len = steps.length; _k < _len; _k++) {
+      step = steps[_k];
+      li = new Element('li').inject(ul);
+      if (step === this.page) {
+        li.addClass('active');
+      }
+      text = '<span>' + step + '</span>';
+      if (step === this.page) {
+        text = step + '<span class="sr-only">(current)</span>';
+      }
+      a = new Element('a', {
+        html: text,
+        href: '#',
+        'data-page': step
+      }).inject(li);
+    }
+    text = '<span aria-hidden="true">&raquo;</span><span class="sr-only">' + miwo.tr('miwo.nav.next') + '</span>';
+    li = new Element('li').inject(ul);
+    a = new Element('a', {
+      html: text,
+      href: '#',
+      'data-page': this.paginator.getLastPage()
+    }).inject(li);
+    if (this.paginator.isLast()) {
+      li.addClass('disabled');
+    }
+  };
+
+  Paginator.prototype.onClick = function(event, el) {
+    var page;
+    event.preventDefault();
+    if (this.disabled) {
+      return;
+    }
+    page = parseInt(el.get('data-page'));
+    this.emit('page', this, page);
+    if (this.store) {
+      this.store.loadPage(page);
+    }
+  };
+
+  return Paginator;
+
+})(Miwo.Component);
+
+module.exports = Paginator;
+
+
+},{"../utils/Paginator":97}],69:[function(require,module,exports){
+module.exports = {
+  Paginator: require('./Paginator'),
+  Pager: require('./Pager')
+};
+
+
+},{"./Pager":67,"./Paginator":68}],70:[function(require,module,exports){
 var Notification, Notificator,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7154,13 +7474,13 @@ Notificator = (function(_super) {
 module.exports = Notificator;
 
 
-},{}],68:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 module.exports = {
   Notificator: require('./Notificator')
 };
 
 
-},{"./Notificator":67}],69:[function(require,module,exports){
+},{"./Notificator":70}],72:[function(require,module,exports){
 var Color, ColorPicker,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7336,11 +7656,11 @@ ColorPicker = (function(_super) {
 module.exports = ColorPicker;
 
 
-},{"../utils/Color":91}],70:[function(require,module,exports){
+},{"../utils/Color":95}],73:[function(require,module,exports){
 
 
 
-},{}],71:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 var ColorPicker, PickerManager, Popover;
 
 Popover = require('../tip/Popover');
@@ -7392,15 +7712,15 @@ PickerManager = (function() {
 module.exports = PickerManager;
 
 
-},{"../tip/Popover":86,"./Color":69}],72:[function(require,module,exports){
+},{"../tip/Popover":89,"./Color":72}],75:[function(require,module,exports){
 
 
 
-},{}],73:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 
 
 
-},{}],74:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 module.exports = {
   Manager: require('./Manager'),
   Color: require('./Color'),
@@ -7410,7 +7730,7 @@ module.exports = {
 };
 
 
-},{"./Color":69,"./Date":70,"./Manager":71,"./Month":72,"./Time":73}],75:[function(require,module,exports){
+},{"./Color":72,"./Date":73,"./Manager":74,"./Month":75,"./Time":76}],78:[function(require,module,exports){
 var BaseSelector,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7466,7 +7786,7 @@ BaseSelector = (function(_super) {
 module.exports = BaseSelector;
 
 
-},{}],76:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 var CheckSelector, RowSelector,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7553,7 +7873,7 @@ CheckSelector = (function(_super) {
 module.exports = CheckSelector;
 
 
-},{"./RowSelector":77}],77:[function(require,module,exports){
+},{"./RowSelector":80}],80:[function(require,module,exports){
 var BaseSelector, RowSelector,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7609,7 +7929,7 @@ RowSelector = (function(_super) {
 module.exports = RowSelector;
 
 
-},{"./BaseSelector":75}],78:[function(require,module,exports){
+},{"./BaseSelector":78}],81:[function(require,module,exports){
 var SelectionModel,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7900,7 +8220,7 @@ SelectionModel = (function(_super) {
 module.exports = SelectionModel;
 
 
-},{}],79:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 var SelectorFactory;
 
 SelectorFactory = (function() {
@@ -7928,7 +8248,7 @@ SelectorFactory = (function() {
 module.exports = SelectorFactory;
 
 
-},{}],80:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 module.exports = {
   SelectorFactory: require('./SelectorFactory'),
   BaseSelector: require('./BaseSelector'),
@@ -7938,7 +8258,7 @@ module.exports = {
 };
 
 
-},{"./BaseSelector":75,"./CheckSelector":76,"./RowSelector":77,"./SelectionModel":78,"./SelectorFactory":79}],81:[function(require,module,exports){
+},{"./BaseSelector":78,"./CheckSelector":79,"./RowSelector":80,"./SelectionModel":81,"./SelectorFactory":82}],84:[function(require,module,exports){
 var Panel,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -7980,7 +8300,7 @@ Panel = (function(_super) {
 module.exports = Panel;
 
 
-},{}],82:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 var Panel, Tabs,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8077,14 +8397,14 @@ Tabs = (function(_super) {
 module.exports = Tabs;
 
 
-},{"./Panel":81}],83:[function(require,module,exports){
+},{"./Panel":84}],86:[function(require,module,exports){
 module.exports = {
   Tabs: require('./Tabs'),
   Panel: require('./Panel')
 };
 
 
-},{"./Panel":81,"./Tabs":82}],84:[function(require,module,exports){
+},{"./Panel":84,"./Tabs":85}],87:[function(require,module,exports){
 var BaseTip,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8216,7 +8536,7 @@ BaseTip = (function(_super) {
 module.exports = BaseTip;
 
 
-},{}],85:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 var BaseTipManager,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8307,7 +8627,7 @@ BaseTipManager = (function(_super) {
 module.exports = BaseTipManager;
 
 
-},{}],86:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 var BaseTip, Popover, ScreenMask,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8415,7 +8735,7 @@ Popover = (function(_super) {
 module.exports = Popover;
 
 
-},{"../utils/ScreenMask":93,"./BaseTip":84}],87:[function(require,module,exports){
+},{"../utils/ScreenMask":98,"./BaseTip":87}],90:[function(require,module,exports){
 var BaseTipManager, Popover, PopoverManager,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8468,7 +8788,7 @@ PopoverManager = (function(_super) {
 module.exports = PopoverManager;
 
 
-},{"./BaseTipManager":85,"./Popover":86}],88:[function(require,module,exports){
+},{"./BaseTipManager":88,"./Popover":89}],91:[function(require,module,exports){
 var BaseTip, Tooltip,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8516,7 +8836,7 @@ Tooltip = (function(_super) {
 module.exports = Tooltip;
 
 
-},{"./BaseTip":84}],89:[function(require,module,exports){
+},{"./BaseTip":87}],92:[function(require,module,exports){
 var BaseTipManager, Tooltip, TooltipManager,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8561,7 +8881,7 @@ TooltipManager = (function(_super) {
 module.exports = TooltipManager;
 
 
-},{"./BaseTipManager":85,"./Tooltip":88}],90:[function(require,module,exports){
+},{"./BaseTipManager":88,"./Tooltip":91}],93:[function(require,module,exports){
 module.exports = {
   BaseTip: require('./BaseTip'),
   Popover: require('./Popover'),
@@ -8569,7 +8889,24 @@ module.exports = {
 };
 
 
-},{"./BaseTip":84,"./Popover":86,"./Tooltip":88}],91:[function(require,module,exports){
+},{"./BaseTip":87,"./Popover":89,"./Tooltip":91}],94:[function(require,module,exports){
+module.exports = {
+  nav: {
+    prev: 'Previous',
+    next: 'Next'
+  },
+  grid: {
+    execute: 'Do',
+    confirm: 'Confirm'
+  },
+  dialog: {
+    ok: 'Ok',
+    cancel: 'Cancel'
+  }
+};
+
+
+},{}],95:[function(require,module,exports){
 var Color;
 
 Color = (function() {
@@ -8823,7 +9160,7 @@ Color.intToHex = function(dec) {
 module.exports = Color;
 
 
-},{}],92:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 var LoadMask,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8844,7 +9181,87 @@ LoadMask = (function(_super) {
 module.exports = LoadMask;
 
 
-},{}],93:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
+var Paginator,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+Paginator = (function(_super) {
+  __extends(Paginator, _super);
+
+  function Paginator() {
+    return Paginator.__super__.constructor.apply(this, arguments);
+  }
+
+  Paginator.prototype.base = 1;
+
+  Paginator.prototype.itemsPerPage = 1;
+
+  Paginator.prototype.page = null;
+
+  Paginator.prototype.itemCount = null;
+
+  Paginator.prototype.getFirstPage = function() {
+    return this.base;
+  };
+
+  Paginator.prototype.getLastPage = function() {
+    if (this.itemCount === null) {
+      return null;
+    } else {
+      return this.base + Math.max(0, this.getPageCount() - 1);
+    }
+  };
+
+  Paginator.prototype.isFirst = function() {
+    return this.page === 1 || this.page === null;
+  };
+
+  Paginator.prototype.isLast = function() {
+    if (this.itemCount === null) {
+      return true;
+    } else {
+      return this.page === this.getLastPage();
+    }
+  };
+
+  Paginator.prototype.getPageCount = function() {
+    if (this.itemCount === null) {
+      return null;
+    } else {
+      return Math.ceil(this.itemCount / this.itemsPerPage);
+    }
+  };
+
+  Paginator.prototype.setItemsPerPage = function(itemsPerPage) {
+    this.itemsPerPage = Math.max(1, parseInt(itemsPerPage));
+    this.emit('itemsperpage', this, this.itemsPerPage);
+    return this;
+  };
+
+  Paginator.prototype.setItemCount = function(itemCount) {
+    this.itemCount = Math.max(0, parseInt(itemCount));
+    this.emit('itemcount', this, this.itemCount);
+    return this;
+  };
+
+  Paginator.prototype.setPage = function(page) {
+    page = parseInt(page);
+    if (page !== this.page) {
+      this.page = page;
+      this.emit('page', this, this.page);
+    }
+    return this;
+  };
+
+  return Paginator;
+
+})(Miwo.Object);
+
+module.exports = Paginator;
+
+
+},{}],98:[function(require,module,exports){
 var ScreenMask;
 
 ScreenMask = (function() {
@@ -8881,7 +9298,7 @@ ScreenMask = (function() {
 module.exports = ScreenMask;
 
 
-},{}],94:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 module.exports = {
   LoadMask: require('./LoadMask'),
   ScreenMask: require('./ScreenMask'),
@@ -8889,7 +9306,7 @@ module.exports = {
 };
 
 
-},{"./Color":91,"./LoadMask":92,"./ScreenMask":93}],95:[function(require,module,exports){
+},{"./Color":95,"./LoadMask":96,"./ScreenMask":98}],100:[function(require,module,exports){
 var Dialog, Window,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -8936,7 +9353,7 @@ Dialog = (function(_super) {
 module.exports = Dialog;
 
 
-},{"./Window":98}],96:[function(require,module,exports){
+},{"./Window":103}],101:[function(require,module,exports){
 var Button, Dialog, DialogFactory;
 
 Dialog = require('./Dialog');
@@ -9019,7 +9436,7 @@ DialogFactory = (function() {
 module.exports = DialogFactory;
 
 
-},{"../buttons/Button":6,"./Dialog":95}],97:[function(require,module,exports){
+},{"../buttons/Button":6,"./Dialog":100}],102:[function(require,module,exports){
 var Form, FormWindow, Window,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9088,7 +9505,7 @@ FormWindow = (function(_super) {
 module.exports = FormWindow;
 
 
-},{"../form/container/Form":18,"./Window":98}],98:[function(require,module,exports){
+},{"../form/container/Form":18,"./Window":103}],103:[function(require,module,exports){
 var Button, Window,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9331,7 +9748,7 @@ Window = (function(_super) {
 module.exports = Window;
 
 
-},{"../buttons/Button":6}],99:[function(require,module,exports){
+},{"../buttons/Button":6}],104:[function(require,module,exports){
 var WindowManager;
 
 WindowManager = (function() {
@@ -9372,7 +9789,7 @@ WindowManager = (function() {
 module.exports = WindowManager;
 
 
-},{}],100:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 module.exports = {
   Window: require('./Window'),
   FormWindow: require('./FormWindow'),
@@ -9380,4 +9797,4 @@ module.exports = {
 };
 
 
-},{"./Dialog":95,"./FormWindow":97,"./Window":98}]},{},[54])
+},{"./Dialog":100,"./FormWindow":102,"./Window":103}]},{},[54])

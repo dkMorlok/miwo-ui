@@ -95,7 +95,7 @@ class ActionColumn extends Column
 			@popover = new PopoverSubmit
 				renderTo: miwo.body
 				target: btn.el
-				title: miwo.tr("miwo.grid.confirm") || 'Confirm'
+				title: miwo.tr("miwo.grid.confirm")
 				placement: action.confirmPlacement || 'left'
 				onSubmit: ()=> @getGrid().onActionSubmit(action, record)
 				onCancel: ()=> @closePopover()

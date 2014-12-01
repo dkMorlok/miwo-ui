@@ -98,6 +98,10 @@ class MiwoUiExtension extends Miwo.InjectorExtension
 				behavior.apply(component.el)
 				return
 			return
+
+		injector.update('translator').setup (service)=>
+			service.setTranslates('en', 'miwo', require('./translates'))
+			return
 		return
 
 
