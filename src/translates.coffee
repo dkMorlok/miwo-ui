@@ -2,6 +2,7 @@ module.exports =
 	nav:
 		prev: 'Previous'
 		next: 'Next'
+		current: 'Current'
 	grid:
 		execute: 'Do'
 		confirm: 'Confirm'

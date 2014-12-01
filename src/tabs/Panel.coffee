@@ -17,8 +17,14 @@ class Panel extends Miwo.Container
 		return
 
 
-	setActive: () ->
+	setActive: ->
 		@getParent().setActive(@name)
+		return
+
+
+	afterRender: ->
+		super
+		@el.set('role', 'tabpanel')
 		return
 
 

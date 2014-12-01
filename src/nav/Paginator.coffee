@@ -79,7 +79,7 @@ class Paginator extends Miwo.Component
 			li = new Element('li').inject(ul)
 			li.addClass('active')  if step is @page
 			text = '<span>'+step+'</span>'
-			text = step+'<span class="sr-only">(current)</span>' if step is @page
+			text = step+'<span class="sr-only">('+miwo.tr('miwo.nav.current')+')</span>' if step is @page
 			a = new Element('a', {html:text, href:'#', 'data-page':step}).inject(li)
 
 		text = '<span aria-hidden="true">&raquo;</span><span class="sr-only">'+miwo.tr('miwo.nav.next')+'</span>'

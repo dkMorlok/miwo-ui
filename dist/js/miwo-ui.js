@@ -7481,7 +7481,7 @@ Paginator = (function(_super) {
       }
       text = '<span>' + step + '</span>';
       if (step === this.page) {
-        text = step + '<span class="sr-only">(current)</span>';
+        text = step + '<span class="sr-only">(' + miwo.tr('miwo.nav.current') + ')</span>';
       }
       a = new Element('a', {
         html: text,
@@ -8431,6 +8431,11 @@ Panel = (function(_super) {
     this.getParent().setActive(this.name);
   };
 
+  Panel.prototype.afterRender = function() {
+    Panel.__super__.afterRender.apply(this, arguments);
+    this.el.set('role', 'tabpanel');
+  };
+
   return Panel;
 
 })(Miwo.Container);
@@ -8505,14 +8510,23 @@ Tabs = (function(_super) {
     Tabs.__super__.afterRender.apply(this, arguments);
     this.setActive(this.active);
     this.mon(this.el, 'click:relay(.nav a)', 'onTabClick');
+    this.tabsEl.set('role', 'tablist');
   };
 
   Tabs.prototype.renderComponent = function(component) {
-    var tab;
+    var link, tab;
     Tabs.__super__.renderComponent.call(this, component);
-    tab = new Element('li');
-    tab.set('html', '<a href="#' + component.name + '">' + component.title + '</a>');
+    tab = new Element('li', {
+      role: 'presentation'
+    });
     tab.inject(this.tabsEl);
+    link = new Element('a', {
+      'aria-controls': component.id,
+      href: '#' + component.name,
+      role: 'tab',
+      html: component.title
+    });
+    link.inject(tab);
     component.tab = tab;
   };
 
@@ -9031,7 +9045,8 @@ module.exports = {
 module.exports = {
   nav: {
     prev: 'Previous',
-    next: 'Next'
+    next: 'Next',
+    current: 'Current'
   },
   grid: {
     execute: 'Do',

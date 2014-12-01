@@ -61,15 +61,17 @@ class Tabs extends Miwo.Container
 		super
 		@setActive(@active)
 		@mon(@el, 'click:relay(.nav a)', 'onTabClick')
+		@tabsEl.set('role','tablist')
 		return
 
 
 	renderComponent: (component) ->
 		super(component)
 		# render tab
-		tab = new Element('li')
-		tab.set('html', '<a href="#'+component.name+'">'+(component.title)+'</a>')
+		tab = new Element('li', {role: 'presentation'})
 		tab.inject(@tabsEl)
+		link = new Element('a', {'aria-controls': component.id, href:'#'+component.name, role:'tab', html:component.title})
+		link.inject(tab)
 		component.tab = tab
 		return
 
