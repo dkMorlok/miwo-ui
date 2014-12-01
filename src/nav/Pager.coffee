@@ -51,7 +51,7 @@ class Pager extends Miwo.Component
 		li = new Element('li').inject(ul)
 		li.toggleClass('disabled', @paginator.isFirst())
 		li.addClass('previous') if @navigate
-		a = new Element('a', {html:text, href:'#', 'data-page':'prev'}).inject(li)
+		a = new Element('a', {html:text, href:'#', 'data-page':'prev', role:'button'}).inject(li)
 		@prevEl = li
 
 		text = '<span>'+miwo.tr('miwo.nav.next')+'</span>'
@@ -60,7 +60,7 @@ class Pager extends Miwo.Component
 		li.setStyle('padding-left', '10px')
 		li.toggleClass('disabled', @paginator.isLast())
 		li.addClass('next') if @navigate
-		a = new Element('a', {html:text, href:'#', 'data-page':'next'}).inject(li)
+		a = new Element('a', {html:text, href:'#', 'data-page':'next', role:'button'}).inject(li)
 		@nextEl = li
 		return
 

@@ -42,6 +42,7 @@ class Grid extends Miwo.Container
 	paginator: false
 	# @cfg string Default action button size. You can set size by bootstrap: 'xs', 'sm', ... Default is 'sm'
 	actionBtnSize: null
+	role: 'grid'
 
 	layout: false
 	baseCls: "grid"

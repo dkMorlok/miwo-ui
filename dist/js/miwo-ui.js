@@ -848,6 +848,7 @@ DropdownItem = (function(_super) {
   };
 
   DropdownItem.prototype.doRender = function() {
+    this.el.set('role', 'presentation');
     this.linkEl = new Element("a", {
       href: '#click',
       role: 'menuitem',
@@ -944,6 +945,11 @@ DropdownList = (function(_super) {
   DropdownList.prototype.doHide = function() {
     DropdownList.__super__.doHide.call(this);
     this.resetRendered(true);
+  };
+
+  DropdownList.prototype.afterRender = function() {
+    DropdownList.__super__.afterRender.apply(this, arguments);
+    this.el.set('role', 'menu');
   };
 
   return DropdownList;
@@ -3952,6 +3958,8 @@ Grid = (function(_super) {
 
   Grid.prototype.actionBtnSize = null;
 
+  Grid.prototype.role = 'grid';
+
   Grid.prototype.layout = false;
 
   Grid.prototype.baseCls = "grid";
@@ -5985,6 +5993,8 @@ Combo = (function(_super) {
 
   Combo.prototype.xtype = 'combo';
 
+  Combo.prototype.role = 'combobox';
+
   Combo.prototype.hideSelected = true;
 
   Combo.prototype.multiple = false;
@@ -7311,7 +7321,8 @@ Pager = (function(_super) {
     a = new Element('a', {
       html: text,
       href: '#',
-      'data-page': 'prev'
+      'data-page': 'prev',
+      role: 'button'
     }).inject(li);
     this.prevEl = li;
     text = '<span>' + miwo.tr('miwo.nav.next') + '</span>';
@@ -7327,7 +7338,8 @@ Pager = (function(_super) {
     a = new Element('a', {
       html: text,
       href: '#',
-      'data-page': 'next'
+      'data-page': 'next',
+      role: 'button'
     }).inject(li);
     this.nextEl = li;
   };
@@ -7468,7 +7480,8 @@ Paginator = (function(_super) {
     a = new Element('a', {
       html: text,
       href: '#',
-      'data-page': 1
+      'data-page': 1,
+      role: 'button'
     }).inject(li);
     if (this.paginator.isFirst()) {
       li.addClass('disabled');
@@ -7486,7 +7499,8 @@ Paginator = (function(_super) {
       a = new Element('a', {
         html: text,
         href: '#',
-        'data-page': step
+        'data-page': step,
+        role: 'button'
       }).inject(li);
     }
     text = '<span aria-hidden="true">&raquo;</span><span class="sr-only">' + miwo.tr('miwo.nav.next') + '</span>';
@@ -7494,7 +7508,8 @@ Paginator = (function(_super) {
     a = new Element('a', {
       html: text,
       href: '#',
-      'data-page': this.paginator.getLastPage()
+      'data-page': this.paginator.getLastPage(),
+      role: 'button'
     }).inject(li);
     if (this.paginator.isLast()) {
       li.addClass('disabled');

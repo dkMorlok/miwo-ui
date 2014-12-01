@@ -21,6 +21,7 @@ class DropdownItem extends Miwo.Component
 
 
 	doRender: ->
+		@el.set('role', 'presentation')
 		@linkEl = new Element "a",
 			href: '#click'
 			role: 'menuitem'

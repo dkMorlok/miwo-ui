@@ -72,7 +72,7 @@ class Paginator extends Miwo.Component
 
 		text = '<span class="sr-only">'+miwo.tr('miwo.nav.prev')+'</span><span aria-hidden="true">&laquo;</span>'
 		li = new Element('li').inject(ul)
-		a = new Element('a', {html:text, href:'#', 'data-page':1}).inject(li)
+		a = new Element('a', {html:text, href:'#', 'data-page':1, role:'button'}).inject(li)
 		if @paginator.isFirst() then li.addClass('disabled')
 
 		for step in steps
@@ -80,11 +80,11 @@ class Paginator extends Miwo.Component
 			li.addClass('active')  if step is @page
 			text = '<span>'+step+'</span>'
 			text = step+'<span class="sr-only">('+miwo.tr('miwo.nav.current')+')</span>' if step is @page
-			a = new Element('a', {html:text, href:'#', 'data-page':step}).inject(li)
+			a = new Element('a', {html:text, href:'#', 'data-page':step, role:'button'}).inject(li)
 
 		text = '<span aria-hidden="true">&raquo;</span><span class="sr-only">'+miwo.tr('miwo.nav.next')+'</span>'
 		li = new Element('li').inject(ul)
-		a = new Element('a', {html:text, href:'#', 'data-page':@paginator.getLastPage()}).inject(li)
+		a = new Element('a', {html:text, href:'#', 'data-page':@paginator.getLastPage(), role:'button'}).inject(li)
 		if @paginator.isLast() then li.addClass('disabled')
 		return
 

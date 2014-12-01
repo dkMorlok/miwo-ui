@@ -21,11 +21,11 @@ class DropdownList extends Miwo.Container
 		return @add name, new Item(config)
 
 
-	addDivider: () ->
+	addDivider: ->
 		return @add new Divider()
 
 
-	show: () ->
+	show: ->
 		super()
 		pos = @target.getPosition()
 		pos.y += @target.getSize().y-3
@@ -33,14 +33,20 @@ class DropdownList extends Miwo.Container
 		return
 
 
-	toggle: () ->
+	toggle: ->
 		if @visible then @hide() else @show()
 		return
 
 
-	doHide: () ->
+	doHide: ->
 		super()
 		@resetRendered(true)
+		return
+
+
+	afterRender: ->
+		super
+		@el.set('role', 'menu')
 		return
 
 

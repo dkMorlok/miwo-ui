@@ -5,6 +5,7 @@ class Combo extends Miwo.Component
 
 	isInput: true
 	xtype: 'combo'
+	role: 'combobox'
 	hideSelected: true
 	multiple: false
 	height: null
