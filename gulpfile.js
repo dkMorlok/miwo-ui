@@ -24,9 +24,13 @@ var paths = {
 		target: 'miwo-ui.js',
 		distDir: './dist/js/'
 	},
-	img : {
+	img: {
 		src: 'img/**/*',
 		distDir: './dist/img/'
+	},
+	assets: {
+		src: 'less/**/*',
+		distDir: './dist/less/'
 	},
 	watch: {
 		coffee: ['src/**/*.coffee'],
@@ -64,6 +68,11 @@ gulp.task('copy-images', function() {
 		.pipe(gulp.dest(paths.img.distDir))
 });
 
+gulp.task('copy-assets', function() {
+	return gulp.src(paths.assets.src)
+		.pipe(gulp.dest(paths.assets.distDir))
+});
+
 gulp.task('compile-css', function() {
 	return gulp.src(paths.css.src)
 		.pipe(pipes.createPlumber())
@@ -98,7 +107,7 @@ gulp.task('minify-css', function() {
 });
 
 gulp.task('build', function(cb) {
-	sequence(['compile-js', 'compile-css', 'copy-images'], cb);
+	sequence(['compile-js', 'compile-css', 'copy-images', 'copy-assets'], cb);
 });
 
 gulp.task('dist', function(cb) {

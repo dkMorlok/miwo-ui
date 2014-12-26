@@ -10,6 +10,7 @@ class Popover extends BaseTip
 	baseCls: 'popover'
 	screenMask: null
 	closeMode: 'close'
+	role: 'tooltip'
 
 
 	afterInit: () ->
@@ -22,7 +23,6 @@ class Popover extends BaseTip
 	beforeRender: () ->
 		super
 		@el.addClass("in #{@placement} popover-#{@type}")
-		@el.set('role', 'tooltip')
 		@el.set 'html',
 		'<div class="arrow"></div>'+
 		'<h3 miwo-reference="titleEl" class="popover-title"></h3>'+

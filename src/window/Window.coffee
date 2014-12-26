@@ -94,13 +94,13 @@ class Window extends Miwo.Container
 		super()
 		@el.addClass('modal-dialog')
 		@el.set 'html', """
-		<div class="miwo-window-content modal-content">
-			<div miwo-reference="headerEl" class="miwo-window-header modal-header">
-				<div miwo-reference="toolsEl" class='miwo-window-tools'></div>
-				<h4 miwo-reference="titleEl" class='miwo-window-title modal-title'>#{@title}</h4>
+		<div class="window-content modal-content">
+			<div miwo-reference="headerEl" class="window-header modal-header">
+				<div miwo-reference="toolsEl" class='window-tools'></div>
+				<h4 miwo-reference="titleEl" class='window-title modal-title'>#{@title}</h4>
 			</div>
-			<div miwo-reference="contentEl" class="miwo-window-body modal-body"></div>
-			<div miwo-reference="footerEl" class="miwo-window-footer modal-footer"></div>
+			<div miwo-reference="contentEl" class="window-body modal-body"></div>
+			<div miwo-reference="footerEl" class="window-footer modal-footer"></div>
 		</div>"""
 		return
 
@@ -137,7 +137,7 @@ class Window extends Miwo.Container
 
 	onBodyClick: (e) ->
 		if @isVisible() && e.target is @el then return
-		if e.target.getParent('.miwo-window') is @el then return
+		if e.target.getParent('.window') is @el then return
 		@close() if @closeOnClickOut
 		return
 

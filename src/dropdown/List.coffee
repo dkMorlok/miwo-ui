@@ -9,6 +9,7 @@ class DropdownList extends Miwo.Container
 	baseCls: "dropdown-menu"
 	target: null
 	visible: false
+	role: 'menu'
 
 
 	afterInit: () ->
@@ -41,12 +42,6 @@ class DropdownList extends Miwo.Container
 	doHide: ->
 		super()
 		@resetRendered(true)
-		return
-
-
-	afterRender: ->
-		super
-		@el.set('role', 'menu')
 		return
 
 

@@ -3,6 +3,7 @@ class Panel extends Miwo.Container
 	tab: null
 	baseCls: 'tab-pane'
 	visible: false
+	role: 'tabpanel'
 
 
 	setTitle: (@title) ->
@@ -21,11 +22,6 @@ class Panel extends Miwo.Container
 		@getParent().setActive(@name)
 		return
 
-
-	afterRender: ->
-		super
-		@el.set('role', 'tabpanel')
-		return
 
 
 module.exports = Panel

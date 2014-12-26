@@ -27,7 +27,7 @@ Notificator = require './notify/Notificator'
 PickerManager = require './picker/Manager'
 
 
-class MiwoUiExtension extends Miwo.InjectorExtension
+class MiwoUiExtension extends Miwo.di.InjectorExtension
 
 
 	init: () ->

@@ -3,7 +3,7 @@ class BehaviorManager
 	behaviors: null
 
 
-	constructor: () ->
+	constructor: ->
 		@behaviors = {}
 
 

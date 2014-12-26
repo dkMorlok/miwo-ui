@@ -9,6 +9,7 @@ class ButtonGroup extends Miwo.Container
 	toggle: null # checkbox, radio
 	size: null
 	label: null
+	role: 'group'
 
 
 	beforeInit: ->
@@ -90,7 +91,6 @@ class ButtonGroup extends Miwo.Container
 
 	afterRender: ->
 		super
-		@el.set('role', 'group')
 		@el.set('aria-label', @label) if @label
 		@el.addClass('btn-group-'+@size) if @size
 		return

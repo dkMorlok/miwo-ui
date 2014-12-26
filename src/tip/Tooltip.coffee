@@ -5,6 +5,7 @@ class Tooltip extends BaseTip
 
 	text: null
 	baseCls: 'tooltip'
+	role: 'tooltip'
 
 
 	setText: (@text) ->
@@ -17,7 +18,6 @@ class Tooltip extends BaseTip
 	beforeRender: () ->
 		super
 		@el.addClass("in #{@placement} tooltip-#{@type}")
-		@el.set('role', 'tooltip')
 		@el.set 'html', '<div class="tooltip-arrow"></div><div miwo-reference="contentEl" class="tooltip-inner"></div>'
 		return
 
