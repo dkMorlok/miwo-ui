@@ -2,7 +2,6 @@
   "name": "miwo-ui",
   "version": "0.0.1",
   "description": "UI components based on miwo framework",
-  "main": "dist/js/miwo-ui.js",
   "devDependencies": {
     "gulp": "~3.8.10",
     "gulp-util": "~3.0.1",
