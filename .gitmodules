@@ -1,3 +1,3 @@
-[submodule "examples/miwo"]
-	path = examples/miwo
-	url = https://github.com/dkMorlok/miwo.git
+[submodule "dist"]
+	path = dist
+	url = https://github.com/miwojs/bower-miwo-ui.git
