@@ -87,13 +87,16 @@ miwo.ready(function() {
 	var form = new Miwo.Form();
 	form.addText('name', {
 		label: 'Username',
-		append: '<span class="glyphicon glyphicon-search"></span>'
+		append: '<span class="glyphicon glyphicon-search"></span>',
+		help: 'This is help text for this input'
 	});
 	form.addText('email', {
 		label: 'Email',
 		type: 'email',
 		placeholder: 'your email',
-		prepend: '@'
+		prepend: '@',
+		desc: 'This is help text for this input',
+		tip: 'This is help text for this input'
 	});
 	form.addCheckbox('check', {
 		label: 'I want to be checked'

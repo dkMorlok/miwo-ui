@@ -9,14 +9,37 @@
 	.grid-body {
 		margin-bottom: 5px;
 	}
-	.grid-rows td {
-		border-top: 1px solid @grid-border-color;
+	.grid-rows {
+		tr td {
+			border-top: 1px solid @grid-border-color;
+		}
+		tr:first-child td {
+			border-top: none;
+		}
+		tr.grid-row-data:hover td {
+			background-color: @grid-bg-hover;
+		}
+		tr.grid-row-data.grid-selected td {
+			background-color: @grid-bg-selected;
+		}
+		tr.grid-row-group td {
+			border-top: none;
+			text-transform: uppercase;
+			padding-top: 15px;
+			font-weight: bold;
+		}
+		tr td.grid-col-actions {
+			padding-top: @grid-action-cell-padding;
+			padding-bottom: @grid-action-cell-padding;
+			.btn {
+				margin-left: @grid-action-indent;
+			}
+		}
 	}
-	.grid-row-group td {
-		border-top: none;
-		text-transform: uppercase;
-		padding-top: 15px;
-		font-weight: bold;
+	.grid-headers {
+		tr th {
+			border-bottom: 1px solid @grid-border-color;
+		}
 	}
 	.checkbox {
 		margin-top: -6px;
@@ -28,43 +51,34 @@
 			padding-left: 0px;
 		}
 	}
-	td.grid-col-actions {
-		padding-top: @grid-cell-padding-action;
-		padding-bottom: @grid-cell-padding-action;
+}
+.grid-select-row {
+	.grid-rows {
+		tr.grid-row-data {
+			cursor: pointer;
+		}
 	}
 }
 .grid-align-top {
-	.grid-headers th, .grid-rows td {
+	.grid-headers tr th, .grid-rows tr td {
 		vertical-align: top;
 	}
 }
 .grid-align-middle {
-	.grid-headers th, .grid-rows td {
+	.grid-headers tr th, .grid-rows tr td {
 		vertical-align: middle;
 	}
 }
 .grid-condensed {
-	.grid-headers th, .grid-rows td {
-		padding: @grid-cell-padding-condensed;
+	.grid-headers tr th, .grid-rows tr td {
+		padding: @grid-condensed-cell-padding;
 	}
 }
 .grid-nowrap {
-	.grid-rows {
-		td {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-	}
-}
-.grid-selected {
-	td {
-		background-color: @grid-selected-bg;
-	}
-}
-.grid-col-actions {
-	.btn {
-		margin-left: @grid-action-indent;
+	.grid-rows tr td {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }
 .grid-popover-submit {

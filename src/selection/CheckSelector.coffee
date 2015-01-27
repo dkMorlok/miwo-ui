@@ -3,6 +3,7 @@ RowSelector = require './RowSelector'
 
 class CheckSelector extends RowSelector
 
+	type: 'check'
 	selectOnRowClick: false
 	checkerRequired: true
 

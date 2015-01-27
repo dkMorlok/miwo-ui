@@ -34,6 +34,7 @@ class BaseSelector extends Miwo.Object
 
 
 	gridRendered: (grid) ->
+		grid.el.addClass('grid-select-'+@type)
 		return
 
 

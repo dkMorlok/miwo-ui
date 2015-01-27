@@ -421,7 +421,7 @@ class BaseControl extends Miwo.Component
 			@el.addClass('input-fill')
 			ct.setStyle('width', @inputWidth)
 
-		if @prepend || @append || @buttons
+		if @prepend || @append || @buttons || @tip
 			ct.addClass('input-group')
 		else
 			ct.addClass('input-control')
@@ -444,6 +444,11 @@ class BaseControl extends Miwo.Component
 				button = new Button(button)
 				button.getControl = ()=> return this
 				button.render(buttonsCt)
+
+		if @tip
+			span = new Element('span', {cls:'input-group-addon input-group-addon-tooltip', html: '<span class="glyphicon glyphicon-question-sign" data-title="'+@tip+'" data-toggle="tooltip"></span>'})
+			span.inject(ct)
+			ct.addClass('input-tooltip')
 
 		return input
 

@@ -69,22 +69,18 @@ class HorizontalRenderer
 		if control.help
 			helpEl = new Element "span",
 				parent: controlsEl
-				cls: "help-inline"
+				cls: "help-block"
 				html: control.help
+			control.helpEl = helpEl
 
 		@renderControl(control, controlsEl)
-
-		if control.tip
-			tipEl = new Element "span",
-				parent: controlsEl
-				cls: "help-inline"
-				html: '<i class="glyphicon glyphicon-question-sign" data-behavior="tooltip" data-placement="top" data-title="'+control.tip+'" />'
 
 		if control.desc
 			descEl = new Element "div",
 				parent: controlsEl
 				cls: "help-block"
 				html: control.desc
+			control.descEl = descEl
 		return
 
 

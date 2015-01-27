@@ -3,10 +3,13 @@ BaseSelector = require './BaseSelector'
 
 class RowSelector extends BaseSelector
 
+	type: 'row'
+
 	selectOnRowClick: true
 
 
 	gridRendered: (grid) ->
+		super(grid)
 		if @selectOnRowClick
 			@mon grid.bodyEl, "click:relay(tr)", (event, target) =>
 				@onRowClick(target, event)
