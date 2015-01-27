@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Grid Window</title>
+	<title>Grid</title>
 	<meta charset='utf-8'>
 
 	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css">
@@ -24,7 +24,7 @@ miwo.ready(function() {
 	miwo.init();
 
 	// create data store
-	var store = new Miwo.Store({
+	var store = new Miwo.data.Store({
 		name: 'user',
 		fields: {
 			id: {type:'int'},
@@ -37,17 +37,20 @@ miwo.ready(function() {
 	});
 	store.setData([
 		{id: 1, name: 'Dusan Kmet', role: 'admin'},
-		{id: 2, name: 'Petr Janosik', role: 'root'},
+		{id: 2, name: 'Petr Janosik', role: 'agent'},
 		{id: 3, name: 'John Doe', role: 'agent'},
-		{id: 4, name: 'Lorem dawd awd awd awdaw daiw dhaiw dhaiwdh aiwdhai dhaiwd awidh aiwdha iwdha ihwaidmin', role: 'guest'}
+		{id: 4, name: 'Lorem dawd awd awd awdaw daiw dhaiw dhaiwdh aiwdhai dhaiwd awidh aiwdha iwdha ihwaidmin', role: 'root'},
+		{id: 5, name: 'Miro Kmet', role: 'admin'}
 	]);
 
 
 	// show data in grid
 	var grid = new Miwo.Grid({
-		actionBtnSize: 'xs'
+		groupBy: 'role',
+		selector: 'row'
 	});
 	grid.setStore(store);
+
 	// columns
 	grid.addTextColumn('name', {
 		text: 'Username'
@@ -57,46 +60,21 @@ miwo.ready(function() {
 		align:'right',
 		width: 150
 	});
-	// actions
-	grid.addAction('edit', {
-		text: 'Edit',
-		inline: true,
-		callback: function(record) {
-			// load record into form
-			win.form.loadRecord(record);
-			// open edit window
-			win.open();
-		}
-	});
-	grid.addAction('delete', {
-		text: 'Delete',
-		inline: true,
+
+	// operations
+	grid.addOperation('delete', {
+		text: 'Delete rows',
 		confirm: true,
-		callback: function(record) {
-			store.remove(record);
+		callback:function(records) {
+			store.remove(records);
 		}
 	});
+	grid.addOperation('export', {
+		text: 'Export rows'
+		// handled in action event
+	});
+
 	grid.render('grid');
-
-
-	// create edit window
-	var win = new Miwo.FormWindow({title: 'Edit user'});
-	win.form.addText('name', {
-		label: 'Username'
-	});
-	win.form.addSelect('role', {
-		label: 'Agent role',
-		items: ['admin', 'root', 'agent', 'guest']
-	});
-	win.addCloseButton('Cancel');
-	win.addSubmitButton('Save');
-	win.on('success', function(win, form) {
-		// save form values to loaded record
-		form.updateRecord();
-		// hide edit window
-		win.close();
-	});
-
 });
 </script>
 

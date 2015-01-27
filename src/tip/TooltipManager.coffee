@@ -11,7 +11,12 @@ class TooltipManager extends BaseTipManager
 		placement = config.placement or target.get("data-placement") or @placement
 		distance = config.distance or target.get("data-distance") or @distance
 		delay = config.delay or target.get("data-delay") or @delay
-		if !title then return
+
+		if !title && (selector = target.get('data-title-el')) && (item = target.getElement(selector))
+			title = item.get('html')
+
+		if !title
+			return
 
 		tooltip = new Tooltip
 			target: target

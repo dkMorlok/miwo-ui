@@ -29,10 +29,12 @@ class Grid extends Miwo.Container
 
 	isGrid: true
 	xtype: 'grid'
+	condensed: false
 	stripe: false
 	nowrap: true
 	rowclickable: false
 	loadMask: false
+	verticalAlign: null # top or middle(by default)
 	store: null
 	renderer: null
 	selectable: false

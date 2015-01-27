@@ -4,15 +4,18 @@
 	<title>Form Horizontal</title>
 	<meta charset='utf-8'>
 
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="fontawesome/css/font-awesome.css">
-	<link rel="stylesheet" href="/miwo/dist/css/miwo.css">
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css">
+	<link rel="stylesheet" href="vendor/miwo/dist/css/miwo.css">
+	<link rel="stylesheet" href="css/examples.css">
 	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
-	<link rel="stylesheet" href="examples.css">
 
-	<script src="/mootools/mootools-core.js"></script>
-	<script src="/miwo/dist/js/miwo.js"></script>
-	<script src="/miwo-ui/dist/js/miwo-ui.js"></script>
+	<script src="vendor/mootools/mootools-core.js"></script>
+	<script src="vendor/miwo/dist/js/miwo.js"></script>
+	<script src="vendor/miwo-data/dist/js/miwo-data.js"></script>
+	<script src="vendor/miwo-latte/dist/js/miwo-latte.js"></script>
+	<script src="vendor/miwo-templates/dist/js/miwo-templates.js"></script>
+	<script src="../dist/js/miwo-ui.js"></script>
 </head>
 <body id="body">
 
@@ -29,9 +32,16 @@ miwo.ready(function() {
 	var window = new Miwo.FormWindow({
 		title: 'Form Window'
 	});
-	window.form.addText('name', 'Username');
-	window.form.addText('email', 'Email', {required: true});
-	window.form.addCheckbox('check', 'I want to be checked');
+	window.form.addText('name', {
+		label:'Username'
+	});
+	window.form.addText('email', {
+		label: 'Email',
+		required: true
+	});
+	window.form.addCheckbox('check', {
+		label: 'I want to be checked'
+	});
 	window.addCloseButton('Cancel');
 	window.addSubmitButton('Save');
 	window.show();

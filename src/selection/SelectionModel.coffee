@@ -158,6 +158,18 @@ class SelectionModel extends Miwo.Object
 		return
 
 
+	toggle: (records, silent) ->
+		toSelect = []
+		toDeselect = []
+		for record in Array.from(records)
+			if @isSelected(record) then toDeselect.push(record) else toSelect.push(record)
+		if toSelect.length > 0
+			@select(toSelect, silent)
+		if toDeselect.length > 0
+			@deselect(toDeselect, silent)
+		return
+
+
 	setSelected: (records, select, silent) ->
 		this[(if select then "select" else "deselect")](records, silent)
 		return

@@ -9,27 +9,35 @@ class RowSelector extends BaseSelector
 	gridRendered: (grid) ->
 		if @selectOnRowClick
 			@mon grid.bodyEl, "click:relay(tr)", (event, target) =>
-				record = target.retrieve("record")
-				@selection.deselectAll()
-				@selection.select(record)
+				@onRowClick(target, event)
 				return
 		return
 
 
+	onRowClick: (tr, event) ->
+		if !event.control && !event.meta
+			@selection.deselectAll()
+		if (record = tr.retrieve("record"))
+			@selection.toggle(record)
+		return
+
+
 	getRowByRecord: (record) ->
-		for tr in @grid.bodyEl.getChildren()
-			if tr.retrieve('record') is record
+		for tr in @grid.bodyEl.getElements('tr')
+			if tr.retrieve('record') && tr.retrieve('record').id is record.id
 				return tr
 		return null
 
 
 	modelSelect: (selection, record) ->
-		@getRowByRecord(record).addClass("grid-selected")
+		row = @getRowByRecord(record)
+		row.addClass("grid-selected") if row
 		return
 
 
 	modelDeselect: (selection, record) ->
-		@getRowByRecord(record).removeClass("grid-selected")
+		row = @getRowByRecord(record)
+		row.removeClass("grid-selected") if row
 		return
 
 

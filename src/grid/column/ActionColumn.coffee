@@ -12,7 +12,7 @@ class ActionColumn extends Column
 	align: 'right'
 	colClass: 'actions'
 	isActionColumn: true
-	btnSize: 'sm'
+	btnSize: null
 
 	# disable update cell if row is updated
 	preventUpdateCell: true
@@ -26,7 +26,7 @@ class ActionColumn extends Column
 
 
 	attachedContainer: (grid) ->
-		@btnSize = grid.actionBtnSize || 'sm'
+		@btnSize = grid.actionBtnSize || 'sm'  if !@btnSize
 		return
 
 

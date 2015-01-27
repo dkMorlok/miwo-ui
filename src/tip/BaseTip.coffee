@@ -66,30 +66,30 @@ class BaseTip extends Miwo.Container
 
 	updatePosition: ->
 		pos = @target.getPosition()
-		tsize = @target.getSize()
+		sizeTarget = @target.getSize()
 		size = @el.getSize()
 		distance = @distance
 
 		switch @placement
 			when "top"
 				@el.setPosition
-					x: pos.x - size.x / 2 + tsize.x / 2
+					x: pos.x - size.x / 2 + sizeTarget.x / 2
 					y: pos.y - size.y - distance
 
 			when "bottom"
 				@el.setPosition
-					x: pos.x - size.x / 2 + tsize.x / 2
-					y: pos.y + tsize.y + distance
+					x: pos.x - size.x / 2 + sizeTarget.x / 2
+					y: pos.y + sizeTarget.y + distance
 
 			when "left"
 				@el.setPosition
 					x: pos.x - size.x - distance
-					y: pos.y + tsize.y / 2 - size.y / 2
+					y: pos.y + sizeTarget.y / 2 - size.y / 2
 
 			when "right"
 				@el.setPosition
-					x: pos.x + tsize.x + distance
-					y: pos.y + tsize.y / 2 - size.y / 2
+					x: pos.x + sizeTarget.x + distance
+					y: pos.y + sizeTarget.y / 2 - size.y / 2
 		return
 
 

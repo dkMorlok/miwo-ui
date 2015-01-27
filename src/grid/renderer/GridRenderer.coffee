@@ -35,14 +35,17 @@ class GridRenderer extends Miwo.Object
 		for column in grid.getColumns()
 			if column.isCheckerColumn
 				@columns.push(column)
+
 		for column in grid.getColumns()
 			if !column.isCheckerColumn
 				@columns.push(column)
 
 		bodyEl = grid.bodyEl
 		bodyEl.addClass('grid-stripe')  if grid.stripe
+		bodyEl.addClass('grid-condensed')  if grid.condensed
 		bodyEl.addClass('grid-nowrap')  if grid.nowrap
 		bodyEl.addClass('grid-rowclickable')  if grid.rowclickable
+		bodyEl.addClass('grid-align-'+grid.verticalAlign)  if grid.verticalAlign
 
 		# header TABLE
 		theadTable = new Element("table")

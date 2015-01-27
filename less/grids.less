@@ -2,25 +2,21 @@
 .grid {
 	width: 100%;
 	max-width: 100%;
-	.grid-headers {
-		th {
-			padding: @grid-cell-padding;
-			line-height: 1.4;
-			vertical-align: top;
-			font-size: @grid-th-size;
-		}
+	.grid-headers th, .grid-rows td {
+		padding: @grid-cell-padding;
+		line-height: @grid-line-height;
 	}
 	.grid-body {
 		margin-bottom: 5px;
 	}
-	.grid-rows {
-		td {
-			padding: @grid-cell-padding;
-			line-height: 1.4;
-			vertical-align: top;
-			border-top: 1px solid @grid-border-color;
-			font-size: @grid-td-size;
-		}
+	.grid-rows td {
+		border-top: 1px solid @grid-border-color;
+	}
+	.grid-row-group td {
+		border-top: none;
+		text-transform: uppercase;
+		padding-top: 15px;
+		font-weight: bold;
 	}
 	.checkbox {
 		margin-top: -6px;
@@ -31,6 +27,25 @@
 		label {
 			padding-left: 0px;
 		}
+	}
+	td.grid-col-actions {
+		padding-top: @grid-cell-padding-action;
+		padding-bottom: @grid-cell-padding-action;
+	}
+}
+.grid-align-top {
+	.grid-headers th, .grid-rows td {
+		vertical-align: top;
+	}
+}
+.grid-align-middle {
+	.grid-headers th, .grid-rows td {
+		vertical-align: middle;
+	}
+}
+.grid-condensed {
+	.grid-headers th, .grid-rows td {
+		padding: @grid-cell-padding-condensed;
 	}
 }
 .grid-nowrap {

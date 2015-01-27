@@ -49,11 +49,10 @@ class CheckSelector extends RowSelector
 
 
 	gridRefresh: (grid) ->
-		store = grid.getStore()
-		sm = grid.getSelectionModel()
-
 		if !@column
 			throw new Error("Check selector is not binded with column. You should call setCheckColumn(). Maybe grid is not rendered")
+
+		sm = grid.getSelectionModel()
 
 		grid.getRecords().each (rec) =>
 			if !sm.isSelectable(rec)
