@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Progress bars</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css">
+	<link rel="stylesheet" href="vendor/miwo/dist/css/miwo.css">
+	<link rel="stylesheet" href="css/examples.css">
+	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
+
+	<script src="vendor/mootools/mootools-core.js"></script>
+	<script src="vendor/miwo/dist/js/miwo.js"></script>
+	<script src="vendor/miwo-data/dist/js/miwo-data.js"></script>
+	<script src="vendor/miwo-latte/dist/js/miwo-latte.js"></script>
+	<script src="vendor/miwo-templates/dist/js/miwo-templates.js"></script>
+	<script src="../dist/js/miwo-ui.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+	<h1>Progress bars</h1>
+	<hr>
+	<div style="max-width: 500px;">
+		<h2>Basic example</h2>
+		<div class="example">
+			<h4>Default progress bar</h4>
+			<div class="example-body"><div id="progressBar1"></div></div>
+		</div>
+		<div class="example">
+			<h4>Progress bar with label</h4>
+			<div class="example-body"><div id="progressBar2"></div></div>
+		</div>
+		<div class="example">
+			<h4>Progress bar with minimum width (2em)</h4>
+			<div class="example-body"><div id="progressBar3"></div></div>
+		</div>
+		<div class="example">
+			<h4>Progress bar with description</h4>
+			<div class="example-body"><div id="progressBar3b"></div></div>
+		</div>
+
+		<h2>Contextual alternatives</h2>
+		<div class="example">
+			<div class="example-body">
+				<div id="progressBar4a"></div>
+				<div id="progressBar4b"></div>
+				<div id="progressBar4c"></div>
+				<div id="progressBar4d"></div>
+			</div>
+		</div>
+
+		<h2>Alternative effects</h2>
+		<div class="example">
+			<h4>striped</h4>
+			<div class="example-body">
+				<div id="progressBar5a"></div>
+			</div>
+		</div>
+		<div class="example">
+			<h4>striped + active</h4>
+			<div class="example-body">
+				<div id="progressBar5b"></div>
+			</div>
+		</div>
+
+		<h2>Stacked progress bar</h2>
+		<div class="example">
+			<div class="example-body">
+				<div id="progressBar6a"></div>
+				<div id="progressBar6b"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var bar;
+
+	miwo.ready(function() {
+		miwo.init();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar1',
+			value: 30,
+			hideValue: true
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar2',
+			value: 60
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar3',
+			value: 0,
+			minWidth: 2
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar3b',
+			value: 90,
+			minWidth: 2,
+			desc: 'uploading...'
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar4a',
+			value: 40,
+			type: 'success'
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar4b',
+			value: 20,
+			type: 'info'
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar4c',
+			value: 60,
+			type: 'warning'
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar4d',
+			value: 80,
+			type: 'danger'
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar5a',
+			value: 60,
+			type: 'success',
+			striped: true
+		});
+		bar.replace();
+
+		bar = new Miwo.progress.ProgressBar({
+			id: 'progressBar5b',
+			value: 60,
+			type: 'success',
+			striped: true,
+			active: true,
+			desc: 'uploading...'
+		});
+		bar.replace();
+
+		var stackedBar = new Miwo.progress.StackedBar({
+			id: 'progressBar6a'
+		});
+		stackedBar.addBar('bar1', {
+			value: 40,
+			type: 'success'
+		});
+		stackedBar.addBar('bar2', {
+			value: 20,
+			hideValue: true,
+			type: 'warning',
+			striped: true
+		});
+		stackedBar.addBar('bar3', {
+			value: 20,
+			type: 'danger',
+			desc: 'limited'
+		});
+		stackedBar.replace();
+
+		stackedBar = new Miwo.progress.StackedBar({
+			id: 'progressBar6b'
+		});
+		stackedBar.addBar('bar1', {
+			value: 70,
+			type: 'success'
+		});
+		stackedBar.addBar('bar2', {
+			value: 30,
+			type: 'danger'
+		});
+		stackedBar.replace();
+	});
+</script>
+
+</body>
+</html>

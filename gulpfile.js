@@ -61,6 +61,15 @@ gulp.task("watch", function() {
 	gulp.watch(paths.watch.images, ['copy-images']);
 });
 
+gulp.task('build', function(cb) {
+	sequence(['compile-js', 'compile-css', 'copy-images', 'copy-assets'], cb);
+});
+
+gulp.task('dist', function(cb) {
+	sequence('build', ['minify-js', 'minify-css'], cb);
+});
+
+
 gulp.task('copy-images', function() {
 	return gulp.src(paths.img.src)
 		.pipe(newer(paths.img.distDir))
@@ -104,12 +113,4 @@ gulp.task('minify-css', function() {
 		.pipe(size({title: paths.css.target, gzip:true}))
 		.pipe(rename({suffix:'.min'}))
 		.pipe(gulp.dest(paths.css.distDir));
-});
-
-gulp.task('build', function(cb) {
-	sequence(['compile-js', 'compile-css', 'copy-images', 'copy-assets'], cb);
-});
-
-gulp.task('dist', function(cb) {
-	sequence('build', ['minify-js', 'minify-css'], cb);
 });
