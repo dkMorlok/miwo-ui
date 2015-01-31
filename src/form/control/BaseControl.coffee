@@ -78,6 +78,10 @@ class BaseControl extends Miwo.Component
 		if @width
 			@inputWidth = @width
 			@width = null
+
+		items = @buttons
+		@buttons = new Miwo.utils.Collection()
+		if items then for button in items then @addButton(button.name, button)
 		return
 
 
@@ -359,7 +363,7 @@ class BaseControl extends Miwo.Component
 		return
 
 
-	getForm: () ->
+	getForm: ->
 		if !@form then throw new Error("Component is not attached to Form")
 		return @form
 
@@ -370,17 +374,17 @@ class BaseControl extends Miwo.Component
 		return
 
 
-	getLabel: () ->
+	getLabel: ->
 		return @label
 
 
-	getLabelEl: () ->
+	getLabelEl: ->
 		if !@labelEl
 			@labelEl = new Element('label')
 		return @labelEl
 
 
-	getInput: () ->
+	getInput: ->
 		if !@input
 			@input = @createInput()
 			if !@input
@@ -388,12 +392,24 @@ class BaseControl extends Miwo.Component
 		return @input
 
 
-	createInput: () ->
+	addButton: (name, config) ->
+		button = new Button(config)
+		button.getControl = ()=> return this
+		button.render(@buttonsCt)  if @buttonsCt
+		@buttons.set(name, button)
+		return button
+
+
+	getButton: (name) ->
+		return @buttons.get(name)
+
+
+	createInput: ->
 		# must implement in descandent
 		return
 
 
-	doRender: () ->
+	doRender: ->
 		@renderControl(@el)
 		return
 
@@ -421,7 +437,7 @@ class BaseControl extends Miwo.Component
 			@el.addClass('input-fill')
 			ct.setStyle('width', @inputWidth)
 
-		if @prepend || @append || @buttons || @tip
+		if @prepend || @append || @buttons.length>0 || @tip
 			ct.addClass('input-group')
 		else
 			ct.addClass('input-control')
@@ -437,13 +453,10 @@ class BaseControl extends Miwo.Component
 			span = new Element('span', {cls:'input-group-addon', html: @append})
 			span.inject(ct)
 
-		if @buttons
-			buttonsCt = new Element('div', {cls:'input-group-btn'})
-			buttonsCt.inject(ct)
-			for button in @buttons
-				button = new Button(button)
-				button.getControl = ()=> return this
-				button.render(buttonsCt)
+		if @buttons.length isnt 0
+			@buttonsCt = new Element('div', {cls:'input-group-btn'})
+			@buttonsCt.inject(ct)
+			@buttons.each (button) => button.render(@buttonsCt)
 
 		if @tip
 			span = new Element('span', {cls:'input-group-addon input-group-addon-tooltip', html: '<span class="glyphicon glyphicon-question-sign" data-title="'+@tip+'" data-toggle="tooltip"></span>'})
@@ -453,7 +466,7 @@ class BaseControl extends Miwo.Component
 		return input
 
 
-	afterRender: () ->
+	afterRender: ->
 		super
 		@afterRenderLabel()
 		@afterRenderControl()
@@ -461,18 +474,18 @@ class BaseControl extends Miwo.Component
 		return
 
 
-	afterRenderLabel: () ->
+	afterRenderLabel: ->
 		if @labelEl && @input.getInputId
 			@labelEl.set('for', @input.getInputId())
 		return
 
 
-	afterRenderControl: () ->
+	afterRenderControl: ->
 
 		return
 
 
-	doDestroy: () ->
+	doDestroy: ->
 		@input.destroy() if @input
 		super
 		return

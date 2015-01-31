@@ -164,7 +164,7 @@ class ColorPicker extends Miwo.Component
 	onColorChanged: ->
 		@preview.setStyle("background-color", "#" + @color.hex)
 		@hexinput.set("value", @color.hex)
-		@emit("colorchange", this, @color.hex)
+		@emit("changed", this, @color.hex)
 		return
 
 

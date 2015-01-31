@@ -1,21 +1,21 @@
 BaseControl = require './BaseControl'
-Color = require '../../input/Color'
+ColorInput = require '../../input/Color'
 
 
 class ColorControl extends BaseControl
 
 	xtype: 'colorfield'
-
+	resettable: false
 
 	createInput: ->
-		picker = new Color
+		picker = new ColorInput
 			id: @id
 			disabled: @disabled
-			resetable: false
+			resettable: @resettable
 		picker.on 'changed', (picker, hex) =>
 			@setValue('#'+hex)
 			return
-		picker.on 'reset', () =>
+		picker.on 'reset', =>
 			@reset()
 			return
 		return picker
@@ -28,7 +28,7 @@ class ColorControl extends BaseControl
 
 
 	onDirtyChange: (isDirty) ->
-		@input.setResetable(isDirty)
+		@input.setResettable(isDirty)
 		return
 
 

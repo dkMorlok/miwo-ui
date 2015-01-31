@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pickers</title>
+	<meta charset='utf-8'>
+
+	<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css">
+	<link rel="stylesheet" href="vendor/miwo/dist/css/miwo.css">
+	<link rel="stylesheet" href="css/examples.css">
+	<link rel="stylesheet" href="../dist/css/miwo-ui.css">
+
+	<script src="vendor/mootools/mootools-core.js"></script>
+	<script src="vendor/miwo/dist/js/miwo.js"></script>
+	<script src="vendor/miwo-data/dist/js/miwo-data.js"></script>
+	<script src="vendor/miwo-latte/dist/js/miwo-latte.js"></script>
+	<script src="vendor/miwo-templates/dist/js/miwo-templates.js"></script>
+	<script src="../dist/js/miwo-ui.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+	<h1>Pickers</h1>
+	<hr>
+	<div style="max-width: 500px;">
+		<h2>DatePicker</h2>
+		<div class="example">
+			<h4>Default datepicker</h4>
+			<div class="example-body" id="datePicker1"></div>
+		</div>
+		<div class="example">
+			<h4>With today and clear buttons</h4>
+			<div class="example-body" id="datePicker2"></div>
+		</div>
+		<div class="example">
+			<h4>With start and end date</h4>
+			<div class="example-body" id="datePicker3"></div>
+		</div>
+
+		<h2>ColorPicker</h2>
+		<div class="example">
+			<h4>Default color picker</h4>
+			<div class="example-body" id="colorPicker1"></div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var picker;
+
+	miwo.ready(function() {
+		miwo.init();
+
+		picker = new Miwo.picker.Date({
+			id: 'datePicker1',
+			selectedDate: new Date()
+		});
+		picker.replace();
+
+		picker = new Miwo.picker.Date({
+			id: 'datePicker2',
+			todayBtn: true,
+			clearBtn: true,
+			selectedDate: new Date(2015, 1, 15)
+		});
+		picker.replace();
+
+		picker = new Miwo.picker.Date({
+			id: 'datePicker3',
+			startDate: new Date(2015, 0, 1),
+			endDate: new Date(2015, 2, 15),
+			selectedDate: new Date(2015, 1, 15)
+		});
+		picker.replace();
+
+		picker = new Miwo.picker.Color({
+			id: 'colorPicker1'
+		});
+		picker.replace();
+	});
+</script>
+
+</body>
+</html>

@@ -1,41 +1,36 @@
 Popover = require '../tip/Popover'
 ColorPicker = require './Color'
+DatePicker = require './Date'
 
 
 class PickerManager
 
-	pickers: null
 
-
-	constructor: () ->
-		@pickers = {}
-
-
-	get: (type) ->
-		if !@pickers[type]
-			@pickers[type] = @createPicker(type)
-		return @pickers[type]
-
-
-	createPicker: (type) ->
+	createPicker: (type, config) ->
 		factory = 'create'+type.capitalize()+'Picker'
 		if !this[factory]
 			throw new Error("Undefined factory function for '#{type}' picker")
-		return this[factory]()
+		return this[factory](config)
 
 
-	createColorPicker: ->
+	createColorPicker: (config) ->
 		popover = new Popover
-			title: 'Select color'
+			target: config.target
+			closeMode: config.closeMode || 'close'
+			title: miwo.tr('miwo.pickers.selectColor')
 			styles: {maxWidth: 500}
-			closeMode: 'hide'
-		popover.add('picker', new ColorPicker())
+		popover.add('picker', new ColorPicker(config))
 		return popover
 
 
-	createDatePicker: ()->
-
-		return
+	createDatePicker: (config) ->
+		popover = new Popover
+			target: config.target
+			closeMode: config.closeMode || 'close'
+			title: ''
+			styles: {maxWidth: 500}
+		popover.add('picker', new DatePicker(config))
+		return popover
 
 
 module.exports = PickerManager

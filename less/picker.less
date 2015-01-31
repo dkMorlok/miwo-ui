@@ -66,17 +66,52 @@
 }
 
 .datepicker {
-
-}
-
-.monthpicker {
-
-}
-
-.timepicker {
-
-}
-
-.yearpicker {
-
+	table {
+		width: 100%;
+		border-spacing: 2px;
+		border-collapse: separate;
+		td, th {
+			text-align: center;
+			cursor: pointer;
+			border-radius: @border-radius-base;
+		}
+		thead tr:nth-child(2) th {
+			background: transparent;
+		}
+		thead th:hover {
+			background: @gray-lighter;
+		}
+		td.inactive {
+			color: @component-inactive-color;
+		}
+		td.focus {
+			background: @gray-lighter;
+		}
+		td.disabled {
+			color: @component-inactive-color;
+			background: transparent;
+			cursor: text;
+		}
+		td.selected {
+			background: @component-active-bg;
+			color: @component-active-color;
+		}
+		td.today {
+			border: 1px solid @brand-primary;
+		}
+	}
+	.switch {
+		text-align: center;
+	}
+	.invisible {
+		opacity: 0;
+	}
+	&-panel {
+		outline: 0;
+	}
+	&-footer {
+		td:hover {
+			background: @gray-lighter;
+		}
+	}
 }

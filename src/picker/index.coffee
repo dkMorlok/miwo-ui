@@ -2,6 +2,8 @@ module.exports =
 
 	Manager: require './Manager'
 	Color: require './Color'
-	Date: require './Date'
+	Day: require './Day'
 	Month: require './Month'
+	Year: require './Year'
+	Date: require './Date'
 	Time: require './Time'

@@ -1,4 +1,4 @@
-class Text extends Miwo.Component
+class TextInput extends Miwo.Component
 
 	xtype: 'textinput'
 	isInput: true
@@ -25,15 +25,15 @@ class Text extends Miwo.Component
 		return
 
 
-	getInputEl: () ->
+	getInputEl: ->
 		return @el
 
 
-	getInputId: () ->
+	getInputId: ->
 		return @id
 
 
-	doRender: () ->
+	doRender: ->
 		@el.set("type", @type)
 		@el.set("autocomplete", @autocomplete) if @autocomplete isnt null
 		@el.set("placeholder", @placeholder) if @placeholder isnt null
@@ -42,4 +42,4 @@ class Text extends Miwo.Component
 		return
 
 
-module.exports = Text
+module.exports = TextInput

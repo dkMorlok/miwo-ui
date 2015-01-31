@@ -5,13 +5,13 @@ class ColorInput extends Miwo.Component
 
 	xtype: "colorinput"
 	value: '#ffffff'
-	resetable: true
+	resettable: false
 
 	resetBtn: null
 	popover: null
 
 
-	doRender: () ->
+	doRender: ->
 		@el.addClass('colorfield')
 
 		@inputEl = new Element 'input',
@@ -27,15 +27,16 @@ class ColorInput extends Miwo.Component
 
 		@inputEl.on 'click', (event) =>
 			event.stop()
+			if @disabled then return
 			@openPicker()
 			return
 		return
 
 
-	afterRender: () ->
+	afterRender: ->
 		super()
-		@setDisabled(@disabled) if @disabled
-		@setResetable(@resetable) if @resetable
+		@setDisabled(@disabled)
+		@setResettable(@resettable)
 		return
 
 
@@ -45,7 +46,7 @@ class ColorInput extends Miwo.Component
 		return
 
 
-	getValue: () ->
+	getValue: ->
 		return if @rendered then @inputEl.get("value") else @value
 
 
@@ -57,59 +58,53 @@ class ColorInput extends Miwo.Component
 		return
 
 
-	setResetable: (@resetable) ->
+	setResettable: (@resettable) ->
 		if !@rendered then return
-		@resetBtn.setVisible(resetable)  if @resetBtn
+		@resetBtn.setVisible(resettable)  if @resetBtn
 		return
 
 
 	openPicker: ->
-		@popover = @createPicker()  if !@popover
-		@popover.target = @inputEl
+		@popover = @createPicker() if !@popover
 		@popover.show()
-		picker = @popover.get('picker')
-		picker.setColor(@getValue())
-		@mon picker, 'colorchange', 'onPickerColorChange'
-		@mon picker, 'selected', 'onPickerColorSelected'
+		@popover.get('picker').setColor(@getValue())
 		return
 
 
-	hidePicker: () ->
-		@popover.hide()
-		picker = @popover.get('picker')
-		@mun picker, 'colorchange', 'onPickerColorChange'
-		@mun picker, 'selected', 'onPickerColorSelected'
+	hidePicker: ->
+		@popover.close()
 		return
 
 
-	createPicker: () ->
-		# use shared picker from pickerManager
-		return miwo.pickers.get('color')
+	createPicker: ->
+		popover = miwo.pickers.createPicker 'color',
+			target: @inputEl
+		picker = popover.get('picker')
+		picker.on 'changed', (picker, hex) =>
+			@emit("changed", this, hex)
+			@setValue("#" + hex)
+			return
+		picker.on 'selected', (picker, hex) =>
+			@emit('changed', this, hex)
+			@setValue("#" + hex)
+			@hidePicker()
+			return
+		popover.on 'close', =>
+			@popover = null
+			return
+		return popover
 
 
-	onPickerColorChange: (picker, hex) ->
-		@emit("colorchange", this, hex)
-		@setValue("#" + hex)
-		return
-
-
-	onPickerColorSelected: (picker, hex) ->
-		@emit('changed', this, hex)
-		@setValue("#" + hex)
-		@hidePicker()
-		return
-
-
-	getInputEl: () ->
+	getInputEl: ->
 		return @inputEl
 
 
-	getInputId: () ->
+	getInputId: ->
 		return @id+'-input'
 
 
-	doDestroy: () ->
-		@popover = null
+	doDestroy: ->
+		@popover.destroy() if @popover
 		super
 
 

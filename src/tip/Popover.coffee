@@ -13,36 +13,37 @@ class Popover extends BaseTip
 	role: 'tooltip'
 
 
-	afterInit: () ->
+	afterInit: ->
 		super()
 		@screenMask = new ScreenMask =>
 			if @closeMode is 'hide' then @hide() else @close()
+			return
 		return
 
 
-	beforeRender: () ->
+	beforeRender: ->
 		super
 		@el.addClass("in #{@placement} popover-#{@type}")
 		@el.set 'html',
 		'<div class="arrow"></div>'+
-		'<h3 miwo-reference="titleEl" class="popover-title"></h3>'+
+		'<h3 miwo-reference="titleEl" class="popover-title" style="display:none"></h3>'+
 		'<div miwo-reference="contentEl" class="popover-content"></div>'
 		return
 
 
-	show: () ->
+	show: ->
 		@screenMask.show()
 		super()
 		return
 
 
-	hide: () ->
+	hide: ->
 		@screenMask.hide()
 		super()
 		return
 
 
-	afterRender: () ->
+	afterRender: ->
 		super
 		@setTitle(@title) if @title
 		@setContent(@content) if @content
@@ -52,6 +53,7 @@ class Popover extends BaseTip
 	setTitle: (@title) ->
 		if @rendered
 			@titleEl.set("html", title)
+			@titleEl.setVisible(title)
 			@updatePosition()
 		return
 
@@ -75,7 +77,7 @@ class Popover extends BaseTip
 		return
 
 
-	doDestroy: () ->
+	doDestroy: ->
 		@screenMask.destroy()
 		super()
 		return

@@ -12,3 +12,7 @@ module.exports =
 	window:
 		close: 'Close window'
 		hide: 'Hide window'
+	picker:
+		selectColor: 'Select color'
+		today: 'Today'
+		clear: 'Clear'

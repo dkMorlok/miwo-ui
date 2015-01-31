@@ -45,17 +45,16 @@ miwo.ready(function() {
 	});
 	form.addDate('date', {
 		label: 'Date',
-		type: 'date',
-		placeholder: 'dd.mm.yy'
+		type: 'date'
 	});
 	form.addDate('date2', {
-		label: 'Datetime',
-		type: 'datetime',
-		placeholder: 'dd.mm.yy'
+		label: 'Date (resettable)',
+		pickerBtn: true,
+		resettable: true
 	});
 	form.addDate('date3', {
-		label: 'Custom Datetime Short',
-		type: [/*'day',*/ 'month', /*'year',*/ 'time']
+		label: 'Date (disabled)',
+		disabled: true
 	});
 	form.addDate('date4', {
 		label: 'Custom Datetime Full',
@@ -115,7 +114,8 @@ miwo.ready(function() {
 	});
 	form.addColor('color2', {
 		label: 'Select color',
-		value: '#ff0000'
+		value: '#ff0000',
+		resettable: true
 	});
 	form.addColor('colordisabled', {
 		label: 'Select color (disabled)',
