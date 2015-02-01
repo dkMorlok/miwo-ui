@@ -6,7 +6,7 @@ DatePicker = require './Date'
 class PickerManager
 
 
-	createPicker: (type, config) ->
+	createPopoverPicker: (type, config) ->
 		factory = 'create'+type.capitalize()+'Picker'
 		if !this[factory]
 			throw new Error("Undefined factory function for '#{type}' picker")
@@ -28,8 +28,12 @@ class PickerManager
 			target: config.target
 			closeMode: config.closeMode || 'close'
 			title: ''
-			styles: {maxWidth: 500}
-		popover.add('picker', new DatePicker(config))
+			styles: {maxWidth: 500, width:320}
+		picker = new DatePicker(config)
+		picker.on 'switch', =>
+			popover.updatePosition()
+			return
+		popover.add('picker', picker)
 		return popover
 
 

@@ -13,6 +13,7 @@ class DateControl extends TextControl
 	todayBtn: false
 	clearBtn: false
 	resettable: false
+	editable: false # by default is not editable, only by picker
 
 	resetBtn: null
 
@@ -29,7 +30,7 @@ class DateControl extends TextControl
 
 
 	onDirtyChange: (isDirty) ->
-		@resetBtn.setDisabled(!isDirty)
+		@resetBtn.setDisabled(!isDirty) if @resetBtn
 		return
 
 
@@ -38,6 +39,7 @@ class DateControl extends TextControl
 			id: @id
 			type: @type
 			disabled: @disabled
+			readonly: @readonly
 			placeholder: 'yyyy-mm-dd'
 			startDate: @startDate
 			endDate: @endDate
@@ -62,10 +64,7 @@ class DateControl extends TextControl
 		super
 		@getElement('.glyphicon-calendar').getParent()
 			.setStyle('cursor', 'pointer')
-			.on 'click', =>
-				if @disabled then return
-				@getInput().openPicker()
-				return
+			.on 'click', => @getInput().openPicker() # only if not disabled and not readonly
 		return
 
 

@@ -37,7 +37,7 @@ class ColorPicker extends Miwo.Component
 
 	afterRender: ->
 		super()
-		@hexinput.on "keyup", ()=>
+		@hexinput.on "keyup", =>
 			@setColor(@hexinput.get("value"))
 			return
 
@@ -63,11 +63,11 @@ class ColorPicker extends Miwo.Component
 			@updateBarOnMouseEvent(event)
 			return
 
-		@setColor(@color.hex, true)
+		@setColor(@color.hex, true, true)
 		return
 
 
-	setColor: (color, update) ->
+	setColor: (color, update, silent) ->
 		color = color.toUpperCase()
 		color = color.replace("#", "")
 		if @isColorValid(color) and (@color.hex isnt color or update)
@@ -76,7 +76,7 @@ class ColorPicker extends Miwo.Component
 			@doSetHue(@color.h)
 			@doSetSaturationAndValue(@color.s, @color.v)
 			@color.setHex(color)
-			@onColorChanged()
+			@onColorChanged(silent)
 		return
 
 
@@ -161,10 +161,10 @@ class ColorPicker extends Miwo.Component
 		return
 
 
-	onColorChanged: ->
+	onColorChanged: (silent) ->
 		@preview.setStyle("background-color", "#" + @color.hex)
 		@hexinput.set("value", @color.hex)
-		@emit("changed", this, @color.hex)
+		@emit("changed", this, @color.hex) if !silent
 		return
 
 

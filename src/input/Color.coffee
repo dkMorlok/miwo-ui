@@ -5,6 +5,7 @@ class ColorInput extends Miwo.Component
 
 	xtype: "colorinput"
 	value: '#ffffff'
+	readonly: false
 	resettable: false
 
 	resetBtn: null
@@ -27,7 +28,6 @@ class ColorInput extends Miwo.Component
 
 		@inputEl.on 'click', (event) =>
 			event.stop()
-			if @disabled then return
 			@openPicker()
 			return
 		return
@@ -65,6 +65,7 @@ class ColorInput extends Miwo.Component
 
 
 	openPicker: ->
+		if @disabled || @readonly then return
 		@popover = @createPicker() if !@popover
 		@popover.show()
 		@popover.get('picker').setColor(@getValue())
@@ -77,7 +78,7 @@ class ColorInput extends Miwo.Component
 
 
 	createPicker: ->
-		popover = miwo.pickers.createPicker 'color',
+		popover = miwo.pickers.createPopoverPicker 'color',
 			target: @inputEl
 		picker = popover.get('picker')
 		picker.on 'changed', (picker, hex) =>

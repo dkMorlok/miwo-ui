@@ -15,30 +15,18 @@ class DateInput extends TextInput
 	afterRender: ->
 		super
 		@el.set('type', 'text')
-		@el.on 'click', =>
-			if @disabled then return
-			@openPicker()
-			return
+		@el.on 'click', => @openPicker()
 		return
 
 
 	setValue: (value) ->
 		if Type.isDate(value) then value = @formatDate(value)
-		@el.set("value", value)
+		super(value)
 		return
 
 
-	formatDate: (date) ->
-		return date.getFullYear()+ '-' + (date.getMonth()+1).pad(2)+ '-' + date.getDate().pad(2)
-
-
-	parseDate: (value) ->
-		if !value.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/) then return null
-		parts = value.split('-')
-		return new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]))
-
-
 	openPicker: ->
+		if @disabled || @readonly then return
 		@popover = @createPicker() if !@popover
 		@popover.show()
 		@popover.get('picker').setDate(@parseDate(@getValue()), true)
@@ -51,7 +39,7 @@ class DateInput extends TextInput
 
 
 	createPicker: ->
-		popover = miwo.pickers.createPicker 'date',
+		popover = miwo.pickers.createPopoverPicker 'date',
 			target: @el
 			type: @type
 			startDate: @startDate
@@ -67,6 +55,16 @@ class DateInput extends TextInput
 			@popover = null
 			return
 		return popover
+
+
+	formatDate: (date) ->
+		return date.getFullYear()+ '-' + (date.getMonth()+1).pad(2)+ '-' + date.getDate().pad(2)
+
+
+	parseDate: (value) ->
+		if !value.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/) then return null
+		parts = value.split('-')
+		return new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]))
 
 
 	doDestroy: ->

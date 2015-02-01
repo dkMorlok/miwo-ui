@@ -35,6 +35,7 @@ class DatePicker extends Miwo.Container
 			@get('month').activate(picker.activeDate)
 			@get('month').select(picker.selectedDate, true)
 			@get('month').show()
+			@emit('switch', this, 'month')
 			return
 		picker.on 'selected', (picker, date)=>
 			@emit('selected', this, date)
@@ -52,11 +53,13 @@ class DatePicker extends Miwo.Container
 		picker.on 'switch', =>
 			picker.hide()
 			@get('year').show()
+			@emit('switch', this, 'year')
 			return
 		picker.on 'selected', =>
 			picker.hide()
 			@get('day').activate(picker.selectedDate)
 			@get('day').show()
+			@emit('switch', this, 'day')
 			return
 		return picker
 
@@ -72,6 +75,7 @@ class DatePicker extends Miwo.Container
 			picker.hide()
 			@get('month').activate(picker.selectedDate)
 			@get('month').show()
+			@emit('switch', this, 'month')
 			return
 		return picker
 

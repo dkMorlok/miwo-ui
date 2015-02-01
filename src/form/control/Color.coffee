@@ -5,13 +5,22 @@ ColorInput = require '../../input/Color'
 class ColorControl extends BaseControl
 
 	xtype: 'colorfield'
-	resettable: false
+	readonly: false
+
+
+
+	doInit: ->
+		super
+		if @value then @value = @value.toUpperCase()
+		return
+
 
 	createInput: ->
 		picker = new ColorInput
 			id: @id
 			disabled: @disabled
-			resettable: @resettable
+			readonly: @readonly
+			resettable: false
 		picker.on 'changed', (picker, hex) =>
 			@setValue('#'+hex)
 			return
@@ -22,12 +31,14 @@ class ColorControl extends BaseControl
 
 
 	setValue: (value) ->
+		if value then value = value.toUpperCase()
 		super(value)
 		@input.setValue(value)
 		return
 
 
 	onDirtyChange: (isDirty) ->
+		super(isDirty)
 		@input.setResettable(isDirty)
 		return
 

@@ -16,7 +16,7 @@ class TextInput extends Miwo.Component
 		return
 
 
-	getValue: () ->
+	getValue: ->
 		return @el.get("value")
 
 

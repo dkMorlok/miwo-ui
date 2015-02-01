@@ -42,7 +42,7 @@ class MonthPicker extends BaseDatePicker
 			for j in [0..3]
 				index = i*4 + j
 				item = @items[index]
-				item.cell = new Element('td', {parent:tr, html: @formatMonth(item.date), 'data-index': index, 'data-date':item.date})
+				item.cell = new Element('td', {parent:tr, html: @formatMonth(item.date), 'data-index': index})
 				if !@isDayEnabled(item.date)
 					item.cell.addClass('disabled')
 				if @isSelected(item.date)

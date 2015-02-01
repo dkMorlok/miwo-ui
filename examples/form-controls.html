@@ -43,22 +43,10 @@ miwo.ready(function() {
 		placeholder: 'Your email',
 		prepend: '@'
 	});
-	form.addDate('date', {
-		label: 'Date',
-		type: 'date'
-	});
-	form.addDate('date2', {
-		label: 'Date (resettable)',
-		pickerBtn: true,
-		resettable: true
-	});
-	form.addDate('date3', {
-		label: 'Date (disabled)',
-		disabled: true
-	});
-	form.addDate('date4', {
-		label: 'Custom Datetime Full',
-		type: ['date', 'time']
+	form.addTextarea('textarea', {
+		label: 'Textarea',
+		height: 70,
+		resize: 'none'
 	});
 	form.addNumber('number', {
 		label: 'Number',
@@ -72,13 +60,29 @@ miwo.ready(function() {
 		max: 100,
 		value: 50
 	});
+	form.addDate('date', {
+		label: 'Date',
+		type: 'date'
+	});
+	form.addDate('date2', {
+		label: 'Date (resettable)',
+		pickerBtn: true,
+		resettable: true
+	});
+	form.addDate('date3', {
+		label: 'Date (readonly)',
+		readonly: true
+	});
+	form.addDate('date4', {
+		label: 'Date (disabled)',
+		disabled: true
+	});
+	form.addDate('date5', {
+		label: 'Custom Datetime Full',
+		type: ['date', 'time']
+	});
 	form.addCheckbox('check', {
 		label: 'I want to be checked'
-	});
-	form.addTextarea('textarea', {
-		label: 'Textarea',
-		height: 70,
-		resize: 'none'
 	});
 	form.addCombo('combo', {
 		label: 'Combo Select',
@@ -127,6 +131,9 @@ miwo.ready(function() {
 	});
 
 	form.render('form');
+	form.on('success', function(form){
+		console.log(form.getValues());
+	});
 });
 </script>
 

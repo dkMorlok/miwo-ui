@@ -16,6 +16,7 @@ class BaseTextControl extends BaseControl
 	validateOnKeyUp: false
 	value: ''
 	type: null
+	editable: true
 
 
 	initRules: ->
@@ -72,6 +73,9 @@ class BaseTextControl extends BaseControl
 
 
 	onInputKeydown: (e) ->
+		if !@editable
+			e.stop()
+			return
 		if e.key.length is 1
 			@onKeydown(this, e.key, e)
 			@emit("keydown", this, e.key, e)
