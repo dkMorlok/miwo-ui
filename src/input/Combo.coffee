@@ -1,10 +1,10 @@
 ScreenMask = require '../utils/ScreenMask'
 
 
-class Combo extends Miwo.Component
+class ComboInput extends Miwo.Component
 
 	isInput: true
-	xtype: 'combo'
+	xtype: 'comboinput'
 	role: 'combobox'
 	hideSelected: true
 	multiple: false
@@ -31,7 +31,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	afterInit: () ->
+	afterInit: ->
 		super()
 		# create layout
 		@el.set 'html',
@@ -40,7 +40,7 @@ class Combo extends Miwo.Component
 			'<span class="combo-input-reset" style="display: none;"><i class="glyphicon glyphicon glyphicon-remove"></i></span>'+
 			'<span class="combo-input-arrow"><i class="glyphicon glyphicon-chevron-down"></i></span>'+
 		'</div>'+
-		'<input class="screen-off" id="'+@id+'Input" type="text" role="button" aria-haspopup="true" aria-labelledby="'+@id+'Input" >'
+		'<input class="screen-off" id="'+@id+'-input" type="text" role="button" aria-haspopup="true" aria-labelledby="'+@id+'-input" >'
 
 		# references
 		@control = @el.getElement('.combo-input')
@@ -135,7 +135,7 @@ class Combo extends Miwo.Component
 					val = item.get('data-value')
 					@setValue(@getValue().erase(val))
 				else
-					@activeteLastValue()
+					@activateLastValue()
 					if (item = @getActiveValue())
 						val = item.get('data-value')
 						@setValue(@getValue().erase(val))
@@ -158,12 +158,12 @@ class Combo extends Miwo.Component
 		return
 
 
-	getInputEl: () ->
+	getInputEl: ->
 		return @inputEl
 
 
-	getInputId: () ->
-		return @id+'Input'
+	getInputId: ->
+		return @id+'-input'
 
 
 	setFocus: (silent) ->
@@ -222,7 +222,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	getValue: () ->
+	getValue: ->
 		value = @inputEl.get('value')
 		return if @multiple then (if value then value.split(',') else []) else value
 
@@ -258,7 +258,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	clear: () ->
+	clear: ->
 		@items.empty()
 		@dropdownItemsEl.empty()
 		return
@@ -270,7 +270,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	open: () ->
+	open: ->
 		if @opened then return
 		@opened = true
 		@setFocus()
@@ -292,7 +292,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	close: () ->
+	close: ->
 		if !@opened then return
 		@opened = false
 		@el.removeClass('combo-open')
@@ -302,7 +302,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	getActiveItem: () ->
+	getActiveItem: ->
 		return @items[@activeItemIndex] || null
 
 
@@ -316,7 +316,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	activatePrevItem: () ->
+	activatePrevItem: ->
 		activateIndex = null
 		for item,index in @items
 			if !item.hasClass('selected') && index < @activeItemIndex
@@ -326,7 +326,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	activateNextItem: () ->
+	activateNextItem: ->
 		activateIndex = null
 		for item,index in @items
 			if !item.hasClass('selected') && index > @activeItemIndex
@@ -341,7 +341,7 @@ class Combo extends Miwo.Component
 		return @textEl.getElement('li:nth-child('+(index+1)+')')
 
 
-	getActiveValue: () ->
+	getActiveValue: ->
 		return @getValueElAt(@activeValueIndex) || null
 
 
@@ -356,7 +356,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	activatePrevValue: () ->
+	activatePrevValue: ->
 		if @activeValueIndex < 0
 			index = @getValue().length-1
 		else
@@ -365,7 +365,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	activateNextValue: () ->
+	activateNextValue: ->
 		if @activeValueIndex < 0
 			index = 0
 		else
@@ -374,7 +374,7 @@ class Combo extends Miwo.Component
 		return
 
 
-	activeteLastValue: () ->
+	activateLastValue: ->
 		@activateValue(@getValue().length-1)
 		return
 
@@ -386,11 +386,11 @@ class Combo extends Miwo.Component
 		return
 
 
-	doDestroy: () ->
+	doDestroy: ->
 		@screenMask.destroy()
 		@keyListener.destroy()
 		miwo.body.un('click', @bound('onBodyClick'))
 		super
 
 
-module.exports = Combo
+module.exports = ComboInput

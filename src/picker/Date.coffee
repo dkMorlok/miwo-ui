@@ -8,6 +8,9 @@ class DatePicker extends Miwo.Container
 	startDate: null
 	endDate: null
 	selectedDate: null
+	rangeStart: null
+	rangeEnd: null
+	rangeSelector: 'end'
 	todayBtn: false
 	clearBtn: false
 
@@ -30,6 +33,9 @@ class DatePicker extends Miwo.Container
 			startDate: @startDate
 			endDate: @endDate
 			selectedDate: @selectedDate
+			rangeStart: @rangeStart
+			rangeEnd: @rangeEnd
+			rangeSelector: @rangeSelector
 		picker.on 'switch', =>
 			picker.hide()
 			@get('month').activate(picker.activeDate)
@@ -105,6 +111,11 @@ class DatePicker extends Miwo.Container
 		return
 
 
+	setRange: (rangeStart, rangeEnd, silent) ->
+		@get('day').setRange(rangeStart, rangeEnd, silent)
+		return
+
+
 	setTodayBtn: (@todayBtn) ->
 		@getElement('.todayBtn').setVisible(@todayBtn) if @rendered
 		return
@@ -121,6 +132,11 @@ class DatePicker extends Miwo.Container
 
 	setType: (type = 'date') ->
 		@type = type
+		return
+
+
+	setFocus: ->
+		@get('day').setFocus()
 		return
 
 

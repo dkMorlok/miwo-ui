@@ -107,6 +107,7 @@ class Button extends Miwo.Component
 		@el.addClass('disabled')  if @disabled
 		@el.set("title", @tooltip)  if @tooltip
 		@el.on("click", @bound("onClick"))
+		@el.on("keyup", @bound("onKeyUp"))
 
 		@iconEl = new Element "i",
 			parent: @el
@@ -132,6 +133,11 @@ class Button extends Miwo.Component
 		if @toggled then @toggle()
 		@emit('click', this, e)
 		@click(e)
+		return
+
+
+	onKeyUp: (e) ->
+		if e.key is 'enter' then @onClick(e)
 		return
 
 

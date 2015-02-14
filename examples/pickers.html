@@ -36,6 +36,10 @@
 			<h4>With start and end date</h4>
 			<div class="example-body" id="datePicker3"></div>
 		</div>
+		<div class="example">
+			<h4>Range datepicker</h4>
+			<div class="example-body" id="datePicker4"></div>
+		</div>
 
 		<h2>ColorPicker</h2>
 		<div class="example">
@@ -70,6 +74,16 @@
 			startDate: new Date(2015, 0, 1),
 			endDate: new Date(2015, 2, 15),
 			selectedDate: new Date(2015, 1, 15)
+		});
+		picker.replace();
+
+		picker = new Miwo.picker.Date({
+			id: 'datePicker3',
+			startDate: new Date(2015, 0, 1),
+			endDate: new Date(2015, 2, 15),
+			selectedDate: new Date(2015, 1, 15),
+			rangeStart: new Date(2015, 1, 10),
+			rangeEnd: new Date(2015, 1, 18)
 		});
 		picker.replace();
 

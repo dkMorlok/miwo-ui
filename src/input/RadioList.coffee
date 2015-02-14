@@ -1,9 +1,9 @@
 Radio = require './Radio'
 
 
-class RadioList extends Miwo.Container
+class RadioListInput extends Miwo.Container
 
-	xtype: 'radioboxlist'
+	xtype: 'radiolistinput'
 	isInput: true
 	inline: false
 	radioName: null
@@ -35,7 +35,7 @@ class RadioList extends Miwo.Container
 		return
 
 
-	getValue: () ->
+	getValue: ->
 		value = null
 		@components.each (radio, name)=>
 			if radio.isChecked() && !radio.disabled
@@ -84,4 +84,4 @@ class RadioList extends Miwo.Container
 		return
 
 
-module.exports = RadioList
+module.exports = RadioListInput

@@ -22,6 +22,7 @@ exports =
 		Combo: require('./control/Combo')
 		Color: require('./control/Color')
 		Date: require('./control/Date')
+		DateRange: require('./control/DateRange')
 		Number: require('./control/Number')
 		Slider: require('./control/Slider')
 		Text: require('./control/Text')
@@ -35,6 +36,7 @@ exports =
 # register add method
 BaseContainer = exports.container.BaseContainer
 BaseContainer.registerControl('date', exports.control.Date)
+BaseContainer.registerControl('dateRange', exports.control.DateRange)
 BaseContainer.registerControl('text', exports.control.Text)
 BaseContainer.registerControl('textarea', exports.control.TextArea)
 BaseContainer.registerControl('color', exports.control.Color)

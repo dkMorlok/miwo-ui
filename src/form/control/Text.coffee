@@ -6,13 +6,13 @@ class TextControl extends BaseTextControl
 	isTextField: true
 	xtype: 'textfield'
 
+
 	initRules:  ->
 		super
 		switch @type
-			when 'email'
-				@rules.addRule('email')
-			when 'url'
-				@rules.addRule('url')
+			when 'email' then @rules.addRule('email')
+			when 'url' then @rules.addRule('url')
+			when 'date' then @rules.addRule('date')
 		return
 
 

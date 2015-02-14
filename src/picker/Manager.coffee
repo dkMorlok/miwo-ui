@@ -28,7 +28,7 @@ class PickerManager
 			target: config.target
 			closeMode: config.closeMode || 'close'
 			title: ''
-			styles: {maxWidth: 500, width:320}
+			styles: {width:260}
 		picker = new DatePicker(config)
 		picker.on 'switch', =>
 			popover.updatePosition()

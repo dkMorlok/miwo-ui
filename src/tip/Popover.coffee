@@ -16,7 +16,7 @@ class Popover extends BaseTip
 	afterInit: ->
 		super()
 		@screenMask = new ScreenMask =>
-			if @closeMode is 'hide' then @hide() else @close()
+			@sleep()
 			return
 		return
 
@@ -33,13 +33,20 @@ class Popover extends BaseTip
 
 	show: ->
 		@screenMask.show()
+		miwo.body.on 'keydown', @bound('onKeyDown')
 		super()
 		return
 
 
 	hide: ->
+		miwo.body.un 'keydown', @bound('onKeyDown')
 		@screenMask.hide()
 		super()
+		return
+
+
+	sleep: ->
+		if @closeMode is 'hide' then @hide() else @close()
 		return
 
 
@@ -47,6 +54,11 @@ class Popover extends BaseTip
 		super
 		@setTitle(@title) if @title
 		@setContent(@content) if @content
+		return
+
+
+	onKeyDown: (e) ->
+		if e.key is 'esc' then @sleep()
 		return
 
 

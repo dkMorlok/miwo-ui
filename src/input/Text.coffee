@@ -8,6 +8,8 @@ class TextInput extends Miwo.Component
 	readonly: false
 	autocomplete: null
 	placeholder: null
+	tabindex: 0
+	name: null
 	componentCls: 'form-control'
 
 
@@ -35,6 +37,8 @@ class TextInput extends Miwo.Component
 
 	doRender: ->
 		@el.set("type", @type)
+		@el.set("tabindex", @tabindex)
+		@el.set("name", @name) if @name
 		@el.set("autocomplete", @autocomplete) if @autocomplete isnt null
 		@el.set("placeholder", @placeholder) if @placeholder isnt null
 		@el.set("readonly", @readonly) if @readonly

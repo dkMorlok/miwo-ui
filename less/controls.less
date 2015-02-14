@@ -203,7 +203,8 @@
 		border-radius: 10px;
 		background: @btn-default-bg;
 		border: 1px solid @btn-default-border;
-		&:hover, &.active {
+		&:hover, &.active, &:focus {
+			outline: none;
 			background: @btn-primary-bg;
 			border-color: @btn-primary-border;
 		}
@@ -216,6 +217,34 @@
 				background: @btn-default-bg;
 				border: 1px solid @btn-default-border;
 			}
+		}
+	}
+}
+
+.daterange {
+	width: 100%;
+	display: table;
+	.input-group-addon {
+		width: 20px;
+	}
+	&-start {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	&-end {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	&.has-append {
+		.daterange-end {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+	&.has-prepend {
+		.daterange-start {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
 		}
 	}
 }

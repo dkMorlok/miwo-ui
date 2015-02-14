@@ -4,19 +4,20 @@ TextArea = require '../../input/TextArea'
 
 class TextAreaControl extends BaseTextControl
 
-	isTextAreaField: true
 	xtype: "textarea"
+	isTextAreaField: true
 	height: null
 	resize: "vertical"
 
 
-	createInput: () ->
-		return new TextArea
+	createInput: ->
+		input = new TextArea
 			id: @id+'-input'
 			height: @height
 			readonly: @readonly
 			disabled: @disabled
 			resize: @resize
+		return input
 
 
 

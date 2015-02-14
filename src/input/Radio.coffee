@@ -80,7 +80,7 @@ class Radio extends Miwo.Component
 		return
 
 
-	getValue: () ->
+	getValue: ->
 		return @isChecked()
 
 

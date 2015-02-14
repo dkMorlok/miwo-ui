@@ -68,10 +68,11 @@
 .datepicker {
 	table {
 		width: 100%;
-		border-spacing: 2px;
-		border-collapse: separate;
+		border-spacing: 0;
+		border-collapse: collapse;
 		td, th {
 			text-align: center;
+			padding: 3px !important;
 			cursor: pointer;
 			border-radius: @border-radius-base;
 		}
@@ -84,8 +85,26 @@
 		td.inactive {
 			color: @component-inactive-color;
 		}
-		td.focus {
+		td.range-item {
 			background: @gray-lighter;
+			border-radius: 0;
+		}
+		td.range-start {
+			background: @gray-light;
+			border-radius: @border-radius-base;
+			color: white;
+		}
+		td.range-end {
+			background: @gray-light;
+			border-radius: @border-radius-base;
+			color: white;
+		}
+		td.focus {
+			background: darken(@gray-lighter, 10%);
+		}
+		td.today {
+			border: 1px solid @brand-primary;
+			border-radius: 0;
 		}
 		td.disabled {
 			color: @component-inactive-color;
@@ -95,9 +114,6 @@
 		td.selected {
 			background: @component-active-bg;
 			color: @component-active-color;
-		}
-		td.today {
-			border: 1px solid @brand-primary;
 		}
 	}
 	.switch {

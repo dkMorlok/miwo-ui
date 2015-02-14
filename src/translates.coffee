@@ -16,3 +16,5 @@ module.exports =
 		selectColor: 'Select color'
 		today: 'Today'
 		clear: 'Clear'
+	inputs:
+		dateTo: 'to'

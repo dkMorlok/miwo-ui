@@ -1,4 +1,4 @@
-class TextArea extends Miwo.Component
+class TextAreaInput extends Miwo.Component
 
 	xtype: 'textareainput'
 	isInput: true
@@ -36,4 +36,4 @@ class TextArea extends Miwo.Component
 		return
 
 
-module.exports = TextArea
+module.exports = TextAreaInput

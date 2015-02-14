@@ -4,11 +4,37 @@ class DayPicker extends BaseDatePicker
 
 	xtype: "daypicker"
 	baseCls: 'daypicker'
+	rangeStart: null
+	rangeEnd: null
+	rangeSelector: null
 
 
 	beforeInit: ->
 		super
 		@moveIndex = {'up':-7, 'down':7, 'right':1, 'left':-1}
+		return
+
+
+	setRange: (rangeStart, rangeEnd, silent) ->
+		@rangeStart = if rangeStart is false then null else rangeStart || @rangeStart
+		@rangeEnd = if rangeEnd is false then null else rangeEnd || @rangeEnd
+		@emit('range', this, @rangeStart, @rangeEnd) if !silent
+		@onRangeChanged(silent)
+		@updateCalendar() if @rendered
+		return
+
+
+	setStartDate: (startDate) ->
+		@startDate = new Date(startDate.getTime())
+		return
+
+
+	setEndDate: (endDate) ->
+		@endDate = new Date(endDate.getTime())
+		return
+
+
+	onRangeChanged: (silent) ->
 		return
 
 
@@ -19,6 +45,14 @@ class DayPicker extends BaseDatePicker
 
 	activatePrev: ->
 		@activate(null, @activeDate.getMonth()-1)
+		return
+
+
+	onSelected: (silent) ->
+		if @rangeSelector is 'end'
+			@setRange(null, @selectedDate, silent)
+		else if @rangeSelector is 'start'
+			@setRange(@selectedDate, null, silent)
 		return
 
 
@@ -84,23 +118,24 @@ class DayPicker extends BaseDatePicker
 				index = i*7+j
 				item = @items[index]
 				td = new Element('td', {parent:tr, html: item.date.getDate(), 'data-index': index})
-				if item.foreign
-					td.addClass('inactive')
-				if !@isDayEnabled(item.date)
-					td.addClass('disabled')
-				if @isSelected(item.date)
-					td.addClass('selected')
 				if @isFocused(item.date)
-					td.addClass('focus')
 					@focusedIndex = index
+					@focusedDate = item.date
 				if toDay is item.date.toDateString()
 					td.addClass('today')
+					toDayIndex = index
+					toDayDate = item.date
 				item.index = index
 				item.cell = td
 
+		@updateCalendar()
+
+		if !@focusedDate && toDayDate
+			@focusedDate = toDayDate
+			@focusedIndex = toDayIndex
+
 		enabledPrevLastDay = @isDayEnabled(prevLastDay)
 		enabledNextFirstDay = @isDayEnabled(nextFirstDay)
-
 		@panel.getElement('.prev').toggleClass('invisible', !enabledPrevLastDay)
 		@panel.getElement('.next').toggleClass('invisible', !enabledNextFirstDay)
 		@panel.getElement('.switch').toggleClass('disabled', !enabledNextFirstDay && !enabledPrevLastDay)
@@ -116,18 +151,31 @@ class DayPicker extends BaseDatePicker
 				.toggleClass('disabled', !@isDayEnabled(item.date))
 				.toggleClass('selected', @isSelected(item.date))
 				.toggleClass('focus', @isFocused(item.date))
+				.toggleClass('range-item', @isDayInRange(item.date))
+				.toggleClass('range-start', @isSameDates(@rangeStart, item.date))
+				.toggleClass('range-end', @isSameDates(@rangeEnd, item.date))
 		return
 
 
 	isSelected: (date) ->
-		return @selectedDate isnt null && @selectedDate.toDateString() is date.toDateString()
+		return @selectedDate isnt null && @isSameDates(@selectedDate, date)
 
 
 	isFocused: (date) ->
-		return @focusedDate isnt null && @focusedDate.toDateString() is date.toDateString()
+		return @focusedDate isnt null && @isSameDates(@focusedDate, date)
+
+
+	isDayInRange: (date) ->
+		return @rangeStart isnt null && @rangeEnd isnt null && @rangeStart <= date && @rangeEnd >= date
+
+
+	isSameDates: (dateA, dateB) ->
+		return dateA isnt null && dateB isnt null && dateA.toDateString() is dateB.toDateString()
 
 
 	tryMoveFocus: (index) ->
+		if !@focusedDate then return
+
 		date = @focusedDate.getDate()
 		focusedIndex = @focusedIndex
 

@@ -400,6 +400,14 @@ class BaseControl extends Miwo.Component
 		return button
 
 
+	addResetButton: ->
+		button = @addButton 'reset',
+			disabled: true
+			icon: 'glyphicon glyphicon-remove'
+			handler: => @reset()
+		return button
+
+
 	getButton: (name) ->
 		return @buttons.get(name)
 

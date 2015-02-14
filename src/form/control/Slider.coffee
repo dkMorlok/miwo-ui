@@ -19,6 +19,7 @@ class SliderControl extends BaseControl
 
 	createInput: ->
 		input = new Slider
+			inputName: @name
 			step: @step
 			min: @min
 			max: @max

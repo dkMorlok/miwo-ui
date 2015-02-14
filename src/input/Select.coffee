@@ -22,8 +22,9 @@ class OptionGroup extends Miwo.Object
 
 
 
-class Select extends Miwo.Component
+class SelectInput extends Miwo.Component
 
+	xtype: 'selectinput'
 	isInput: true
 	el: 'select',
 	componentCls: 'form-control'
@@ -39,7 +40,7 @@ class Select extends Miwo.Component
 		return OptionGroup(this, {label: title})
 
 
-	clear: () ->
+	clear: ->
 		@el.empty()
 		return
 
@@ -55,16 +56,16 @@ class Select extends Miwo.Component
 		return this
 
 
-	getValue: () ->
+	getValue: ->
 		return @el.get('value')
 
 
-	getInputEl: () ->
+	getInputEl: ->
 		return @el
 
 
-	getInputId: () ->
+	getInputId: ->
 		return @id
 
 
-module.exports = Select
+module.exports = SelectInput

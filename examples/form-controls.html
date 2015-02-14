@@ -48,11 +48,6 @@ miwo.ready(function() {
 		height: 70,
 		resize: 'none'
 	});
-	form.addNumber('number', {
-		label: 'Number',
-		min: 0,
-		max: 1000
-	});
 	form.addSlider('slider', {
 		label: 'Slider',
 		step: 10,
@@ -60,9 +55,25 @@ miwo.ready(function() {
 		max: 100,
 		value: 50
 	});
+	form.addNumber('number', {
+		label: 'Number',
+		min: 0,
+		max: 1000
+	});
 	form.addDate('date', {
 		label: 'Date',
 		type: 'date'
+	});
+	form.addNumber('number2', {
+		label: 'Number',
+		min: 0,
+		max: 1000
+	});
+	form.addDate('date1', {
+		label: 'Limited Date',
+		type: 'date',
+		startDate: new Date(2015, 1, 5),
+		endDate: new Date(2015, 1, 25)
 	});
 	form.addDate('date2', {
 		label: 'Date (resettable)',
@@ -77,9 +88,29 @@ miwo.ready(function() {
 		label: 'Date (disabled)',
 		disabled: true
 	});
-	form.addDate('date5', {
-		label: 'Custom Datetime Full',
-		type: ['date', 'time']
+	form.addDateRange('dateRange1', {
+		label: 'Date range',
+		value: [new Date(2015, 1, 10), new Date(2015, 1, 18)]
+	});
+	form.addDateRange('dateRange2', {
+		label: 'Date range (disabled)',
+		disabled: true
+	});
+	form.addDateRange('dateRange3', {
+		label: 'Date range (readonly)',
+		readonly: true,
+		value: [new Date(2015, 1, 10), new Date(2015, 1, 18)]
+	});
+	form.addDateRange('dateRange4', {
+		label: 'Limited Date range',
+		startDate: new Date(2015, 1, 5),
+		endDate: new Date(2015, 1, 25),
+		value: [new Date(2015, 1, 10), null]
+	});
+	form.addDateRange('dateRange5', {
+		label: 'Date range (resettable)',
+		pickerBtn: true,
+		resettable: true
 	});
 	form.addCheckbox('check', {
 		label: 'I want to be checked'

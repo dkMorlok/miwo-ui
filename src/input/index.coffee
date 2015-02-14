@@ -5,6 +5,7 @@ module.exports =
 	Select: require './Select'
 	Combo: require './Combo'
 	Date: require './Date'
+	DateRange: require './DateRange'
 	Text: require './Text'
 	Slider: require './Slider'
 	Color: require './Color'

@@ -49,6 +49,11 @@ class BaseDatePicker extends Miwo.Component
 		return @selectedDate
 
 
+	setFocus: ->
+		@panel.setFocus() if @panel
+		return
+
+
 	select: (date, silent) ->
 		if date
 			@selectedDate = new Date(date.getTime())
@@ -59,6 +64,11 @@ class BaseDatePicker extends Miwo.Component
 			@focusedDate = null
 			@updateCalendar()
 		@emit('selected', this, @selectedDate) if !silent
+		@onSelected(@selectedDate, silent)
+		return
+
+
+	onSelected: (date, silent) ->
 		return
 
 
@@ -179,10 +189,11 @@ class BaseDatePicker extends Miwo.Component
 			@activate(item.date) if !item.foreign
 			return true
 
-		if @selectedDate
-			@focusedDate = new Date(@selectedDate.getTime())
-		else
-			@focusedDate = new Date(@activeDate.getTime())
+		if !@focusedDate
+			if @selectedDate
+				@focusedDate = new Date(@selectedDate.getTime())
+			else
+				@focusedDate = new Date(@activeDate.getTime())
 
 		if @selectedDate
 			@activate(@selectedDate)

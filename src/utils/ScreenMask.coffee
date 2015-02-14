@@ -10,17 +10,17 @@ class ScreenMask
 		return
 
 
-	show: () ->
+	show: ->
 		@el.inject(miwo.body)
 		return
 
 
-	hide: () ->
+	hide: ->
 		@el.dispose()
 		return
 
 
-	destroy: () ->
+	destroy: ->
 		@hide()
 		@el.destroy()
 		return

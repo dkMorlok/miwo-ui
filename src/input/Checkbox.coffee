@@ -1,7 +1,7 @@
 class Checkbox extends Miwo.Component
 
 	isInput: true
-	xtype: 'checkbox'
+	xtype: 'checkboxinput'
 	label: ''
 	disabled: false
 	checked: false

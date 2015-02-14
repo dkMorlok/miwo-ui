@@ -74,7 +74,7 @@ class BaseTextControl extends BaseControl
 
 	onInputKeydown: (e) ->
 		if !@editable
-			e.stop()
+			e.stop() if e.key.length is 1
 			return
 		if e.key.length is 1
 			@onKeydown(this, e.key, e)

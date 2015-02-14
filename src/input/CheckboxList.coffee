@@ -3,7 +3,7 @@ Checkbox = require './Checkbox'
 
 class CheckboxList extends Miwo.Container
 
-	xtype: 'checkboxlist'
+	xtype: 'checkboxlistinput'
 	isInput: true
 	inline: false
 	componentCls: 'checkboxlist'
