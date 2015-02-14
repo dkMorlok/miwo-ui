@@ -8,6 +8,7 @@ class Checkbox extends Miwo.Component
 
 	inputEl: null
 	iconEl: null
+	checkerEl: null
 	labelEl: null
 	textEl: null
 
@@ -16,9 +17,9 @@ class Checkbox extends Miwo.Component
 		@el.addClass('checkbox')
 		@el.set 'html',
 		'<label miwo-reference="labelEl" for="'+@getInputId()+'">'+
-			'<span class="checker">'+
+			'<span miwo-reference="checkerEl" class="checker" tabindex="0">'+
 				'<i miwo-reference="iconEl" class="fa"></i>'+
-				'<input miwo-reference="inputEl" type="checkbox" id="'+@getInputId()+'">'+
+				'<input miwo-reference="inputEl" type="checkbox" id="'+@getInputId()+'" tabindex="-1">'+
 			'</span>'+
 			'<span miwo-reference="textEl" class="label-text">'+@label+'</span>'+
 		'</label>'
@@ -27,24 +28,37 @@ class Checkbox extends Miwo.Component
 
 	afterRender: ->
 		super
-		@inputEl.on 'change', ()=>
+		@inputEl.on 'change', =>
 			if @disabled then return
 			@setChecked(this.getValue())
 			@emit('change', this, this.getValue())
+			@setFocus()
 			return
 
-		@inputEl.on 'focus', ()=>
+		@inputEl.on 'focus', =>
 			if @disabled then return
-			@el.addClass('focus')
-			@emit('focus', this)
+			@setFocus()
 			return
 
-		@inputEl.on 'blur', ()=>
+		@checkerEl.on 'focus', =>
+			if @disabled then return
+			@setFocus()
+			return
+
+		@checkerEl.on 'keydown', (e) =>
+			if @disabled then return
+			if e.key is 'space' or e.key is 'enter'
+				e.stop()
+				@setChecked(!@checked)
+			return
+
+		@inputEl.on 'blur', =>
 			if @disabled then return
 			@el.removeClass('focus')
 			@emit('blur', this)
 			return
 
+		@focusEl = @checkerEl
 		@setChecked(@checked)
 		return
 

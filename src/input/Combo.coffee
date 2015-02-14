@@ -40,7 +40,8 @@ class ComboInput extends Miwo.Component
 			'<span class="combo-input-reset" style="display: none;"><i class="glyphicon glyphicon glyphicon-remove"></i></span>'+
 			'<span class="combo-input-arrow"><i class="glyphicon glyphicon-chevron-down"></i></span>'+
 		'</div>'+
-		'<input class="screen-off" id="'+@id+'-input" type="text" role="button" aria-haspopup="true" aria-labelledby="'+@id+'-input" >'
+		'<input name="'+@name+'" class="screen-off" id="'+@id+'-input" type="text" role="button" aria-haspopup="true" aria-labelledby="'+@id+'-input" tabindex="-1" >'
+		@el.set('tabindex', 0)
 
 		# references
 		@control = @el.getElement('.combo-input')
@@ -65,9 +66,22 @@ class ComboInput extends Miwo.Component
 		@el.addClass('disabled') if @disabled
 
 		# bind events
-		@el.on 'click', (event) =>
+		@el.on 'mousedown', (event) =>
+			if @disabled then event.stop()
+			return
+
+		@el.on 'click', =>
 			if @disabled then return
+			@setFocus()
 			@open()
+			return
+		@el.on 'focus', =>
+			if @disabled then return
+			@setFocus()
+			return
+		@el.on 'blur', =>
+			if @disabled then return
+			@blur()
 			return
 		@dropdownEl.on 'click:relay(.combo-dropdown-item)', (event, target) =>
 			event.stop()
@@ -100,12 +114,8 @@ class ComboInput extends Miwo.Component
 			event.stop()
 			@setValue()
 			return
-		@inputEl.on 'focus', (event) =>
-			if @disabled then return
-			@setFocus(true)
-			return
 
-		@keyListener = new Miwo.utils.KeyListener(miwo.body, 'keydown')
+		@keyListener = new Miwo.utils.KeyListener(@el, 'keydown')
 		@keyListener.on 'esc', () =>
 			if @disabled then return
 			@close()
@@ -154,7 +164,8 @@ class ComboInput extends Miwo.Component
 				else
 					@open()
 			return true
-		@keyListener.pause()
+
+		@focusEl = @el
 		return
 
 
@@ -164,24 +175,6 @@ class ComboInput extends Miwo.Component
 
 	getInputId: ->
 		return @id+'-input'
-
-
-	setFocus: (silent) ->
-		@active = true
-		@el.addClass('active')
-		@el.setFocus() if !silent
-		@keyListener.resume()
-		miwo.body.on('click', @bound('onBodyClick'))
-		return
-
-
-	blur: (silent) ->
-		@active = false
-		@el.removeClass('active')
-		@el.blur() if !silent
-		@keyListener.pause()
-		miwo.body.un('click', @bound('onBodyClick'))
-		return
 
 
 	setValue: (value) ->
@@ -299,6 +292,7 @@ class ComboInput extends Miwo.Component
 		@dropdownEl.removeClass('active')
 		@dropdownEl.dispose()
 		@screenMask.hide()
+		@setFocus()
 		return
 
 
@@ -379,17 +373,9 @@ class ComboInput extends Miwo.Component
 		return
 
 
-	onBodyClick: (event) ->
-		parents = event.target.getParents()
-		if parents.indexOf(@el)<0 && parents.indexOf(@dropdownMaskEl)<0
-			@blur()
-		return
-
-
 	doDestroy: ->
 		@screenMask.destroy()
 		@keyListener.destroy()
-		miwo.body.un('click', @bound('onBodyClick'))
 		super
 
 

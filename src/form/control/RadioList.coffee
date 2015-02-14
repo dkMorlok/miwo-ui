@@ -54,7 +54,6 @@ class RadioListControl extends BaseControl
 		@input.setValue(@value)
 		@input.setDisabled(@disabled)
 		@input.on 'change', ()=> @setValue(@input.getValue())
-		@input.on 'focus', ()=> @setFocus()
 		@input.on 'blur', ()=> @validate()
 		return
 

@@ -18,7 +18,9 @@
 		font-size: 22px;
 		position: relative;
 		color: @input-border;
-		.transition(all 0.2s)
+		outline: none;
+		.transition(all 0.2s);
+		&:focus { color: @brand-primary; }
 	}
 	.label-text {
 		float: left;
@@ -27,11 +29,6 @@
 	input {
 		position: absolute;
 		opacity: 0;
-	}
-	&.focus {
-		.checker {
-			color: @brand-primary;
-		}
 	}
 	&.checked {
 		.checker {
@@ -158,7 +155,7 @@
 		border-radius: 4px 4px 0px 0px;
 		border-bottom-color: #ddd !important;
 	}
-	&.active {
+	&:focus {
 		border-color: @input-border-focus;
 		outline: none;
 		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);

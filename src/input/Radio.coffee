@@ -15,9 +15,9 @@ class Radio extends Miwo.Component
 		@el.addClass('radio')
 		@el.set 'html',
 		'<label miwo-reference="labelEl" for="'+@getInputId()+'">'+
-			'<span class="checker">'+
+			'<span miwo-reference="checkerEl" class="checker" tabindex="0">'+
 				'<i miwo-reference="iconEl" class="fa"></i>'+
-				'<input miwo-reference="inputEl" type="radio" id="'+@getInputId()+'" name="'+@radioName+'" value="'+@name+'" >'+
+				'<input miwo-reference="inputEl" type="radio" id="'+@getInputId()+'" name="'+@radioName+'" value="'+@name+'" tabindex="-1" >'+
 			'</span>'+
 			'<span miwo-reference="textEl" class="label-text">'+@label+'</span>'+
 		'</label>'
@@ -29,27 +29,40 @@ class Radio extends Miwo.Component
 		@inputEl.on 'change', =>
 			if @disabled then return
 			@setChecked(@isChecked())
-			@emit('change', this, @name)
 			return
 
 		@inputEl.on 'focus', =>
 			if @disabled then return
-			@el.addClass('focus')
-			@emit('focus', this)
+			@setFocus()
+			return
+
+		@checkerEl.on 'focus', =>
+			if @disabled then return
+			@setFocus()
+			return
+
+		@checkerEl.on 'keydown', (e) =>
+			if @disabled then return
+			if e.key is 'space' or e.key is 'enter'
+				e.stop()
+				@setChecked(!@isChecked())
 			return
 
 		@inputEl.on 'blur', =>
 			if @disabled then return
-			@el.removeClass('focus')
 			@emit('blur', this)
 			return
 
+		@focusEl = @checkerEl
 		@setDisabled(@disabled)
 		@setChecked(@checked)
 		return
 
 
-	setChecked: (@checked) ->
+	setChecked: (checked, silent) ->
+		checkedOld = @checked
+		@checked = checked
+		@emit('change', this, @name) if !silent && checkedOld isnt checked
 		if !@rendered then return
 		@el.toggleClass('checked', checked)
 		@inputEl.set('checked', checked)

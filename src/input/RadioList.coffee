@@ -12,7 +12,7 @@ class RadioListInput extends Miwo.Container
 
 	setChecked: (name) ->
 		@components.each (radio)=>
-			radio.setChecked(radio.name is name)
+			radio.setChecked(radio.name is name, true)
 			return
 		return
 
@@ -30,7 +30,7 @@ class RadioListInput extends Miwo.Container
 
 	setValue: (value) ->
 		@components.each (checkbox, name)=>
-			checkbox.setChecked(value is name)
+			checkbox.setChecked(value is name, true)
 			return
 		return
 

@@ -28,6 +28,7 @@ class Button extends Miwo.Component
 
 	setDisabled: (disabled, silent) ->
 		@el.toggleClass('disabled', disabled)
+		@el.set('tabindex', -disabled)
 		@disabled = disabled
 		(if disabled then @emit('disabled', this) else @emit('enabled', this)) unless silent
 		return
@@ -105,6 +106,7 @@ class Button extends Miwo.Component
 		@el.addClass(@getBaseCls(@size))  if @size
 		@el.addClass('active')  if @active
 		@el.addClass('disabled')  if @disabled
+		@el.set('tabindex', -1)  if @disabled
 		@el.set("title", @tooltip)  if @tooltip
 		@el.on("click", @bound("onClick"))
 		@el.on("keyup", @bound("onKeyUp"))

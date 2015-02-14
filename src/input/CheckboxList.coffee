@@ -6,7 +6,7 @@ class CheckboxList extends Miwo.Container
 	xtype: 'checkboxlistinput'
 	isInput: true
 	inline: false
-	componentCls: 'checkboxlist'
+	baseCls: 'checkboxlist'
 
 
 	setChecked: (name, checked) ->
@@ -21,20 +21,23 @@ class CheckboxList extends Miwo.Container
 			disabled = name
 			@components.each (checkbox)=>
 				checkbox.setDisabled(disabled)
+				return
 		return
 
 
 	setValue: (value) ->
 		@components.each (checkbox, name)=>
 			checkbox.setChecked(value.indexOf(name)>=0)
+			return
 		return
 
 
-	getValue: () ->
+	getValue: ->
 		value = []
 		@components.each (checkbox, name)=>
 			if checkbox.isChecked() && !checkbox.disabled
 				value.push(name)
+			return
 		return value
 
 
@@ -67,7 +70,7 @@ class CheckboxList extends Miwo.Container
 		return checkbox
 
 
-	clear: () ->
+	clear: ->
 		@components.each (component, name) =>
 			@removeComponent(name)
 			component.destroy()

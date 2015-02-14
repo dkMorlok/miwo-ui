@@ -19,11 +19,12 @@ class ColorInput extends Miwo.Component
 			id: @getInputId()
 			cls: 'form-control'
 			type: 'color'
+			tabindex: 0
 		@inputEl.inject(@el)
 
 		@resetBtn = new Button
 			icon: 'remove'
-			handler: => @emit('reset', this)
+			handler: => @emit('reset', this); @setFocus()
 		@resetBtn.render(@el)
 
 		@inputEl.on 'click', (event) =>
@@ -35,8 +36,14 @@ class ColorInput extends Miwo.Component
 
 	afterRender: ->
 		super()
+		@focusEl = @inputEl
 		@setDisabled(@disabled)
 		@setResettable(@resettable)
+		@inputEl.on 'keydown', (e)=>
+			if e.key is 'space' or e.key is 'enter'
+				e.stop()
+				@openPicker()
+			return
 		return
 
 
@@ -92,6 +99,7 @@ class ColorInput extends Miwo.Component
 			return
 		popover.on 'close', =>
 			@popover = null
+			@setFocus()
 			return
 		return popover
 
