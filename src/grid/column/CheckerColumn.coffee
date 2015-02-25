@@ -7,20 +7,17 @@ class CheckerColumn extends Column
 	xtype: "checkercolumn"
 	align: "center"
 	width: 50
-	colClass: 'checker'
+	colCls: 'checker'
 	isCheckerColumn: true
+	@randId: 0
 
 	# disable update cell if row is updated
 	preventUpdateCell: true
 
 
-	constructor: (config) ->
-		super(config)
-
-
 	onRenderCell: (td, value, record) ->
 		checkbox = new Checkbox
-			id: @getGrid().id.toString()+"-checker-"+record.getId().toString()
+			id: @getGrid().id.toString()+"-checker-"+(record.id || 'rnd'+(CheckerColumn.randId++))
 		checkbox.render(td)
 		checkbox.on 'change', (checker, value)=>
 			@emit("rowcheck", this, td.getParent('tr'), value)
@@ -55,7 +52,7 @@ class CheckerColumn extends Column
 		return null
 
 
-	getHeadChecker: () ->
+	getHeadChecker: ->
 		return @getGrid().headerEl.getElement('tr:first-child th.grid-col-checker').retrieve('checker')
 
 

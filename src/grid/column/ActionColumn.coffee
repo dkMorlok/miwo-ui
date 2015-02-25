@@ -10,7 +10,7 @@ class ActionColumn extends Column
 	xtype: 'actioncolumn'
 	actions: null
 	align: 'right'
-	colClass: 'actions'
+	colCls: 'actions'
 	isActionColumn: true
 	btnSize: null
 

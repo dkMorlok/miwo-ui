@@ -43,7 +43,7 @@ class CheckSelector extends RowSelector
 		return
 
 
-	gridRendered: (grid) ->
+	gridRender: (grid) ->
 		super(grid)
 		@setCheckColumn(grid.checker)
 		return
@@ -68,8 +68,7 @@ class CheckSelector extends RowSelector
 
 	doDestroy: ->
 		@column = null
-		super()
-		return
+		super
 
 
 module.exports = CheckSelector

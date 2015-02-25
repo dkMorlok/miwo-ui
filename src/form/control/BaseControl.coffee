@@ -396,6 +396,9 @@ class BaseControl extends Miwo.Component
 		button = new Button(config)
 		button.getControl = ()=> return this
 		button.render(@buttonsCt)  if @buttonsCt
+		button.on 'click', (btn, event)=>
+			@emit('buttonclick', this, btn, event)
+			return
 		@buttons.set(name, button)
 		return button
 
@@ -403,7 +406,7 @@ class BaseControl extends Miwo.Component
 	addResetButton: ->
 		button = @addButton 'reset',
 			disabled: true
-			icon: 'glyphicon glyphicon-remove'
+			icon: 'remove'
 			handler: => @reset()
 		return button
 
@@ -453,6 +456,7 @@ class BaseControl extends Miwo.Component
 		if @prepend
 			span = new Element('span', {cls:'input-group-addon', html: @prepend})
 			span.inject(ct)
+			span.on 'click', (e)=> @emit('prependclick', this, e)
 
 		input.render(ct)
 		input.setDisabled(@disabled)
@@ -460,6 +464,7 @@ class BaseControl extends Miwo.Component
 		if @append
 			span = new Element('span', {cls:'input-group-addon', html: @append})
 			span.inject(ct)
+			span.on 'click', (e)=> @emit('appendclick', this, e)
 
 		if @buttons.length isnt 0
 			@buttonsCt = new Element('div', {cls:'input-group-btn'})

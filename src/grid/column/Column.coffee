@@ -27,7 +27,7 @@ class Column extends Miwo.Component
 		return @container
 
 
-	getDataIndex: () ->
+	getDataIndex: ->
 		return @dataIndex || @name
 
 

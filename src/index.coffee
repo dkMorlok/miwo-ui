@@ -1,4 +1,5 @@
 miwo.registerExtension('miwo-ui', require './DiExtension')
+miwo.translator.setTranslates('en', 'miwo', require('./translates'))
 
 # classes
 Miwo.ui = {}

@@ -12,7 +12,7 @@ class DropdownList extends Miwo.Container
 	role: 'menu'
 
 
-	afterInit: () ->
+	afterInit: ->
 		super
 		@renderTo = miwo.body
 		return
@@ -27,7 +27,7 @@ class DropdownList extends Miwo.Container
 
 
 	show: ->
-		super()
+		super
 		pos = @target.getPosition()
 		pos.y += @target.getSize().y-3
 		@setPosition(pos)
@@ -40,7 +40,7 @@ class DropdownList extends Miwo.Container
 
 
 	doHide: ->
-		super()
+		super
 		@resetRendered(true)
 		return
 

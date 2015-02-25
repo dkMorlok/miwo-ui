@@ -20,32 +20,34 @@
 <body>
 
 <script>
+var store, grid;
 miwo.ready(function() {
 	miwo.init();
 
 	// create data store
-	var store = new Miwo.data.Store({
+	store = new Miwo.data.Store({
 		name: 'user',
 		fields: {
 			id: {type:'int'},
 			name: {type:'string'},
-			role: {type:'string'}
+			role: {type:'string'},
+			enabled: {type:'boolean'}
 		},
 		sort: {
 			role: 'asc'
 		}
 	});
 	store.setData([
-		{id: 1, name: 'Dusan Kmet', role: 'admin'},
-		{id: 2, name: 'Petr Janosik', role: 'agent'},
-		{id: 3, name: 'John Doe', role: 'agent'},
-		{id: 4, name: 'Lorem dawd awd awd awdaw daiw dhaiw dhaiwdh aiwdhai dhaiwd awidh aiwdha iwdha ihwaidmin', role: 'root'},
-		{id: 5, name: 'Miro Kmet', role: 'admin'}
+		{id: 1, name: 'Dusan Kmet', role: 'admin', enabled: true },
+		{id: 2, name: 'Petr Janosik', role: 'agent', enabled: true},
+		{id: 3, name: 'John Doe', role: 'agent', enabled: false},
+		{id: 4, name: 'Lorem dawd awd awd awdaw daiw dhaiw dhaiwdh aiwdhai dhaiwd awidh aiwdha iwdha ihwaidmin', role: 'root', enabled: false},
+		{id: 5, name: 'Miro Kmet', role: 'admin', enabled: true}
 	]);
 
 
 	// show data in grid
-	var grid = new Miwo.Grid({
+	grid = new Miwo.Grid({
 		groupBy: 'role'
 	});
 	grid.setStore(store);
@@ -58,6 +60,9 @@ miwo.ready(function() {
 		text: 'Agent Role',
 		align:'right',
 		width: 150
+	});
+	grid.addSwitchColumn('enabled', {
+		text: 'Switch'
 	});
 
 	// actions

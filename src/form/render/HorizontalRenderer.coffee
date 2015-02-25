@@ -10,10 +10,16 @@ class HorizontalRenderer
 
 	renderForm: (form) ->
 		form.el.addClass('form-horizontal')
+		if form.preventAutoLogin
+			username = new Element('input', {name:'_username', styles:{display:'none'}})
+			username.inject(form.el)
+			username = new Element('input', {name:'_password', type:'password', styles:{display:'none'}})
+			username.inject(form.el)
 		return
 
 
 	renderButtons: (buttons, ct) ->
+		ct.addClass('form-actions')
 		if ct.generated
 			ct.addClass("col-sm-offset-#{12-@options.baseColSize}")
 			ct.addClass("col-sm-#{@options.baseColSize}")
@@ -29,9 +35,6 @@ class HorizontalRenderer
 			control.groupEl.addClass('form-group')
 
 		control.el = control.groupEl
-
-		if control.isBoxControl
-			control.groupEl.addClass('margin-no')
 
 		if !control.labelRendered
 			@renderLabel(control, control.groupEl)

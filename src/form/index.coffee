@@ -5,7 +5,7 @@ exports =
 		Fieldset: require './container/Fieldset'
 		Form: require './container/Form'
 
-	# renderers
+	# renderer
 	render:
 		FormRendererFactory: require './render/FormRendererFactory'
 		HorizontalRenderer: require './render/HorizontalRenderer'
@@ -27,6 +27,8 @@ exports =
 		Slider: require('./control/Slider')
 		Text: require('./control/Text')
 		TextArea: require('./control/TextArea')
+		Switch: require('./control/Switch')
+		DropSelect: require('./control/DropSelect')
 		ButtonGroup: require('./control/ButtonGroup')
 		Button: require('./control/Buttons').ButtonControl
 		SubmitButton: require('./control/Buttons').SubmitButton
@@ -47,6 +49,8 @@ BaseContainer.registerControl('select', exports.control.Select)
 BaseContainer.registerControl('checkbox', exports.control.Checkbox)
 BaseContainer.registerControl('checkboxList', exports.control.CheckboxList)
 BaseContainer.registerControl('radioList', exports.control.RadioList)
+BaseContainer.registerControl('switch', exports.control.Switch)
+BaseContainer.registerControl('dropSelect', exports.control.DropSelect)
 BaseContainer.registerControl('buttonGroup', exports.control.ButtonGroup)
 BaseContainer.registerControl('button', exports.control.Button)
 BaseContainer.registerControl('submit', exports.control.SubmitButton)

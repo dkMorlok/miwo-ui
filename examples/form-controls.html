@@ -113,7 +113,14 @@ miwo.ready(function() {
 		resettable: true
 	});
 	form.addCheckbox('check', {
-		label: 'I want to be checked'
+		label: 'I want to be checked',
+		desc: 'This some description to input with longer text than other words what you can here in input.'
+	});
+	form.addCheckbox('check2', {
+		label: 'I am checked'
+	});
+	form.addCheckbox('check3', {
+		label: 'This some description to input with longer text than.'
 	});
 	form.addCombo('combo', {
 		label: 'Combo Select',
@@ -130,13 +137,15 @@ miwo.ready(function() {
 		label: 'Check List',
 		items: {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'},
 		inline: true,
-		value:['one', 'six']
+		value:['one', 'six'],
+		desc: 'This some description to input with longer text than other words what you can here in input.'
 	});
 	form.addRadioList('radiolist', {
 		label: 'Radio List',
 		items: {one:'one', two: 'two', three: 'three', four:'four', five:'five', six:'six'},
 		inline: true,
-		value:'two'
+		value:'two',
+		desc: 'This some description to input with longer text than other words what you can here in input.'
 	});
 	form.addButtonGroup('buttongroup', {
 		label: 'button group',
@@ -162,6 +171,14 @@ miwo.ready(function() {
 		label: 'Select color (disabled)',
 		value: '#428bca',
 		disabled: true
+	});
+	form.addSwitch('switch', {
+		label: 'State switch',
+		value: true,
+		onState: 'success',
+		offState: 'danger',
+		onText: 'ON',
+		offText: 'OFF'
 	});
 	form.addSubmit('submit', {
 		label: 'Submit me!'

@@ -11,7 +11,7 @@ class RadioListControl extends BaseControl
 	isBoxControl: true
 
 
-	createInput: () ->
+	createInput: ->
 		return new RadioList
 			id: @id
 			inline: @inline
@@ -49,12 +49,12 @@ class RadioListControl extends BaseControl
 		return
 
 
-	afterRenderControl: ()->
+	afterRenderControl: ->
 		@setItems(@getItems())
 		@input.setValue(@value)
 		@input.setDisabled(@disabled)
-		@input.on 'change', ()=> @setValue(@input.getValue())
-		@input.on 'blur', ()=> @validate()
+		@input.on 'change', => @setValue(@input.getValue())
+		@input.on 'blur', => @validate()
 		return
 
 

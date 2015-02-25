@@ -8,7 +8,7 @@ class RowSelector extends BaseSelector
 	selectOnRowClick: true
 
 
-	gridRendered: (grid) ->
+	gridRender: (grid) ->
 		super(grid)
 		if @selectOnRowClick
 			@mon grid.bodyEl, "click:relay(tr)", (event, target) =>

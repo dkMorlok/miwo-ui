@@ -1,10 +1,6 @@
 SelectionModel = require '../selection/SelectionModel'
 GridRenderer = require './renderer/GridRenderer'
 CheckerColumn = require './column/CheckerColumn'
-CheckColumn = require './column/CheckColumn'
-DateColumn = require './column/DateColumn'
-TextColumn = require './column/TextColumn'
-NumberColumn = require './column/NumberColumn'
 ActionColumn = require './column/ActionColumn'
 Operations = require './Operations'
 LoadMask = require '../utils/LoadMask'
@@ -24,7 +20,7 @@ class Grid extends Miwo.Container
 	# @event destroyrow (grid, tr, index)
 	# @event destroycell (grid, td)
 	# @event refresh (grid)
-	# @event operation (grid, name, records)
+	# @event action (grid, name, records)
 	# @event selectionchange (grid, sm, selection)
 
 	isGrid: true
@@ -59,14 +55,22 @@ class Grid extends Miwo.Container
 	actionColumnIndex: 0
 
 
+	@registerColumn: (columnName, fn) ->
+		if !fn then throw new Error("Error in registry control #{controlName}, constructor is undefined")
+		addMethod = 'add'+columnName.capitalize()
+		@prototype[addMethod] = (name, config = {}) ->
+			return @addColumn(name, new fn(config))
+		return
+
+
 	afterInit: ->
-		super()
+		super
 		@contentEl.addClass(@getBaseCls('container'))
 
 		if @loadMask
 			@setLoadMask(@loadMask)
 
-		if @store
+		if @store && Type.isString(@store)
 			@setStore(miwo.store(@store))
 
 		if @renderer
@@ -86,24 +90,8 @@ class Grid extends Miwo.Container
 		return @add(name, column)
 
 
-	addCheckColumn: (name, config) ->
-		return @addColumn(name, new CheckColumn(config))
-
-
 	addCheckerColumn: (name, config) ->
 		return @addColumn(name, new CheckerColumn(config))
-
-
-	addDateColumn: (name, config) ->
-		return @addColumn(name, new DateColumn(config))
-
-
-	addNumberColumn: (name, config) ->
-		return @addColumn(name, new NumberColumn(config))
-
-
-	addTextColumn: (name, config) ->
-		return @addColumn(name, new TextColumn(config))
 
 
 	addActionColumn: (name, config) ->
@@ -118,20 +106,20 @@ class Grid extends Miwo.Container
 		return @getActionColumn().addAction(name, config)
 
 
-	getActionColumn: () ->
+	getActionColumn: ->
 		if !@lastAddedColumn.isActionColumn
 			@addActionColumn('actions'+@actionColumnIndex)
 			@actionColumnIndex++
 		return @lastAddedColumn
 
 
-	getOperations: () ->
+	getOperations: ->
 		if !@operations
 			@operations = new Operations(this)
 		return @operations
 
 
-	getColumns: () ->
+	getColumns: ->
 		return @getComponents().toArray()
 
 
@@ -266,7 +254,6 @@ class Grid extends Miwo.Container
 			if @selector.checkerRequired
 				@checker = @addCheckerColumn('checker')
 
-
 		@headerEl = new Element "div",
 			parent: el
 			cls: @getBaseCls("header")
@@ -322,8 +309,7 @@ class Grid extends Miwo.Container
 		@renderer = null
 		@selector = null
 		@store = null
-		super()
-		return
+		super
 
 
 module.exports = Grid

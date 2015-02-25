@@ -1,4 +1,4 @@
-module.exports =
+exports =
 
 	Grid: require ('./Grid')
 	Action: require ('./Action')
@@ -11,6 +11,7 @@ module.exports =
 		CheckColumn: require ('./column/CheckColumn')
 		CheckerColumn: require ('./column/CheckerColumn')
 		TextColumn: require ('./column/TextColumn')
+		SwitchColumn: require ('./column/SwitchColumn')
 		ActionColumn: require ('./column/ActionColumn')
 
 	renderer:
@@ -19,3 +20,15 @@ module.exports =
 
 	utils:
 		PopoverSubmit: require ('./utils/PopoverSubmit')
+
+
+# register add method
+Grid = exports.Grid
+Grid.registerColumn('numberColumn', exports.column.NumberColumn)
+Grid.registerColumn('dateColumn', exports.column.DateColumn)
+Grid.registerColumn('checkColumn', exports.column.CheckColumn)
+Grid.registerColumn('textColumn', exports.column.TextColumn)
+Grid.registerColumn('switchColumn', exports.column.SwitchColumn)
+
+
+module.exports = exports

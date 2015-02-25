@@ -81,22 +81,22 @@ class GridRenderer extends Miwo.Object
 		return
 
 
-	recordAdded: (record) ->
+	recordAdded: (record, index) ->
 		@renderRow(@tbody, record, @tbody.getChildren().length)  # push to end
 		@syncRows()
 		return
 
 
 	recordRemoved: (record) ->
-		tr = @getRowById(record.getId())
+		tr = @getRowByRecord(record)
 		if tr
 			@destroyRow(tr)
 			@syncRows()
 		return
 
 
-	recordUpdated: (record) ->
-		tr = @getRowById(record.getId())
+	recordUpdated: (record, index) ->
+		tr = @getRowByRecord(record)
 		if tr
 			@updateRow(tr, record)
 			@syncRows()
@@ -115,7 +115,7 @@ class GridRenderer extends Miwo.Object
 		for column in @columns
 			th = new Element("th").inject(tr)
 			th.addClass('text-'+column.align)
-			th.addClass('grid-col-'+column.colClass) if column.colClass
+			th.addClass('grid-col-'+column.colCls) if column.colCls
 			th.set("column", column.name)
 			th.set("html", column.renderHeader())
 			th.set("title", column.title) if column.title
@@ -136,8 +136,8 @@ class GridRenderer extends Miwo.Object
 	renderBody: (tbodyTable) ->
 		tbody = new Element("tbody", {cls: "grid-rows"})
 		tbody.inject(tbodyTable)
-		tbody.on("click:relay(td)", @bound('onCellClick'))
-		tbody.on("dblclick:relay(td)", @bound('onCellDblClick'))
+		tbody.on("click:relay(tr.grid-row-data td)", @bound('onCellClick'))
+		tbody.on("dblclick:relay(tr.grid-row-data td)", @bound('onCellDblClick'))
 		@tbody = tbody
 		@grid.tbodyEl = tbody
 
@@ -192,18 +192,20 @@ class GridRenderer extends Miwo.Object
 
 
 	updateRow: (tr, record) ->
+		if !tr.retrieve("rowid")
+			tr.set("data-row", record.getId())
+			tr.store("rowid", record.getId())
 		cells = {}
 		for td in tr.getElements('td')
 			cells[td.get('column')] = td
 		for column in @columns
-			if !column.preventUpdateCell
-				@updateCell(cells[column.name], record, column)
+			@updateCell(cells[column.name], record, column)  if !column.preventUpdateCell
 		return
 
 
 	renderCell: (tr, record, column) ->
 		td = new Element("td").inject(tr)
-		td.addClass('grid-col-'+column.colClass) if column.colClass
+		td.addClass('grid-col-'+column.colCls) if column.colCls
 		td.addClass("text-" + column.align)
 		td.store("dataIndex", column.getDataIndex())
 		td.set("column", column.name)
@@ -216,38 +218,47 @@ class GridRenderer extends Miwo.Object
 	updateCell: (td, record, column) ->
 		dataIndex = column.getDataIndex()
 		value = record.get(dataIndex)
-		td.set("html", column.renderValue(value, record))
+		rendered = column.renderValue(value, record)
+		if Type.isObject(rendered) && rendered.isComponent
+			td.empty()
+			rendered.render(td)
+		else
+			td.set('html', rendered)
 		column.onRenderCell(td, value, record) if column.onRenderCell
-		@grid.emit("cellrender", @grid, td, value, record)
+		@grid.emit('cellrender', @grid, td, value, record)
 		return
 
 
 	destroyRows: (tbody) ->
 		for tr in tbody.getElements("tr")
-			@destroyRow(tr)
+			if tr.hasClass('grid-row-group')
+				tr.destroy()
+			else
+				@destroyRow(tr)
 		return
 
 
 	destroyRow: (tr) ->
-		record = tr.retrieve("record")
-		tr.eliminate("record")
-		tr.eliminate("rowid")
-		@grid.emit("rowdestroy", @grid, tr)
-		for td in tr.getElements("td")
+		record = tr.retrieve('record')
+		tr.eliminate('record')
+		tr.eliminate('rowid')
+		@grid.emit('rowdestroy', @grid, tr)
+		for td in tr.getElements('td')
 			@destroyCell(td, record)
 		tr.destroy()
 		return
 
 
 	destroyCell: (td, record) ->
-		column = @grid.get(td.get("column"))
+		name = td.get('column')
+		column = @grid.get(name)
 		column.onDestroyCell(td, record) if column.onDestroyCell
-		@grid.emit("celldestroy", @grid, td)
-		td.eliminate("dataIndex")
+		@grid.emit('celldestroy', @grid, td)
+		td.eliminate('dataIndex')
 		return
 
 
-	syncRows: () ->
+	syncRows: ->
 		records = @grid.getRecords()
 
 		if !@grid.groupBy
@@ -266,7 +277,7 @@ class GridRenderer extends Miwo.Object
 				if !groupRow
 					@renderGroup(@tbody, name)
 
-			for groupRow in @tbody.getElements("tr.grid-row-group")
+			for groupRow in @tbody.getElements('tr.grid-row-group')
 				groupName = groupRow.get('data-group')
 				if !groups[groupName]
 					groupRow.destroy()
@@ -344,34 +355,34 @@ class GridRenderer extends Miwo.Object
 
 
 	onCellClick: (e, td) ->
-		if td.get("disableclick") then return
-		if e.target.tagName is "A" then return
+		if td.get('disableclick') then return
+		if e.target.tagName is 'A' then return
 
 		clearTimeout(@cellclickTimeoutId)
 		@cellclickTimeoutId = (=>
 			info = @getCellInfo(td)
-			@grid.emit("cellclick", @grid, td, info.record, info, e)
-			@grid.emit("rowclick", @grid, info.record, info, e)  if @grid.rowclickable
+			@grid.emit('cellclick', @grid, td, info.record, info, e)
+			@grid.emit('rowclick', @grid, info.record, info, e)  if @grid.rowclickable
 			return
 		).delay(@dblclickdelay)
 		return
 
 
 	onCellDblClick: (e, td) ->
-		if td.get("disableclick") then return
+		if td.get('disableclick') then return
 		if e.target.tagName is "A" then return
 
 		clearTimeout(@cellclickTimeoutId)
 		info = @getCellInfo(td)
-		@grid.emit("celldblclick", @grid, td, info.record, info, e)
-		@grid.emit("rowdblclick", @grid, info.record, info, e)  if @grid.rowclickable
+		@grid.emit('celldblclick', @grid, td, info.record, info, e)
+		@grid.emit('rowdblclick', @grid, info.record, info, e)  if @grid.rowclickable
 		return
 
 
 	getCellInfo: (td) ->
 		tr = td.getParent()
-		dataIndex = td.retrieve("dataIndex")
-		record = tr.retrieve("record")
+		dataIndex = td.retrieve('dataIndex')
+		record = tr.retrieve('record')
 		return {
 			tr: tr
 			cellIndex: td.getIndex()
@@ -379,30 +390,36 @@ class GridRenderer extends Miwo.Object
 			record: record
 			value: record.get(dataIndex)
 			dataIndex: dataIndex
-			column: td.get("column")
+			column: td.get('column')
 		}
 
 
 	getRowById: (id) ->
-		for tr in @tbody.getElements("tr")
+		for tr in @tbody.getElements('tr')
 			if tr.retrieve('rowid') is id
 				return tr
 		return null
 
 
-	onGridParentShown: (component) ->
+	getRowByRecord: (record) ->
+		for tr in @tbody.getElements('tr')
+			if tr.retrieve('record') is record
+				return tr
+		return null
+
+
+	onGridParentShown: ->
 		@widthManager.actualize()
 		return
 
 
 	doDestroy: ->
 		@widthManager.destroy()
-		@grid.un("parentshown", @bound('onGridParentShown'))
-		@grid.un("selectionchange", @bound('onSelectionChanged'))
+		@grid.un('parentshown', @bound('onGridParentShown'))
+		@grid.un('selectionchange', @bound('onSelectionChanged'))
 		@destroyRows(@tbody)
 		@grid = @tbody = @tfilters = @thead = @tfoot = null
-		super()
-		return
+		super
 
 
 module.exports = GridRenderer

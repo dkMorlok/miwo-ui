@@ -20,13 +20,9 @@
 
 .form-horizontal {
 	.radio, .checkbox {
-		margin-bottom: 15px;
 		padding-top: 0px;
 		label {
 			padding-left: 0px;
-		}
-		.checker {
-			margin-left: -4px;
 		}
 	}
 	.control-label-required {
@@ -37,6 +33,9 @@
 	.checkbox-inline, .radio-inline {
 		margin-left: -15px;
 	}
+	.form-actions button {
+		margin-right: @padding-base-horizontal;
+	}
 }
 
 .form-inline {
@@ -46,6 +45,9 @@
 		.control-label {
 			display: none;
 		}
+	}
+	.form-group:last-child {
+		padding-right: 0;
 	}
 }
 

@@ -14,6 +14,7 @@ class BaseTextControl extends BaseControl
 	notifyInputChange: false
 	setValueInputChange: true
 	validateOnKeyUp: false
+	resetFormOnEsc: false
 	value: ''
 	type: null
 	editable: true
@@ -31,6 +32,8 @@ class BaseTextControl extends BaseControl
 		return new Text
 			id: @id+'-input'
 			type: @type || 'text'
+			name: 'input'
+			inputName: @name
 			autocomplete: @autocomplete
 			placeholder: @placeholder
 			readonly: @readonly
@@ -81,6 +84,7 @@ class BaseTextControl extends BaseControl
 			@emit("keydown", this, e.key, e)
 			if @pattern and !@pattern.test(e.key) then e.stop()
 		else
+			if @resetFormOnEsc && e.key is 'esc' then @getForm().reset()
 			@onSpecialkey(this, e.key, e)
 			@emit("specialkey", this, e.key, e)
 		return

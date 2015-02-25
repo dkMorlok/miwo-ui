@@ -11,7 +11,7 @@ class FormWindow extends Window
 	@getter 'form', () -> @getForm()
 
 
-	doInit: () ->
+	doInit: ->
 		super
 		form = @add 'form', new Form
 		form.on('submit', (form, isValid)=> @emit('submit', this, form, isValid))
@@ -20,8 +20,14 @@ class FormWindow extends Window
 		return
 
 
-	getForm: () ->
+	getForm: ->
 		return @get('form')
+
+
+	setFocus: ->
+		super()
+		@getForm().getFocusControl().setFocus()
+		return
 
 
 	addSubmitButton: (text) ->
@@ -29,12 +35,6 @@ class FormWindow extends Window
 			text: text
 			type: 'primary'
 			handler: () => @getForm().submit()
-
-
-	setFocus: () ->
-		super()
-		@getForm().getFocusControl().setFocus()
-		return
 
 
 module.exports = FormWindow

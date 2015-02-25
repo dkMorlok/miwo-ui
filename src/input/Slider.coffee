@@ -169,7 +169,7 @@ class SliderInput extends Miwo.Component
 
 	setDisabled: (@disabled) ->
 		if !@rendered then return
-		@el.toggleClass("disabled", disabled)
+		@el.toggleClass('disabled', @disabled)
 		return
 
 

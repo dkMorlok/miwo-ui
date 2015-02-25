@@ -18,3 +18,5 @@ module.exports =
 		clear: 'Clear'
 	inputs:
 		dateTo: 'to'
+		switchOn: 'ON'
+		switchOff: 'OFF'

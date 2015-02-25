@@ -2,6 +2,7 @@ class Checkbox extends Miwo.Component
 
 	isInput: true
 	xtype: 'checkboxinput'
+	baseCls: 'checkbox'
 	label: ''
 	disabled: false
 	checked: false
@@ -14,15 +15,14 @@ class Checkbox extends Miwo.Component
 
 
 	doRender: ->
-		@el.addClass('checkbox')
-		@el.set 'html',
-		'<label miwo-reference="labelEl" for="'+@getInputId()+'">'+
-			'<span miwo-reference="checkerEl" class="checker" tabindex="0">'+
-				'<i miwo-reference="iconEl" class="fa"></i>'+
-				'<input miwo-reference="inputEl" type="checkbox" id="'+@getInputId()+'" tabindex="-1">'+
-			'</span>'+
-			'<span miwo-reference="textEl" class="label-text">'+@label+'</span>'+
-		'</label>'
+		@el.set 'html', """
+		<label miwo-reference="labelEl" for='#{@getInputId()}'>
+			<span miwo-reference="checkerEl" class="checker" tabindex="0">
+				<i miwo-reference="iconEl" class="fa"></i>
+				<input miwo-reference="inputEl" type="checkbox" id='#{@getInputId()}' tabindex="-1">
+			</span>
+			<span miwo-reference="textEl" class="label-text">#{@label}</span>
+		</label>"""
 		return
 
 
@@ -72,14 +72,15 @@ class Checkbox extends Miwo.Component
 		return
 
 
-	isChecked: () ->
+	isChecked: ->
 		return if @rendered then @inputEl.get('checked') else @checked
 
 
 	setDisabled: (@disabled) ->
 		if !@rendered then return
-		@el.toggleClass('disabled', disabled)
-		@inputEl.set('disabled', disabled)
+		@el.toggleClass('disabled', @disabled)
+		@inputEl.set('disabled', @disabled)
+		@checkerEl.set('tabindex', -@disabled)
 		return
 
 

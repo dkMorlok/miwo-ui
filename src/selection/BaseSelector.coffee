@@ -15,7 +15,7 @@ class BaseSelector extends Miwo.Object
 	# Set grid
 	# @param {Miwo.grid.Grid} grid
 	setGrid: (@grid) ->
-		@mon(grid, 'rendered', 'gridRendered')
+		@mon(grid, 'render', 'gridRender')
 		@mon(grid, 'refresh', 'gridRefresh')
 		return
 
@@ -33,7 +33,7 @@ class BaseSelector extends Miwo.Object
 		return
 
 
-	gridRendered: (grid) ->
+	gridRender: (grid) ->
 		grid.el.addClass('grid-select-'+@type)
 		return
 

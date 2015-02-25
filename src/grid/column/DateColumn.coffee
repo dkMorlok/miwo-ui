@@ -11,7 +11,7 @@ class DateColumn extends Column
 
 	formatValue: (value, record) ->
 		if Type.isDate(value)
-			return value.format(this.format)
+			return if value.format then value.format(this.format) else value.toDateString()
 		else
 			return value
 

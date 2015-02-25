@@ -10,6 +10,7 @@ class Form extends BaseContainer
 	renderer: null
 	rendererType: 'horizontal'
 	rendererOptions: null
+	preventAutoLogin: false
 
 
 	beforeInit: ->
@@ -25,6 +26,12 @@ class Form extends BaseContainer
 		@keyListener.on 'enter', =>
 			@submit()
 			return true
+		return
+
+
+	reset: (btn, silent) ->
+		super
+		@emit('reset', this, btn) if !silent
 		return
 
 
@@ -58,17 +65,17 @@ class Form extends BaseContainer
 
 
 	onResetButtonClick: (btn) ->
-		@reset()
-		@emit('reset', this, btn)
+		@reset(btn)
 		return
 
 
 	loadRecord: (record) ->
+		if !record then throw new Error("Undefined record")
 		@record = record
 		values = record.getValues()
 		@setOriginals(values)
 		@setValues(values)
-		@reset()
+		@reset(null, true)
 		return
 
 
@@ -76,7 +83,7 @@ class Form extends BaseContainer
 		@record = null
 		@setOriginals({}, true)
 		@setValues({})
-		@reset()
+		@reset(null, true)
 		return
 
 

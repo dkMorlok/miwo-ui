@@ -1,4 +1,4 @@
-class LoadMask extends Miwo.Object
+class LoadMask extends Miwo.Component
 
 	target: null
 
