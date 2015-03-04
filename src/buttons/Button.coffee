@@ -14,6 +14,7 @@ class Button extends Miwo.Component
 	toggled: false
 	toggleHandler: null
 	tooltip: null
+	title: null
 	icon: null
 
 	textEl: null
@@ -107,7 +108,7 @@ class Button extends Miwo.Component
 		@el.addClass('active')  if @active
 		@el.addClass('disabled')  if @disabled
 		@el.set('tabindex', -1)  if @disabled
-		@el.set("title", @tooltip)  if @tooltip
+		@el.set("title", @tooltip || @title)  if @tooltip || @title
 		@el.on("click", @bound("onClick"))
 		@el.on("keyup", @bound("onKeyUp"))
 

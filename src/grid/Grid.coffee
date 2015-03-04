@@ -5,9 +5,9 @@ ActionColumn = require './column/ActionColumn'
 Operations = require './Operations'
 LoadMask = require '../utils/LoadMask'
 Paginator = require '../nav/Paginator'
+Pane = require '../panel/Pane'
 
-
-class Grid extends Miwo.Container
+class Grid extends Pane
 
 	# @event render (grid)
 	# @event renderheader (grid, th, column)
@@ -44,7 +44,6 @@ class Grid extends Miwo.Container
 
 	layout: false
 	baseCls: "grid"
-	contentEl: 'div'
 	checker: null
 	operations: null
 	selectionModel: null
@@ -65,17 +64,40 @@ class Grid extends Miwo.Container
 
 	afterInit: ->
 		super
-		@contentEl.addClass(@getBaseCls('container'))
-
 		if @loadMask
 			@setLoadMask(@loadMask)
 
-		if @store && Type.isString(@store)
-			@setStore(miwo.store(@store))
+		if @store
+			if Type.isString(@store)
+				@setStore(miwo.store(@store))
+			else
+				@setStore(@store)
 
 		if @renderer
 			@rendererOptions = @renderer
 			@renderer = null
+
+		contentEl = @getContentEl()
+		contentEl.addClass(@getBaseCls('container'))
+
+		@headerEl = new Element "div",
+			parent: contentEl
+			cls: @getBaseCls("header")
+
+		@mainEl = new Element "div",
+			parent: contentEl
+			cls: @getBaseCls("main")
+
+		@bodyEl = new Element "div",
+			parent: @mainEl
+			cls: @getBaseCls("body")
+
+		@footerEl = new Element "div",
+			parent: contentEl
+			cls: @getBaseCls("footer")
+
+		@scrollableCt = @mainEl
+		@scrollableEl = @bodyEl
 		return
 
 
@@ -230,8 +252,6 @@ class Grid extends Miwo.Container
 
 
 	doRender: ->
-		el = @getContentEl()
-
 		if @selectable or @operations
 			if !@selectionModel
 				if Type.isString(@selection)
@@ -253,18 +273,6 @@ class Grid extends Miwo.Container
 
 			if @selector.checkerRequired
 				@checker = @addCheckerColumn('checker')
-
-		@headerEl = new Element "div",
-			parent: el
-			cls: @getBaseCls("header")
-
-		@bodyEl = new Element "div",
-			parent: el
-			cls: @getBaseCls("body")
-
-		@footerEl = new Element "div",
-			parent: el
-			cls: @getBaseCls("footer")
 
 		@getRenderer().render()
 		return

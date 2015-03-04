@@ -52,6 +52,12 @@ class BaseTextControl extends BaseControl
 		return
 
 
+	setReadonly: (readonly) ->
+		@readonly = readonly
+		@input.setReadonly(readonly)  if @input
+		return
+
+
 	afterRenderControl: () ->
 		super
 		inputEl = @input.getInputEl()
@@ -91,8 +97,7 @@ class BaseTextControl extends BaseControl
 
 
 	onInputKeyup: (e) ->
-		# after any keyup enable error notification
-		@notifyErrors = true
+		@notifyErrors = true # after any keyup enable error notification
 		@emit("inputchange", this, @getRawValue())
 
 		if e.key.length is 1
@@ -134,6 +139,7 @@ class BaseTextControl extends BaseControl
 
 	onInputBlur: (e) ->
 		@validate()
+		@emit('blur', this)
 		return
 
 

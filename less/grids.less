@@ -39,6 +39,9 @@
 	.grid-headers {
 		tr th {
 			border-bottom: 1px solid @grid-border-color;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
 	.checkbox {
@@ -53,6 +56,18 @@
 	}
 	.label {
 		padding: .3em .6em .3em; // fix bootstrap label padding
+	}
+	&.scrollable {
+		.miwo-ct {
+			overflow: hidden !important;
+		}
+		.grid-main {
+			position: absolute;
+			top: 38px;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+		}
 	}
 }
 .grid-rowclickable {

@@ -9,7 +9,7 @@ class DialogFactory
 		dialog = new Dialog()
 		dialog.render(miwo.body)
 		dialog.setTitle(title)
-		dialog.setContent("<p>" + message + "</p>")
+		dialog.setContent("<p class='text-center'>" + message + "</p>")
 		dialog.setButtons(buttons)
 		dialog.show()
 		return dialog

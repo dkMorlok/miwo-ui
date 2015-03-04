@@ -2,7 +2,7 @@ class WidthManager extends Miwo.Object
 
 	defaultFitWidth: 100
 	renderer: null
-
+	widths: null
 
 	constructor: (@renderer, config) ->
 		super(config)
@@ -10,7 +10,42 @@ class WidthManager extends Miwo.Object
 		return
 
 
-	actualize: ->
+	actualize: (tr = null) ->
+		if !@widths
+			@widths = @detectWidths()
+		if tr
+			# update single row sizes
+			@actualizeRow(tr, @widths)
+		else
+			# update header sizes
+			theadRow = @renderer.thead
+			for name,width of @widths
+				if width isnt null
+					th = theadRow.getElement("tr th[column=\"" + name + "\"]")
+					th.setStyle("width", width)
+					th.setStyle("max-width", width)
+			# update body sizes
+			for tr in @renderer.tbody.getElements("tr.grid-row-data")
+				@actualizeRow(tr, @widths)
+		return
+
+
+	actualizeRow: (tr, widths) ->
+		for name,width of widths
+			if width isnt null
+				td = tr.getElement("td[column=\"" + name + "\"]")
+				td.setStyle("width", width)
+				td.setStyle("max-width", width)
+		return
+
+
+	onWindowResize: ->
+		@widths = null
+		@actualize()
+		return
+
+
+	detectWidths: ->
 		renderer = @renderer
 		freeWidth = renderer.grid.bodyEl.getWidth()
 		totalFit = 0
@@ -56,27 +91,7 @@ class WidthManager extends Miwo.Object
 				if widths[column.name] is null
 					widths[column.name] = (freeWidth / wildCount).round()
 
-		# update header sizes
-		theadRow = renderer.thead
-		for name,width of widths
-			if width isnt null
-				th = theadRow.getElement("tr th[column=\"" + name + "\"]")
-				th.setStyle("width", width)
-				th.setStyle("max-width", width)
-
-		# update cells sizes
-		for tr in renderer.tbody.getElements("tr.grid-row-data")
-			for name,width of widths
-				if width isnt null
-					td = tr.getElement("td[column=\"" + name + "\"]")
-					td.setStyle("width", width)
-					td.setStyle("max-width", width)
-		return
-
-
-	onWindowResize: ->
-		@actualize()
-		return
+		return widths
 
 
 	doDestroy: ->

@@ -3,6 +3,7 @@ miwo.translator.setTranslates('en', 'miwo', require('./translates'))
 
 # classes
 Miwo.ui = {}
+Miwo.drag = require './drag'
 Miwo.notify = require './notify'
 Miwo.buttons = require './buttons'
 Miwo.dropdown = require './dropdown'
@@ -10,6 +11,7 @@ Miwo.input = require './input'
 Miwo.picker = require './picker'
 Miwo.nav = require './nav'
 Miwo.form = require './form'
+Miwo.panel = require './panel'
 Miwo.window = require './window'
 Miwo.tabs = require './tabs'
 Miwo.selection = require './selection'
@@ -24,3 +26,4 @@ Miwo.Window = Miwo.window.Window
 Miwo.FormWindow = Miwo.window.FormWindow
 Miwo.Tabs = Miwo.tabs.Tabs
 Miwo.Grid = Miwo.grid.Grid
+Miwo.Pane = Miwo.panel.Pane

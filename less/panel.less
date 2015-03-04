@@ -1,0 +1,32 @@
+.scrollable {
+	&-ct {
+		position: relative;
+		overflow: hidden;
+	}
+	&-body {
+		position: relative;
+		height: 100%;
+		overflow: hidden !important;
+	}
+	&-slider {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		width: 10px;
+		cursor: pointer;
+	}
+	&-knob {
+		position: relative;
+		background: #333333;
+		margin: 0px 2px;
+		width: 7px;
+		height: 50px;
+		opacity: 0.7;
+		border-radius: 3px;
+		border: 1px solid #303030;
+		&:hover {
+			opacity: 1.0;
+		}
+	}
+}

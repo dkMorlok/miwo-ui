@@ -13,10 +13,12 @@ class TextAreaControl extends BaseTextControl
 	createInput: ->
 		input = new TextArea
 			id: @id+'-input'
+			inputName: @name
 			height: @height
 			readonly: @readonly
 			disabled: @disabled
 			resize: @resize
+			placeholder: @placeholder
 		return input
 
 

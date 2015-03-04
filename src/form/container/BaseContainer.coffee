@@ -98,7 +98,7 @@ class BaseContainer extends Miwo.Container
 		values = {}
 		for control in @controls
 			if (!submitable or control.submitValue) and !control.disabled
-				if not dirtyOnly or control.isDirty()
+				if !dirtyOnly or control.isDirty()
 					values[control.getName()] = control.getValue()
 		return values
 
@@ -106,8 +106,8 @@ class BaseContainer extends Miwo.Container
 	getRawValues: (dirtyOnly, submitable) ->
 		values = {}
 		for control in @controls
-			if (not submitable or control.submitValue) and not control.disabled
-				if not dirtyOnly or control.isDirty()
+			if (!submitable or control.submitValue) and not control.disabled
+				if !dirtyOnly or control.isDirty()
 					values[control.getName()] = control.getRawValue()
 		return values
 

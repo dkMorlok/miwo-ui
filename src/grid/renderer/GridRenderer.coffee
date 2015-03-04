@@ -76,13 +76,14 @@ class GridRenderer extends Miwo.Object
 	refresh: ->
 		@destroyRows(@tbody)
 		@renderBody(@tbody)
-		@widthManager.actualize()
 		@grid.onRefresh()
+		@widthManager.actualize()
 		return
 
 
 	recordAdded: (record, index) ->
-		@renderRow(@tbody, record, @tbody.getChildren().length)  # push to end
+		tr = @renderRow(@tbody, record, @tbody.getChildren().length)  # push to end
+		@widthManager.actualize(tr)
 		@syncRows()
 		return
 
@@ -118,7 +119,7 @@ class GridRenderer extends Miwo.Object
 			th.addClass('grid-col-'+column.colCls) if column.colCls
 			th.set("column", column.name)
 			th.set("html", column.renderHeader())
-			th.set("title", column.title) if column.title
+			th.set("title", column.title || column.text)
 			th.setVisible(false) if !column.visible
 
 			column.onRenderHeader(th) if column.onRenderHeader
@@ -188,7 +189,7 @@ class GridRenderer extends Miwo.Object
 
 		# notify after row rendered
 		@grid.emit("rowrender", @grid, tr, record, index)
-		return
+		return tr
 
 
 	updateRow: (tr, record) ->
@@ -409,6 +410,7 @@ class GridRenderer extends Miwo.Object
 
 
 	onGridParentShown: ->
+		@widthManager.widths = null # reset widths
 		@widthManager.actualize()
 		return
 

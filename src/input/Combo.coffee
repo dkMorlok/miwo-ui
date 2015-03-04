@@ -85,28 +85,33 @@ class ComboInput extends Miwo.Component
 			return
 		@dropdownEl.on 'click:relay(.combo-dropdown-item)', (event, target) =>
 			event.stop()
+			if target.hasClass('disabled') then return
 			val = target.get('data-value')
 			@setValue((if @multiple then @getValue().include(val) else val))
 			@close()
 			return
 		@dropdownEl.on 'mouseenter:relay(.combo-dropdown-item)', (event, target) =>
 			event.stop()
+			if target.hasClass('disabled') then return
 			@activateItem(target.get('data-index'))
 			return
 		@textEl.on 'click:relay(.combo-input-text li)', (event, target) =>
 			if @disabled then return
 			event.stop()
+			if target.hasClass('disabled') then return
 			val = target.get('data-value')
 			@setValue(@getValue().erase(val))
 			return
 		@textEl.on 'mouseenter:relay(li)', (event, target) =>
 			if @disabled then return
 			event.stop()
+			if target.hasClass('disabled') then return
 			@activateValue(parseInt(target.get('data-index')))
 			return
 		@textEl.on 'mouseleave:relay(li)', (event, target) =>
 			if @disabled then return
 			event.stop()
+			if target.hasClass('disabled') then return
 			@activateValue(-1)
 			return
 		@resetEl.on 'click', (event) =>
@@ -141,24 +146,24 @@ class ComboInput extends Miwo.Component
 		@keyListener.on 'backspace', () =>
 			if @disabled then return
 			if !@opened
-				if (item = @getActiveValue())
+				if (item = @getActiveValue()) && !item.hasClass('disabled')
 					val = item.get('data-value')
 					@setValue(@getValue().erase(val))
 				else
 					@activateLastValue()
-					if (item = @getActiveValue())
+					if (item = @getActiveValue()) && !item.hasClass('disabled')
 						val = item.get('data-value')
 						@setValue(@getValue().erase(val))
 			return true
 		@keyListener.on 'enter', () =>
 			if @disabled then return
 			if @opened
-				if (item = @getActiveItem())
+				if (item = @getActiveItem()) && !item.hasClass('disabled')
 					val = item.get('data-value')
 					@setValue((if @multiple then @getValue().include(val) else val))
 					@close()
 			else if !@opened
-				if (item = @getActiveValue())
+				if (item = @getActiveValue()) && !item.hasClass('disabled')
 					val = item.get('data-value')
 					@setValue(@getValue().erase(val))
 				else
@@ -177,7 +182,7 @@ class ComboInput extends Miwo.Component
 		return @id+'-input'
 
 
-	setValue: (value) ->
+	setValue: (value, silent) ->
 		if value is undefined || value is null
 			value = ''
 
@@ -199,7 +204,8 @@ class ComboInput extends Miwo.Component
 
 		if @inputEl.get('value') isnt inputValue
 			@inputEl.set('value', inputValue)
-			@inputEl.emit('change')
+			@inputEl.emit('change')  if !silent
+			@emit('change', this)  if !silent
 
 		@activeValueIndex = -1
 
@@ -242,8 +248,17 @@ class ComboInput extends Miwo.Component
 
 	setOptions: (items) ->
 		@clear()
-		@setOptions(items)
+		@addOptions(items)
 		return
+
+
+	setOptionDisabled: (name, disabled) ->
+		@getOption(name).toggleClass('disabled', disabled)
+		return
+
+
+	getOption: (name) ->
+		return @dropdownItemsEl.getElement('[data-value="'+name+'"]')
 
 
 	setPrompt: (text) ->
@@ -313,7 +328,7 @@ class ComboInput extends Miwo.Component
 	activatePrevItem: ->
 		activateIndex = null
 		for item,index in @items
-			if !item.hasClass('selected') && index < @activeItemIndex
+			if !item.hasClass('selected') && !item.hasClass('disabled') && index < @activeItemIndex
 				activateIndex = index
 		if activateIndex isnt null
 			@activateItem(activateIndex)
@@ -323,7 +338,7 @@ class ComboInput extends Miwo.Component
 	activateNextItem: ->
 		activateIndex = null
 		for item,index in @items
-			if !item.hasClass('selected') && index > @activeItemIndex
+			if !item.hasClass('selected') && !item.hasClass('disabled') && index > @activeItemIndex
 				activateIndex = index
 				break
 		if activateIndex isnt null
@@ -345,8 +360,9 @@ class ComboInput extends Miwo.Component
 			activeItem.removeClass('active')
 		if index >= 0 && index < @getValue().length
 			item = @getValueElAt(index)
-			item.addClass('active')
-			@activeValueIndex = index
+			if !item.hasClass('disabled')
+				item.addClass('active')
+				@activeValueIndex = index
 		return
 
 

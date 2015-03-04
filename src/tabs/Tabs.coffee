@@ -1,4 +1,4 @@
-Panel = require './Panel'
+TabPanel = require './TabPanel'
 
 
 class Tabs extends Miwo.Container
@@ -43,21 +43,21 @@ class Tabs extends Miwo.Container
 		return
 
 
-	getActive: () ->
+	getActive: ->
 		return @active
 
 
 	addPanel: (name, config) ->
-		return @add(name, new Panel(config))
+		return @add(name, new TabPanel(config))
 
 
-	doRender: () ->
+	doRender: ->
 		super
 		@el.addClass('tabs-'+@align)
 		return
 
 
-	afterRender: () ->
+	afterRender: ->
 		super
 		@setActive(@active)
 		@mon(@el, 'click:relay(.nav a)', 'onTabClick')

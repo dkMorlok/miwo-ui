@@ -1,4 +1,7 @@
-class Panel extends Miwo.Container
+Pane = require '../panel/Pane'
+
+
+class TabPanel extends Pane
 
 	tab: null
 	baseCls: 'tab-pane'
@@ -15,6 +18,7 @@ class Panel extends Miwo.Container
 		@setVisible(active)
 		@el.toggleClass('active', active)
 		@tab.toggleClass('active', active)
+		@emit('active', this, active)
 		return
 
 
@@ -24,4 +28,4 @@ class Panel extends Miwo.Container
 
 
 
-module.exports = Panel
+module.exports = TabPanel
