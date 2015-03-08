@@ -25,7 +25,7 @@ class BaseTextInput extends Miwo.Component
 
 
 	setReadonly: (@readonly) ->
-		@el.set("disabled", @readonly)
+		@el.set("readonly", @readonly)
 		return
 
 

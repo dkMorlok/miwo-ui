@@ -43,19 +43,19 @@ class BaseTextControl extends BaseControl
 	setValue: (value, ignoreInputChange) ->
 		super(value)
 		@input.setValue(value)  if @input and !ignoreInputChange
-		return
+		return this
 
 
 	setDisabled: (disabled) ->
 		super(disabled)
 		@input.setDisabled(disabled)  if @input
-		return
+		return this
 
 
 	setReadonly: (readonly) ->
 		@readonly = readonly
 		@input.setReadonly(readonly)  if @input
-		return
+		return this
 
 
 	afterRenderControl: () ->

@@ -1,18 +1,21 @@
 BaseControl = require './BaseControl'
-SwitchInput = require '../../input/Switch'
+ToggleInput = require '../../input/Toggle'
 
-class SwitchControl extends BaseControl
+class ToggleControl extends BaseControl
 
-	xtype: 'switch'
+	xtype: 'toggle'
 	onState: undefined
 	offState: undefined
 	onText: undefined
 	offText: undefined
+	size: undefined
 
 
 	createInput: ->
-		return new SwitchInput
+		return new ToggleInput
 			id: @id
+			inputName: @name
+			size: @size
 			onState: @onState
 			offState: @offState
 			onText: @onText
@@ -49,4 +52,4 @@ class SwitchControl extends BaseControl
 		return
 
 
-module.exports = SwitchControl
+module.exports = ToggleControl

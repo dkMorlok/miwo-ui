@@ -79,7 +79,7 @@ class Form extends BaseContainer
 		return
 
 
-	unloadRecord: () ->
+	unloadRecord: ->
 		@record = null
 		@setOriginals({}, true)
 		@setValues({})
@@ -115,15 +115,14 @@ class Form extends BaseContainer
 	submit: (btn) ->
 		@submitBtn = btn
 		isValid = @validate()
-		@emit('submit', this, isValid)
 		@onSubmit()
-
+		@emit('submit', this, isValid)
 		if isValid
-			@emit('success', this)
 			@onSuccess()
+			@emit('success', this)
 		else
-			@emit('failure', this)
 			@onFailure()
+			@emit('failure', this)
 		return
 
 

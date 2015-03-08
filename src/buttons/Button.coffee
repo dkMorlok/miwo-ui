@@ -43,9 +43,8 @@ class Button extends Miwo.Component
 
 
 	setIcon: (cls, silent) ->
-		if @iconEl
-			if @icon
-				@iconEl.removeClass(Button.defaultIconClsPrefix+@icon)
+		if @iconEl && @icon
+			@iconEl.removeClass(Button.defaultIconClsPrefix+@icon)
 		@icon = cls
 		if @iconEl
 			if cls
@@ -81,7 +80,7 @@ class Button extends Miwo.Component
 
 	toggle: (silent) ->
 		@setActive(!@active)
-		unless silent
+		if !silent
 			@emit('toggle', this, @active)
 			if @toggleHandler then @toggleHandler(this, @active)
 		return
@@ -92,7 +91,7 @@ class Button extends Miwo.Component
 			@handler(this, e)
 		else if Type.isString(@handler)
 			if @handler.indexOf('#') is 0
-				document.location.hash = @handler
+				miwo.redirect(@handler)
 			else
 				document.location = @handler
 		return

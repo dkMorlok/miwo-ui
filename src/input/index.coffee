@@ -8,7 +8,7 @@ module.exports =
 	DateRange: require './DateRange'
 	Text: require './Text'
 	Slider: require './Slider'
-	Switch: require './Switch'
+	Toggle: require './Toggle'
 	Color: require './Color'
 	RadioList: require './RadioList'
 	CheckboxList: require './CheckboxList'

@@ -1,24 +1,26 @@
 Column = require './Column'
-SwitchInput = require '../../input/Switch'
+ToggleInput = require '../../input/Toggle'
 
 
-class SwitchColumn extends Column
+class ToggleColumn extends Column
 
-	xtype: 'switchcolumn'
+	xtype: 'togglecolumn'
 	align:'center'
 	width: 110
 	onState: undefined
 	offState: undefined
 	onText: undefined
 	offText: undefined
+	size: undefined
 
 	renderValue: (value, row) ->
-		input = new SwitchInput
+		input = new ToggleInput
 			value: value
 			onState: @onState
 			offState: @offState
 			onText: @onText
 			offText: @offText
+			size: @size
 		input.on 'beforechange', =>
 			@emit('beforechange', this, input, row)
 			return
@@ -27,4 +29,5 @@ class SwitchColumn extends Column
 			return
 		return input
 
-module.exports = SwitchColumn
+
+module.exports = ToggleColumn

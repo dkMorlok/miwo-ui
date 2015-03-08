@@ -172,13 +172,32 @@ miwo.ready(function() {
 		value: '#428bca',
 		disabled: true
 	});
-	form.addSwitch('switch', {
-		label: 'State switch',
+	form.addToggle('toggle', {
+		label: 'Toggle state',
 		value: true,
 		onState: 'success',
 		offState: 'danger',
 		onText: 'ON',
-		offText: 'OFF'
+		offText: 'OFF',
+		size: 'md'
+	});
+	form.addToggle('togglesm', {
+		label: 'Toggle state (SM)',
+		value: true,
+		onState: 'success',
+		offState: 'danger',
+		onText: 'ON2',
+		offText: 'OFF2',
+		size: 'sm'
+	});
+	form.addToggle('togglelg', {
+		label: 'Toggle state (SM)',
+		value: true,
+		onState: 'success',
+		offState: 'danger',
+		onText: 'ON2',
+		offText: 'OFF2',
+		size: 'lg'
 	});
 	form.addSubmit('submit', {
 		label: 'Submit me!'

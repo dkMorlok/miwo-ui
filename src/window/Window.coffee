@@ -1,7 +1,6 @@
 Button = require '../buttons/Button'
 ToolButton = require '../buttons/ToolButton'
 
-
 class Window extends Miwo.Container
 
 	isWindow: true
@@ -30,9 +29,8 @@ class Window extends Miwo.Container
 
 
 	beforeInit: ->
-		super()
+		super
 		@zIndexManage = true
-		@contentEl = 'div'
 		@baseCls = 'window'
 		@visible = false
 		@width = 600
@@ -44,8 +42,10 @@ class Window extends Miwo.Container
 
 
 	afterInit: ->
-		super()
+		super
 		miwo.windowMgr.register(this)
+		@contentHeight = @height
+		@height = null
 		return
 
 
@@ -74,13 +74,13 @@ class Window extends Miwo.Container
 
 
 	doShow: ->
-		super()
+		super
 		@toFront()
 		return
 
 
 	doHide: ->
-		super()
+		super
 		@toBack()
 		return
 
@@ -90,8 +90,8 @@ class Window extends Miwo.Container
 		return
 
 
-	beforeRender: () ->
-		super()
+	beforeRender: ->
+		super
 		@el.addClass('modal-dialog')
 		@el.set 'html', """
 		<div class="window-content modal-content">
@@ -106,7 +106,7 @@ class Window extends Miwo.Container
 
 
 	afterRender: ->
-		super()
+		super
 		@keyListener = new Miwo.utils.KeyListener(@el)
 		@keyListener.on 'esc', () =>
 			@close()  if @closeOnEsc
@@ -128,7 +128,10 @@ class Window extends Miwo.Container
 				handler: => @hide()
 
 		if !@modal
-			miwo.body.on('click', @bound('onBodyClick'));
+			miwo.body.on('click', @bound('onBodyClick'))
+
+		if @contentHeight
+			@contentEl.setStyle('height', @contentHeight)
 
 		for name,button of @buttons.items
 			button.render(@footerEl) if !button.rendered
@@ -142,7 +145,7 @@ class Window extends Miwo.Container
 		return
 
 
-	onOverlayClick: () ->
+	onOverlayClick: ->
 		@close() if @closeOnClickOut
 		return
 

@@ -117,25 +117,25 @@ class BaseControl extends Miwo.Component
 	setValue: (value) ->
 		@value = value
 		@checkChange()
-		return
+		return this
 
 
 	setOriginalValue: (value) ->
 		@originalValue = value
 		@checkDirty()
-		return
+		return this
 
 
 	setDefaultValue: (value) ->
 		@defaultValue = value  if value
 		@setValue(@defaultValue)
-		return
+		return this
 
 
 	setFocus: ->
 		super()
 		@emit("focus", this)
-		return
+		return this
 
 
 	isDisabled: ->
@@ -144,7 +144,7 @@ class BaseControl extends Miwo.Component
 
 	setDisabled: (@disabled) ->
 		@input.setDisabled(disabled)
-		return
+		return this
 
 
 	isFilled: ->
@@ -197,14 +197,14 @@ class BaseControl extends Miwo.Component
 		@notifyErrors = false
 		@wasInputFocused = false
 		@cleanErrors()
-		return
+		return this
 
 
 	# Resets the field's {@link #originalValue} property so it matches the current {@link #getValue value}.
 	resetOriginalValue: ->
 		@originalValue = @getValue()
 		@checkDirty()
-		return
+		return this
 
 
 	# Checks whether the value of the field has changed since the last time it was checked.

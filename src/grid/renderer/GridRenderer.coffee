@@ -363,7 +363,7 @@ class GridRenderer extends Miwo.Object
 		@cellclickTimeoutId = (=>
 			info = @getCellInfo(td)
 			@grid.emit('cellclick', @grid, td, info.record, info, e)
-			@grid.emit('rowclick', @grid, info.record, info, e)  if @grid.rowclickable
+			@grid.emit('rowclick', @grid, info.record, info, e)
 			return
 		).delay(@dblclickdelay)
 		return
@@ -376,7 +376,7 @@ class GridRenderer extends Miwo.Object
 		clearTimeout(@cellclickTimeoutId)
 		info = @getCellInfo(td)
 		@grid.emit('celldblclick', @grid, td, info.record, info, e)
-		@grid.emit('rowdblclick', @grid, info.record, info, e)  if @grid.rowclickable
+		@grid.emit('rowdblclick', @grid, info.record, info, e)
 		return
 
 

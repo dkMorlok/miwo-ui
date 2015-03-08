@@ -11,7 +11,7 @@ exports =
 		CheckColumn: require ('./column/CheckColumn')
 		CheckerColumn: require ('./column/CheckerColumn')
 		TextColumn: require ('./column/TextColumn')
-		SwitchColumn: require ('./column/SwitchColumn')
+		ToggleColumn: require ('./column/ToggleColumn')
 		ActionColumn: require ('./column/ActionColumn')
 
 	renderer:
@@ -28,7 +28,7 @@ Grid.registerColumn('numberColumn', exports.column.NumberColumn)
 Grid.registerColumn('dateColumn', exports.column.DateColumn)
 Grid.registerColumn('checkColumn', exports.column.CheckColumn)
 Grid.registerColumn('textColumn', exports.column.TextColumn)
-Grid.registerColumn('switchColumn', exports.column.SwitchColumn)
+Grid.registerColumn('toggleColumn', exports.column.ToggleColumn)
 
 
 module.exports = exports

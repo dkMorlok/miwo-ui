@@ -4,6 +4,7 @@ class BaseContainer extends Miwo.Container
 	autoShowErrorTip: true
 	isFormContainer: true
 	disabled: false
+	readonly: false
 	wasDirty: false
 	wasValid: true
 	controls: null
@@ -44,6 +45,9 @@ class BaseContainer extends Miwo.Container
 
 		if @disabled
 			component.setDisabled(@disabled)
+
+		if @readonly
+			component.setReadonly(@readonly)
 		return
 
 
@@ -62,7 +66,17 @@ class BaseContainer extends Miwo.Container
 	setDisabled: (disabled) ->
 		@disabled = disabled
 		@getComponents().each (component) ->
-			component.setDisabled(disabled)
+			if component.setDisabled
+				component.setDisabled(disabled)
+			return
+		return
+
+
+	setReadonly: (readonly) ->
+		@readonly = readonly
+		@getComponents().each (component) ->
+			if component.setReadonly
+				component.setReadonly(readonly)
 			return
 		return
 
@@ -73,9 +87,10 @@ class BaseContainer extends Miwo.Container
 
 	getControl: (name) ->
 		for control in @controls
-			if control.getName() is name
+			if control.name is name
 				return control
 		throw new Error("Control #{name} not found")
+		return
 
 
 	getFocusControl: () ->
@@ -148,13 +163,13 @@ class BaseContainer extends Miwo.Container
 		return
 
 
-	setDefaults: (values, onlyset) ->
+	setDefaults: (values, onlySet) ->
 		for control in @controls
 			name = control.getName()
 			if values
 				if values.hasOwnProperty(name)
 					control.setDefaultValue(values[name])
-				else if !onlyset
+				else if !onlySet
 					control.setDefaultValue()
 			else
 				control.setDefaultValue()
