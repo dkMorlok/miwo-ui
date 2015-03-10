@@ -57,7 +57,7 @@ gulp.task('default', ['build']);
 gulp.task("watch", function() {
 	gulp.start('build');
 	gulp.watch(paths.watch.coffee, ['compile-js']);
-	gulp.watch(paths.watch.less, ['compile-css']);
+	gulp.watch(paths.watch.less, ['compile-css', 'copy-assets']);
 	gulp.watch(paths.watch.images, ['copy-images']);
 });
 

@@ -115,6 +115,11 @@ class SliderInput extends Miwo.Component
 		@active = false
 		@knobEl.removeClass('active')
 		@stopDrag()
+		@onChange()
+		return
+
+
+	onChange: ->
 		@emit('change', this, @getValue())
 		return
 
