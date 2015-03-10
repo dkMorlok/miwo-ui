@@ -17,6 +17,7 @@ class BaseTextControl extends BaseControl
 	resetFormOnEsc: false
 	value: ''
 	type: null
+	inputCls: null
 	editable: true
 
 
@@ -33,6 +34,7 @@ class BaseTextControl extends BaseControl
 			id: @id+'-input'
 			type: @type || 'text'
 			name: 'input'
+			cls: @inputCls
 			inputName: @name
 			autocomplete: @autocomplete
 			placeholder: @placeholder
@@ -83,7 +85,7 @@ class BaseTextControl extends BaseControl
 
 	onInputKeydown: (e) ->
 		if !@editable
-			e.stop() if e.key.length is 1
+			e.preventDefault() if e.key.length is 1
 			return
 		if e.key.length is 1
 			@onKeydown(this, e.key, e)

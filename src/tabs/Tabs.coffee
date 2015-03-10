@@ -7,6 +7,7 @@ class Tabs extends Miwo.Container
 	align: 'vertical'
 	active: null
 	tabsEl: null
+	scrollable: false
 
 
 	doInit: () ->
@@ -49,6 +50,12 @@ class Tabs extends Miwo.Container
 
 	addPanel: (name, config) ->
 		return @add(name, new TabPanel(config))
+
+
+	addedComponent: (component) ->
+		if !component.scrollable && @scrollable
+			component.setScrollable(true)
+		return
 
 
 	doRender: ->

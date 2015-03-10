@@ -31,7 +31,8 @@ class Scrollable extends Miwo.Object
 		return
 
 
-	beforeRender: ->
+
+	afterRender: ->
 		@container.el.addClass('scrollable')
 		@scrollableCt = @container.scrollableCt || @container.el
 		@scrollableBody = @container.scrollableEl || @container.getContentEl()
@@ -52,10 +53,7 @@ class Scrollable extends Miwo.Object
 		@slider.on 'change', (step) =>
 			@scrollableBody.scrollTop = (@scrollableBody.scrollHeight - @scrollableBody.offsetHeight) * step / 100
 			return
-		return
 
-
-	afterRender: ->
 		# bind events
 		@scrollableCt.on('mouseenter', @bound('onElementMouseEnter'))
 		@scrollableCt.on('mouseleave', @bound('onElementMouseLeave'))

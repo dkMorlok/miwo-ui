@@ -14,3 +14,4 @@ module.exports =
 	CheckboxList: require './CheckboxList'
 	TextArea: require './TextArea'
 	DropSelect: require './DropSelect'
+	Composite: require './Composite'

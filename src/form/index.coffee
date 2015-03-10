@@ -14,6 +14,7 @@ exports =
 	# controls
 	control:
 		BaseControl: require './control/BaseControl'
+		BaseInputControl: require './control/BaseInputControl'
 		BaseTextControl: require './control/BaseTextControl'
 		Checkbox: require './control/Checkbox'
 		CheckboxList: require './control/CheckboxList'
@@ -55,6 +56,5 @@ BaseContainer.registerControl('buttonGroup', exports.control.ButtonGroup)
 BaseContainer.registerControl('button', exports.control.Button)
 BaseContainer.registerControl('submit', exports.control.SubmitButton)
 BaseContainer.registerControl('reset', exports.control.ResetButton)
-
 
 module.exports = exports

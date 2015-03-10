@@ -4,6 +4,7 @@ Rules = require '../Rules'
 
 class BaseControl extends Miwo.Component
 
+	xtype: 'control'
 	isFormControl: true
 	label: null
 	value: null
@@ -58,12 +59,6 @@ class BaseControl extends Miwo.Component
 	submitValue: true
 
 
-	beforeInit: () ->
-		super
-		@xtype = 'control'
-		return
-
-
 	afterInit: ->
 		super
 		@errors = []
@@ -108,10 +103,6 @@ class BaseControl extends Miwo.Component
 		return (if val isnt null and val isnt `undefined` then val.toString() else "")
 
 
-	getLabel: ->
-		return @label
-
-
 	# Sets a data value into the field and runs the change detection and validation.
 	# @param {Object} value The value to set
 	setValue: (value) ->
@@ -143,7 +134,7 @@ class BaseControl extends Miwo.Component
 
 
 	setDisabled: (@disabled) ->
-		@input.setDisabled(disabled)
+		@input.setDisabled(@disabled)
 		return this
 
 
@@ -429,7 +420,7 @@ class BaseControl extends Miwo.Component
 		labelEl = @getLabelEl()
 		labelEl.inject(ct)
 
-		@labeltextEl = new Element('span', {cls:'control-label-text', html:@label})
+		@labeltextEl = new Element('span', {cls:'control-label-text', html:@getLabel()})
 		@labeltextEl.inject(labelEl)
 
 		if @isRequired()
@@ -494,7 +485,12 @@ class BaseControl extends Miwo.Component
 
 
 	afterRenderControl: ->
+		return
 
+
+	parentShown: (parent) ->
+		super(parent)
+		@getInput().parentShown(parent)
 		return
 
 

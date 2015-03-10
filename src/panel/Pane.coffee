@@ -9,16 +9,21 @@ class Pane extends Miwo.Container
 	# @var {ScrollerPlugin|Object}
 	scrollableOptions: null
 
-
-	beforeInit: ->
-		super
-		@contentEl = 'div'
-		return
+	# @var {string}
+	contentEl: 'div'
 
 
 	doInit: ->
 		super
-		@installPlugin('scrollable', new Scrollable(this, @scrollableOptions))  if @scrollable
+		@setScrollable(@scrollable)
+		return
+
+
+	setScrollable: (@scrollable) ->
+		if @scrollable && !@hasPlugin('scrollable')
+			@installPlugin('scrollable', new Scrollable(this, @scrollableOptions))
+		else if !@scrollable && @hasPlugin('scrollable')
+			@uninstallPlugin('scrollable')
 		return
 
 

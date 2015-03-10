@@ -11,8 +11,6 @@ class SliderInput extends Miwo.Component
 	max: 100
 	disabled: false
 
-	inputName: null
-	inputEl: null
 	selectionEl: null
 	knobEl: null
 	trackEl: null
@@ -36,8 +34,7 @@ class SliderInput extends Miwo.Component
 		'<div miwo-reference="trackEl" class="slider-track">'+
 			'<div miwo-reference="selectionEl" class="slider-selection"></div>'+
 			'<div miwo-reference="knobEl" class="slider-knob" tabindex="0"></div>'+
-		'</div>'+
-		'<input miwo-reference="inputEl" type="text" class="screen-off" id="'+@getInputId()+'" name="'+@inputName+'" tabindex="-1">';
+		'</div>';
 		return
 
 
@@ -72,10 +69,6 @@ class SliderInput extends Miwo.Component
 				when 'down' then @decrease(); e.stop()
 				when 'right' then @increase(); e.stop()
 				when 'up' then @increase(); e.stop()
-			return
-
-		@inputEl.on 'focus', (e) =>
-			@setFocus()
 			return
 
 		@trackEl.on 'click', (event)=>
@@ -149,12 +142,11 @@ class SliderInput extends Miwo.Component
 		if !@rendered then return
 		@selectionEl.setStyle('width', ((value-@min)*@stepSize))
 		@knobEl.setStyle('left', ((value-@min)*@stepSize))
-		@inputEl.set('value', value)
 		return
 
 
 	getValue: ->
-		return if @rendered then @inputEl.get('value') else @value
+		return @value
 
 
 	decrease: ->
@@ -173,12 +165,13 @@ class SliderInput extends Miwo.Component
 		return
 
 
-	getInputEl: ->
-		return @inputEl
-
-
-	getInputId: ->
-		return @id+'-input'
+	parentShown: ->
+		@trackPos = @trackEl.getPosition()
+		@trackSize = @trackEl.getSize()
+		@stepSize = @trackSize.x / (@max-@min)
+		@selectionEl.setStyle('width', ((@value-@min)*@stepSize))
+		@knobEl.setStyle('left', ((@value-@min)*@stepSize))
+		return
 
 
 	doDestroy: ->
