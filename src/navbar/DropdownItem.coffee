@@ -1,16 +1,10 @@
-Button = require './Button'
+Item = require './Item'
 DropdownList = require '../dropdown/List'
 
 
-class DropdownButton extends Button
+class NavbarDropdownItem extends Item
 
 	dropdown: null
-
-
-	afterInit: ->
-		super
-		document.on('click', @bound('onBodyClick'))
-		return
 
 
 	afterRender: ->
@@ -24,10 +18,14 @@ class DropdownButton extends Button
 		if !@dropdown
 			@dropdown = new DropdownList({target: @el})
 			@dropdown.el.set('aria-labelledby', @id)
-			@dropdown.on 'show', (dropdown)=>
-				DropdownButton.dropdown = dropdown
+			@dropdown.on 'show', (dropdown) =>
+				DropdownList.dropdown = dropdown
+				document.on('click', @bound('onBodyClick'))
+				return
 			@dropdown.on 'hide', (dropdown)=>
-				DropdownButton.dropdown = null
+				DropdownList.dropdown = null
+				document.un('click', @bound('onBodyClick'))
+				return
 		return @dropdown
 
 
@@ -41,15 +39,16 @@ class DropdownButton extends Button
 		return @getDropdown().addDivider()
 
 
-	renderText: ->
-		text = super()
-		text += ' ' if text
-		text += '<span class="caret"></span>'
-		return text
+	doRender: ->
+		super
+		caret = new Element "span",
+			cls: 'caret'
+		caret.inject(@getContentEl())
+		return
 
 
 	click: (e) ->
-		if DropdownButton.dropdown && DropdownButton.dropdown isnt @dropdown then DropdownButton.dropdown.hide()
+		if DropdownList.dropdown && DropdownList.dropdown isnt @dropdown then DropdownList.dropdown.hide()
 		@getDropdown().toggle()
 		return
 
@@ -63,8 +62,7 @@ class DropdownButton extends Button
 
 	doDestroy: ->
 		@dropdown.destroy() if @dropdown
-		document.un('click', @bound('onBodyClick'))
 		super()
 
 
-module.exports = DropdownButton
+module.exports = NavbarDropdownItem

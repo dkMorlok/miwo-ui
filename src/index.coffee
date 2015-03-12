@@ -6,6 +6,7 @@ Miwo.ui = {}
 Miwo.drag = require './drag'
 Miwo.notify = require './notify'
 Miwo.buttons = require './buttons'
+Miwo.navbar = require './navbar'
 Miwo.dropdown = require './dropdown'
 Miwo.input = require './input'
 Miwo.picker = require './picker'

@@ -62,6 +62,13 @@ class Button extends Miwo.Component
 		return
 
 
+	setType: (type) ->
+		@el.removeClass(@getBaseCls(@type)) if @type
+		@el.addClass(@getBaseCls(type)) if type
+		@type = type
+		return
+
+
 	setActive: (active, silent) ->
 		@el.toggleClass('active', active)
 		@active = active

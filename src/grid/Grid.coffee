@@ -96,6 +96,7 @@ class Grid extends Pane
 			parent: contentEl
 			cls: @getBaseCls("footer")
 
+		@contentEl = @bodyEl
 		@scrollableCt = @mainEl
 		@scrollableEl = @bodyEl
 		return
