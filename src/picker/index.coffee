@@ -1,6 +1,6 @@
 module.exports =
 
-	Manager: require './Manager'
+	PickerManager: require './PickerManager'
 	Color: require './Color'
 	Day: require './Day'
 	Month: require './Month'

@@ -14,16 +14,17 @@ class DropdownList extends Miwo.Container
 
 	afterInit: ->
 		super
+		miwo.dropdownMgr.register(this)
 		@renderTo = miwo.body
 		return
 
 
 	addItem: (name, config) ->
-		return @add name, new Item(config)
+		return @add(name, new Item(config))
 
 
 	addDivider: ->
-		return @add new Divider()
+		return @add(new Divider())
 
 
 	show: ->
@@ -43,6 +44,11 @@ class DropdownList extends Miwo.Container
 		super
 		@resetRendered(true)
 		return
+
+
+	doDestroy: ->
+		miwo.dropdownMgr.unregister(this)
+		super
 
 
 module.exports = DropdownList

@@ -5,10 +5,12 @@ class Button extends Miwo.Component
 
 	isButton: true
 	xtype: "button"
+	el: 'button'
+	baseCls: 'btn'
 	handler: null
-	text: ""
-	size: ""
-	type: "default"
+	text: ''
+	size: ''
+	type: 'default'
 	disabled: false
 	active: false
 	toggled: false
@@ -19,12 +21,6 @@ class Button extends Miwo.Component
 
 	textEl: null
 	iconEl: null
-
-
-	constructor: (config) ->
-		@el = "button"
-		@baseCls = "btn"
-		super(config)
 
 
 	setDisabled: (disabled, silent) ->
@@ -38,7 +34,7 @@ class Button extends Miwo.Component
 	setText: (text) ->
 		@text = text
 		if @textEl
-			@textEl.set("html", " " + @renderText() + " ")
+			@textEl.set("html", (if @icon then ' '+@text else @text))
 		return
 
 
@@ -104,10 +100,6 @@ class Button extends Miwo.Component
 		return
 
 
-	renderText: ->
-		return if @icon then ' '+@text else @text
-
-
 	doRender: ->
 		@el.addClass(@getBaseCls(@type))  if @type
 		@el.addClass(@getBaseCls(@size))  if @size
@@ -116,7 +108,7 @@ class Button extends Miwo.Component
 		@el.set('tabindex', -1)  if @disabled
 		@el.set("title", @tooltip || @title)  if @tooltip || @title
 		@el.on("click", @bound("onClick"))
-		@el.on("keyup", @bound("onKeyUp"))
+		@el.on("keyup", @bound("onKeyup"))
 
 		@iconEl = new Element "i",
 			parent: @el
@@ -124,7 +116,7 @@ class Button extends Miwo.Component
 
 		@textEl = new Element "span",
 			parent: @el
-			html: @renderText()
+			html: (if @icon then ' '+@text else @text)
 
 		@iconEl.addClass(Button.defaultIconClsPrefix+@icon)
 		if !@icon then @iconEl.hide()
@@ -145,7 +137,7 @@ class Button extends Miwo.Component
 		return
 
 
-	onKeyUp: (e) ->
+	onKeyup: (e) ->
 		if e.key is 'enter' then @onClick(e)
 		return
 

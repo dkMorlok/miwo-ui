@@ -1,17 +1,14 @@
 class NavbarItem extends Miwo.Component
 
 	xtype: "navbaritem"
+	isNavbarItem: true
 	handler: null
 	text: ""
 	disabled: false
 	active: false
+	el: 'li'
+	baseCls: 'dropdown'
 	contentEl: 'a'
-
-
-	constructor: (config) ->
-		@el = "li"
-		@baseCls = "dropdown"
-		super(config)
 
 
 	setDisabled: (disabled, silent) ->
@@ -53,10 +50,9 @@ class NavbarItem extends Miwo.Component
 		@el.addClass('active')  if @active
 		@el.addClass('disabled')  if @disabled
 		@el.set('tabindex', -1)  if @disabled
-		@getContentEl().on("click", @bound("onClick"))
 		@getContentEl().set('href', '#')
-		@textEl = new Element "span", {html: @text}
-		@textEl.inject(@getContentEl())
+		@getContentEl().on("click", @bound("onClick"))
+		@textEl = new Element("span", {html: @text, parent: @getContentEl()})
 		return
 
 

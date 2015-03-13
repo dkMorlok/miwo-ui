@@ -2,7 +2,6 @@ Button = require './Button'
 DropdownButton = require './DropdownButton'
 
 
-
 class ButtonGroup extends Miwo.Container
 
 	xtype: "buttongroup"
@@ -10,13 +9,8 @@ class ButtonGroup extends Miwo.Container
 	size: null
 	label: null
 	role: 'group'
-
-
-	beforeInit: ->
-		super()
-		@layout = "auto"
-		@baseCls = "btn-group"
-		return
+	layout: 'auto'
+	baseCls: 'btn-group'
 
 
 	validateChildComponent: (component) ->

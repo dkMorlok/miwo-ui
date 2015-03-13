@@ -24,7 +24,10 @@ RowSelector = require './selection/RowSelector'
 Notificator = require './notify/Notificator'
 
 # pickers
-PickerManager = require './picker/Manager'
+PickerManager = require './picker/PickerManager'
+
+# dropdown
+DropdownManager = require './dropdown/DropdownManager'
 
 
 class MiwoUiExtension extends Miwo.di.InjectorExtension
@@ -49,13 +52,15 @@ class MiwoUiExtension extends Miwo.di.InjectorExtension
 		injector.define('windowMgr', WindowManager)
 			.setGlobal()
 
-
 		# forms
 		injector.define 'formRendererFactory', FormRendererFactory, (service)=>
 			service.register('horizontal', HorizontalRenderer)
 			service.register('inline', InlineRenderer)
 			return
 
+		# dropdown
+		injector.define('dropdownMgr', DropdownManager)
+			.setGlobal()
 
 		# tooltips
 		injector.define 'tooltip', TooltipManager
