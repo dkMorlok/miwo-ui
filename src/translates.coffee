@@ -20,3 +20,5 @@ module.exports =
 		dateTo: 'to'
 		switchOn: 'ON'
 		switchOff: 'OFF'
+	pagination:
+		pageInfo: 'Visible: {visible} Total: {total}'

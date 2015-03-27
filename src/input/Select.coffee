@@ -6,7 +6,7 @@ class OptionGroup extends Miwo.Object
 
 	constructor: (@select, config) ->
 		super(config)
-		@el = new Element('optgroup', {label: @label})
+		@el = new Element('optgroup', {label: @label, parent: @select.el})
 		return
 
 
@@ -33,11 +33,11 @@ class SelectInput extends Miwo.Component
 	addOption: (value, text) ->
 		option = new Element('option', {value:value, html:text})
 		option.inject(@el)
-		return
+		return this
 
 
 	addGroup: (title) ->
-		return OptionGroup(this, {label: title})
+		return new OptionGroup(this, {label: title})
 
 
 	clear: ->

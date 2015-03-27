@@ -2,6 +2,7 @@ class BaseTextInput extends Miwo.Component
 
 	isInput: true
 	el: 'input'
+	focusEl: true
 	disabled: false
 	readonly: false
 	placeholder: null

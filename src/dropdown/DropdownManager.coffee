@@ -34,9 +34,8 @@ class DropdownManager extends Miwo.Object
 
 
 	onBodyClick: (e) ->
-		if @active
-			dropdown = e.target.getParent('#'+@active.id)
-			if !dropdown then @active.hide()
+		if @active && @isOutClick(e.target, @active)
+			@active.hide()
 		return
 
 
@@ -45,6 +44,14 @@ class DropdownManager extends Miwo.Object
 			e.stop()
 			@active.hide()
 		return
+
+
+	isOutClick: (target, active) ->
+		parent = target
+		while parent = parent.getParent()
+			if parent is active.el || parent is active.target
+				return false
+		return true
 
 
 module.exports = DropdownManager

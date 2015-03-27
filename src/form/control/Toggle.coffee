@@ -9,6 +9,7 @@ class ToggleControl extends BaseControl
 	onText: undefined
 	offText: undefined
 	size: undefined
+	value: false
 
 
 	createInput: ->

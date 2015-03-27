@@ -4,7 +4,7 @@ CheckerColumn = require './column/CheckerColumn'
 ActionColumn = require './column/ActionColumn'
 Operations = require './Operations'
 LoadMask = require '../utils/LoadMask'
-Paginator = require '../nav/Paginator'
+Paginator = require '../pagination/Paginator'
 Pane = require '../panel/Pane'
 
 class Grid extends Pane
@@ -41,6 +41,7 @@ class Grid extends Pane
 	# @cfg string Default action button size. You can set size by bootstrap: 'xs', 'sm', ... Default is 'sm'
 	actionBtnSize: null
 	role: 'grid'
+	size: 'md'
 
 	layout: false
 	baseCls: "grid"

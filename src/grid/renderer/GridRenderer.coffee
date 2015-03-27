@@ -46,6 +46,7 @@ class GridRenderer extends Miwo.Object
 		bodyEl.addClass('grid-nowrap')  if grid.nowrap
 		bodyEl.addClass('grid-rowclickable')  if grid.rowclickable
 		bodyEl.addClass('grid-align-'+grid.verticalAlign)  if grid.verticalAlign
+		bodyEl.addClass('grid-'+grid.size)  if grid.size
 
 		# header TABLE
 		theadTable = new Element("table")
@@ -196,11 +197,17 @@ class GridRenderer extends Miwo.Object
 		if !tr.retrieve("rowid")
 			tr.set("data-row", record.getId())
 			tr.store("rowid", record.getId())
+
 		cells = {}
 		for td in tr.getElements('td')
 			cells[td.get('column')] = td
+
+		# update cells
 		for column in @columns
 			@updateCell(cells[column.name], record, column)  if !column.preventUpdateCell
+
+		# notify after row rendered
+		@grid.emit("rowrender", @grid, tr, record)
 		return
 
 

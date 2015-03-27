@@ -10,6 +10,7 @@ class DropdownList extends Miwo.Container
 	target: null
 	visible: false
 	role: 'menu'
+	zIndexManage: true
 
 
 	afterInit: ->
@@ -27,11 +28,12 @@ class DropdownList extends Miwo.Container
 		return @add(new Divider())
 
 
-	show: ->
+	doShow: ->
 		super
 		pos = @target.getPosition()
 		pos.y += @target.getSize().y-3
 		@setPosition(pos)
+		@toFront()
 		return
 
 
@@ -43,6 +45,7 @@ class DropdownList extends Miwo.Container
 	doHide: ->
 		super
 		@resetRendered(true)
+		@toBack()
 		return
 
 

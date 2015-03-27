@@ -19,24 +19,25 @@ class Pager extends Miwo.Component
 		return
 
 
-	setStore: (@store) ->
-		@mon store, 'beforeload', ()=>
+	setStore: (store) ->
+		@store = store
+		@mon store, 'beforeload', =>
 			@setDisabled(true)
 			return
 
-		@mon store, 'load', ()=>
+		@mon store, 'load', =>
 			@setDisabled(false)
-			@syncStore()
+			@syncPaginator()
 			return
 
 		if store.loading
 			@setDisabled(true)
 		else if store.loaded
-			@syncStore()
+			@syncPaginator()
 		return
 
 
-	syncStore: ->
+	syncPaginator: ->
 		@paginator.setItemsPerPage(@store.pageSize)
 		@paginator.setItemCount(@store.totalCount)
 		@paginator.setPage(@store.page)

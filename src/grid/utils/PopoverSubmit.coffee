@@ -6,16 +6,16 @@ class PopoverSubmit extends Popover
 
 	onSubmit: null
 	onCancel: null
-	width: 140
+	width: 145
 
-	doInit: () ->
-		super()
+	doInit: ->
+		super
 		@el.addClass('grid-popover-submit')
 
 		buttonYes = new Button
 			text: 'Yes'
 			type: 'primary'
-			handler: () =>
+			handler: =>
 				@onSubmit() if @onSubmit
 				@close()
 				return
@@ -24,7 +24,7 @@ class PopoverSubmit extends Popover
 		buttonNo = new Button
 			text: 'No'
 			type: 'default'
-			handler: () =>
+			handler: =>
 				@onCancel() if @onCancel
 				@close()
 				return
