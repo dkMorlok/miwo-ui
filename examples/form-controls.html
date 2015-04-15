@@ -55,6 +55,14 @@ miwo.ready(function() {
 		max: 100,
 		value: 50
 	});
+	form.addSlider('range', {
+		label: 'Range',
+		step: 10,
+		min: 0,
+		max: 100,
+		value: [10,70],
+		mode: 'range'
+	});
 	form.addNumber('number', {
 		label: 'Number',
 		min: 0,

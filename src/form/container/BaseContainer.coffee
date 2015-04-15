@@ -8,6 +8,7 @@ class BaseContainer extends Miwo.Container
 	wasDirty: false
 	wasValid: true
 	controls: null
+	layout: 'form'
 
 
 	@registerControl: (controlName, fn) ->
@@ -18,15 +19,14 @@ class BaseContainer extends Miwo.Container
 		return
 
 
-	beforeInit: () ->
-		super
-		@layout = 'form'
+	beforeInit: ->
+		super()
+		@controls = []
 		return
 
 
 	afterInit: ->
-		super
-		@controls = []
+		super()
 		@updateValidationBoundItems(@isValid(true))
 		return
 
@@ -124,6 +124,13 @@ class BaseContainer extends Miwo.Container
 			if (!submitable or control.submitValue) and not control.disabled
 				if !dirtyOnly or control.isDirty()
 					values[control.getName()] = control.getRawValue()
+		return values
+
+
+	getOriginalValues: ->
+		values = {}
+		for control in @controls
+			values[control.getName()] = control.getRawValue()
 		return values
 
 

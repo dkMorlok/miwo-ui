@@ -5,13 +5,13 @@ Combo = require '../../input/Combo'
 class ComboControl extends BaseSelectControl
 
 	xtype: 'combobox'
-	hideSelected: true
+	hideSelected: false
 	multiple: false
 	height: null
 	placeholder: ''
 	prompt: false
 
-	createInput: () ->
+	createInput: ->
 		return new Combo
 			id: @id
 			hideSelected: @hideSelected

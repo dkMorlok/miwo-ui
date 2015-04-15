@@ -9,6 +9,9 @@ class SliderControl extends BaseControl
 	max: 100
 	step: 1
 	value: 0
+	mode: 'slider'
+	knobRenderer: undefined
+	selectionRenderer: undefined
 
 
 	setValue: (value) ->
@@ -19,13 +22,18 @@ class SliderControl extends BaseControl
 
 	createInput: ->
 		input = new Slider
+			mode: @mode
 			inputName: @name
 			step: @step
 			min: @min
 			max: @max
+			knobRenderer: @knobRenderer
+			selectionRenderer: @selectionRenderer
+
 		input.on 'change', (slider, value)=>
 			@setValue(value)
 			return
+
 		return input
 
 

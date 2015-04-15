@@ -11,9 +11,4 @@ class Tooltip extends Miwo.Object
 		return
 
 
-	apply: (element) ->
-		# not supported
-		return
-
-
 module.exports = Tooltip

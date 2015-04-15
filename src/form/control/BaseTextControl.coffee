@@ -22,14 +22,14 @@ class BaseTextControl extends BaseControl
 
 
 	initRules: ->
-		super
+		super()
 		@rules.addRule("minLength", null, @minLength)  if @minLength
 		@rules.addRule("maxLength", null, @maxLength)  if @maxLength
 		@rules.addRule("length", null, @length)  if @length
 		return
 
 
-	createInput: () ->
+	createInput: ->
 		return new Text
 			id: @id+'-input'
 			type: @type || 'text'
@@ -60,8 +60,8 @@ class BaseTextControl extends BaseControl
 		return this
 
 
-	afterRenderControl: () ->
-		super
+	afterRenderControl: ->
+		super()
 		inputEl = @input.getInputEl()
 		inputEl.set("minlength", @minLength) if @minLength isnt null
 		inputEl.set("maxlength", @maxLength) if @maxLength isnt null

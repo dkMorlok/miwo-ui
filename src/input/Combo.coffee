@@ -6,7 +6,7 @@ class ComboInput extends Miwo.Component
 	isInput: true
 	xtype: 'comboinput'
 	role: 'combobox'
-	hideSelected: true
+	hideSelected: false
 	multiple: false
 	height: null
 	placeholder: ''
@@ -162,13 +162,8 @@ class ComboInput extends Miwo.Component
 					val = item.get('data-value')
 					@setValue((if @multiple then @getValue().include(val) else val))
 					@close()
-			else if !@opened
-				if (item = @getActiveValue()) && !item.hasClass('disabled')
-					val = item.get('data-value')
-					@setValue(@getValue().erase(val))
-				else
-					@open()
-			return true
+				return true
+			return
 
 		@focusEl = @el
 		return

@@ -33,7 +33,7 @@ DropdownManager = require './dropdown/DropdownManager'
 class MiwoUiExtension extends Miwo.di.InjectorExtension
 
 
-	init: () ->
+	init: ->
 		@setConfig
 			behaviors:
 				tooltip: TooltipBehavior,

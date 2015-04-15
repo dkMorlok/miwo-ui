@@ -31,21 +31,24 @@
 }
 
 .tabs-fit {
-	height: 100%;
-	position: relative;
-	.tab-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	> .tab-content {
 		position: absolute;
 		bottom: 0px;
 		top: 42px;
 		left: 0px;
 		right: 0px;
-	}
-	.tab-pane {
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		right: 0px;
-		bottom: 0px;
+		> .pane {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+		}
 	}
 }
 .tabs-layout {

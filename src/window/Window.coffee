@@ -5,6 +5,7 @@ class Window extends Miwo.Container
 
 	isWindow: true
 	xtype: 'window'
+	baseCls: 'window'
 	closeMode: 'hide'
 	closeOnClickOut: true
 	closeOnEsc: true
@@ -13,11 +14,15 @@ class Window extends Miwo.Container
 	title: ''
 	autoCenter: true
 	preventAutoRender: true
+	width: 600
+	top: 30
 
 	# True to make the window modal and mask everything behind it when displayed, false
 	# to display it without restricting access to other UI elements.
 	# @config {Boolean}
 	modal: true
+	zIndexManage: true
+	visible: false
 
 	buttons: null
 	titleEl: null
@@ -29,12 +34,7 @@ class Window extends Miwo.Container
 
 
 	beforeInit: ->
-		super
-		@zIndexManage = true
-		@baseCls = 'window'
-		@visible = false
-		@width = 600
-		@top = 30
+		super()
 		@renderTo = miwo.body
 		@buttons = new Miwo.utils.Collection()
 		@tools = new Miwo.utils.Collection()
@@ -42,10 +42,15 @@ class Window extends Miwo.Container
 
 
 	afterInit: ->
-		super
+		super()
 		miwo.windowMgr.register(this)
 		@contentHeight = @height
 		@height = null
+
+		@keyListener = new Miwo.utils.KeyListener(@el)
+		@keyListener.on 'esc', () =>
+			@close()  if @closeOnEsc
+			return
 		return
 
 
@@ -91,7 +96,7 @@ class Window extends Miwo.Container
 
 
 	beforeRender: ->
-		super
+		super()
 		@el.addClass('modal-dialog')
 		@el.set 'html', """
 		<div class="window-content modal-content">
@@ -106,14 +111,13 @@ class Window extends Miwo.Container
 
 
 	afterRender: ->
-		super
-		@keyListener = new Miwo.utils.KeyListener(@el)
-		@keyListener.on 'esc', () =>
-			@close()  if @closeOnEsc
+		super()
+		if @wasRendered
 			return
 
 		@el.set('aria-labelledby', @id+'Label')
 		@titleEl.set('id', @id+'Label')
+		@contentEl.setStyle('height', @contentHeight) if @contentHeight
 
 		if @closeable
 			@addTool 'close',
@@ -127,14 +131,11 @@ class Window extends Miwo.Container
 				text: miwo.tr('miwo.window.hide')
 				handler: => @hide()
 
-		if !@modal
-			miwo.body.on('click', @bound('onBodyClick'))
-
-		if @contentHeight
-			@contentEl.setStyle('height', @contentHeight)
-
 		for name,button of @buttons.items
 			button.render(@footerEl) if !button.rendered
+
+		if !@modal
+			miwo.body.on('click', @bound('onBodyClick'))
 		return
 
 
@@ -169,7 +170,11 @@ class Window extends Miwo.Container
 		if !Type.isInstance(button)
 			button = new Button(button)
 		@buttons.set(name, button)
-		button.render(@footerEl) if @footerEl
+		button.on 'click', =>
+			@emit('action', this, name)
+			return
+		if @footerEl
+			button.render(@footerEl)
 		return button
 
 

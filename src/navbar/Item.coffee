@@ -57,7 +57,7 @@ class NavbarItem extends Miwo.Component
 
 
 	onClick: (e) ->
-		e.stop()
+		e.preventDefault()
 		if @disabled then return
 
 		@preventClick = false

@@ -4,9 +4,9 @@ BaseControl = require './BaseControl'
 class BaseInputControl extends BaseControl
 
 
-	setValue: (value) ->
+	setValue: (value, onlyControl) ->
 		super(value)
-		@input.setValue(value)  if @input
+		@input.setValue(value)  if @input && !onlyControl
 		return this
 
 

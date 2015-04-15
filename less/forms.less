@@ -82,3 +82,23 @@
 .input-group-addon:not(:first-child):not(:last-child) + .form-control {
 	border-left:0;
 }
+
+.form-control-search {
+	position: relative;
+	&:before {
+		display: block;
+		width: 14px;
+		height: 14px;
+		content: "\e003";
+		font-family: 'Glyphicons Halflings';
+		background-position: -48px 0;
+		position: absolute;
+		top:8px;
+		left:8px;
+		opacity: .5;
+		z-index: 1000;
+	}
+	.form-control {
+		padding-left:26px;
+	}
+}

@@ -4,38 +4,35 @@ class WidthManager extends Miwo.Object
 	renderer: null
 	widths: null
 
+
 	constructor: (@renderer, config) ->
 		super(config)
 		window.on("resize", @bound("onWindowResize"))
 		return
 
 
-	actualize: (tr = null) ->
+	actualize: (tr) ->
 		if !@widths
 			@widths = @detectWidths()
+
 		if tr
-			# update single row sizes
+			# update only row by argument
 			@actualizeRow(tr, @widths)
 		else
 			# update header sizes
-			theadRow = @renderer.thead
-			for name,width of @widths
-				if width isnt null
-					th = theadRow.getElement("tr th[column=\"" + name + "\"]")
-					th.setStyle("width", width)
-					th.setStyle("max-width", width)
-			# update body sizes
-			for tr in @renderer.tbody.getElements("tr.grid-row-data")
-				@actualizeRow(tr, @widths)
+			@actualizeRow(@renderer.thead.getChildren('tr')[0], @widths)
+			# update body sizes of first visible row (only 1 is required)
+			for row in @renderer.tbody.getChildren("tr.grid-row-data")
+				@actualizeRow(row, @widths)
 		return
 
 
 	actualizeRow: (tr, widths) ->
 		for name,width of widths
 			if width isnt null
-				td = tr.getElement("td[column=\"" + name + "\"]")
-				td.setStyle("width", width)
-				td.setStyle("max-width", width)
+				tr.getChildren("[column=\"" + name + "\"]").setStyles
+					width: width
+					maxWidth: width
 		return
 
 

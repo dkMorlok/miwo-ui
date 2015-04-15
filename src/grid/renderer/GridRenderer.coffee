@@ -5,24 +5,33 @@ class GridRenderer extends Miwo.Object
 
 	# @cfg {Number}
 	dblclickdelay: 0
-
-	# common used objects
-	grid: null
-	columns: null
+	# @cfg {Boolean}
+	autoSync: true
+	# @cfg {Number}
+	autoSyncInterval: null
 
 	# private properties
+	grid: null
+	columns: null
 	thead: null
 	tfoot: null
 	tbody: null
 	tfilters: null
 	widthManager: null
-	cellclickTimeoutId: null
+	cellClickTimeoutId: null
 
 
 	constructor: (@grid, config) ->
 		super(config)
 		@columns = []
 		@widthManager = new WidthManager(this, @widthManager)
+
+		if @autoSyncInterval
+			@syncRowsInterval = setInterval ()=>
+				if @requiredSyncRows
+					@syncRows()
+				return
+			, @autoSyncInterval
 		return
 
 
@@ -35,18 +44,9 @@ class GridRenderer extends Miwo.Object
 		for column in grid.getColumns()
 			if column.isCheckerColumn
 				@columns.push(column)
-
 		for column in grid.getColumns()
 			if !column.isCheckerColumn
 				@columns.push(column)
-
-		bodyEl = grid.bodyEl
-		bodyEl.addClass('grid-stripe')  if grid.stripe
-		bodyEl.addClass('grid-condensed')  if grid.condensed
-		bodyEl.addClass('grid-nowrap')  if grid.nowrap
-		bodyEl.addClass('grid-rowclickable')  if grid.rowclickable
-		bodyEl.addClass('grid-align-'+grid.verticalAlign)  if grid.verticalAlign
-		bodyEl.addClass('grid-'+grid.size)  if grid.size
 
 		# header TABLE
 		theadTable = new Element("table")
@@ -59,11 +59,21 @@ class GridRenderer extends Miwo.Object
 		# body TABLE
 		tbodyTable = new Element("table")
 		tbodyTable.inject(grid.bodyEl)
+		# body classes
+		bodyEl = grid.bodyEl
+		bodyEl.addClass('grid-stripe')  if grid.stripe
+		bodyEl.addClass('grid-condensed')  if grid.condensed
+		bodyEl.addClass('grid-nowrap')  if grid.nowrap
+		bodyEl.addClass('grid-rowclickable')  if grid.rowclickable
+		bodyEl.addClass('grid-align-'+grid.verticalAlign)  if grid.verticalAlign
+		bodyEl.addClass('grid-'+grid.size)  if grid.size
 		# body rows
 		@renderBody(tbodyTable)
 
 		# footer
 		@renderFooter(grid.footerEl)
+
+		# finish rendering
 		grid.emit("render", grid)
 		for column in @columns then column.afterRender()
 		return
@@ -82,10 +92,16 @@ class GridRenderer extends Miwo.Object
 		return
 
 
-	recordAdded: (record, index) ->
-		tr = @renderRow(@tbody, record, @tbody.getChildren().length)  # push to end
+	setAutoSync: (@autoSync) ->
+		if @autoSync
+			@syncRows()
+		return
+
+
+	recordAdded: (record) ->
+		tr = @renderRow(@tbody, record, @tbody.getChildren().length)  # push to end and then sync row positions
+		@requireSyncRows() if @autoSync
 		@widthManager.actualize(tr)
-		@syncRows()
 		return
 
 
@@ -93,18 +109,17 @@ class GridRenderer extends Miwo.Object
 		tr = @getRowByRecord(record)
 		if tr
 			@destroyRow(tr)
-			@syncRows()
+			@requireSyncRows() if @autoSync
 		return
 
 
-	recordUpdated: (record, index) ->
+	recordUpdated: (record) ->
 		tr = @getRowByRecord(record)
 		if tr
 			@updateRow(tr, record)
-			@syncRows()
 		else
 			@renderRow(@tbody, record)
-			@syncRows()
+		@requireSyncRows() if @autoSync
 		return
 
 
@@ -119,8 +134,7 @@ class GridRenderer extends Miwo.Object
 			th.addClass('text-'+column.align)
 			th.addClass('grid-col-'+column.colCls) if column.colCls
 			th.set("column", column.name)
-			th.set("html", column.renderHeader())
-			th.set("title", column.title || column.text)
+			th.set("html", '<span title="'+(column.title || column.text)+'" data-toggle="tooltip">'+column.renderHeader()+'</span>')
 			th.setVisible(false) if !column.visible
 
 			column.onRenderHeader(th) if column.onRenderHeader
@@ -136,22 +150,26 @@ class GridRenderer extends Miwo.Object
 
 
 	renderBody: (tbodyTable) ->
+		grid = @grid
+		records = grid.getRecords()
+
 		tbody = new Element("tbody", {cls: "grid-rows"})
 		tbody.inject(tbodyTable)
 		tbody.on("click:relay(tr.grid-row-data td)", @bound('onCellClick'))
 		tbody.on("dblclick:relay(tr.grid-row-data td)", @bound('onCellDblClick'))
-		@tbody = tbody
-		@grid.tbodyEl = tbody
+		grid.tbodyEl = @tbody = tbody
 
-		records = @grid.getRecords()
-
-		if @grid.groupBy
+		if grid.groupBy
 			groups = {}
 			# group records
 			for record in records
-				value = record.get(@grid.groupBy)
+				value = record.get(grid.groupBy)
 				groups[value] = []  if !groups[value]
 				groups[value].push(record)
+
+			# notify by grid (groups order can be changed)
+			grid.emit('beforesync', grid, groups)
+
 			# render grouped records
 			for name,records of groups
 				@renderGroup(tbody, name)
@@ -160,6 +178,7 @@ class GridRenderer extends Miwo.Object
 			@renderRows(tbody, records)
 
 		@reindexRows()
+		grid.emit('aftersync', grid)
 		return
 
 
@@ -266,26 +285,44 @@ class GridRenderer extends Miwo.Object
 		return
 
 
-	syncRows: ->
-		records = @grid.getRecords()
+	requireSyncRows: ->
+		if @syncRowsInterval
+			@requiredSyncRows = true # synced by interval callback
+		else
+			@syncRows()
+		return
 
-		if !@grid.groupBy
+
+	syncRows: ->
+		grid = @grid
+		records = grid.getRecords()
+
+		# reset require sync flag
+		@requiredSyncRows = false
+
+		# prepare data
+		if grid.groupBy
+			groups = {}
+			for record in records
+				value = record.get(grid.groupBy)
+				groups[value] = []  if !groups[value]
+				groups[value].push(record)
+
+		# notify by grid (groups order can be changed)
+		grid.emit('beforesync', grid, groups)
+
+		# create rows positions
+		if !grid.groupBy
 			positions = []
 			for rec in records
 				positions.push(rec.getId())
 		else
-			groups = {}
-			for record in records
-				value = record.get(@grid.groupBy)
-				groups[value] = []  if !groups[value]
-				groups[value].push(record)
-
 			for name, records of groups
-				groupRow = @tbody.getElement("tr.grid-row-group[data-group='#{name}']")
+				groupRow = @tbody.getChildren("tr.grid-row-group[data-group='#{name}']")[0]
 				if !groupRow
 					@renderGroup(@tbody, name)
 
-			for groupRow in @tbody.getElements('tr.grid-row-group')
+			for groupRow in @tbody.getChildren('tr.grid-row-group')
 				groupName = groupRow.get('data-group')
 				if !groups[groupName]
 					groupRow.destroy()
@@ -296,42 +333,54 @@ class GridRenderer extends Miwo.Object
 				for record in records
 					positions.push(record.getId())
 
-		# rows by ids
+		# notify by grid (positions can be changed)
+		grid.emit('sync', grid, positions)
+
+		# parse rows by ids
 		rows = {}
 		for row in @tbody.getChildren()
 			rows[row.retrieve('rowid')] = row
 
 		# bi-directional sorting
+		changed = false
 		len = positions.length
 		limit = Math.round(len/2)
 		for i in [0..limit] by +1
 			id = positions.shift()
 			row = rows[id]
-			@syncRow(row, i) if row
+			if row
+				if @syncRow(row, i)
+					changed = true
 
 			id = positions.pop()
 			row = rows[id]
-			@syncRow(row, len-i-1) if row
+			if row
+				if @syncRow(row, len-i-1)
+					changed = true
 
-		@reindexRows()
+		# check if reindex is needed
+		if changed
+			@reindexRows()
+
+		grid.emit('aftersync', grid)
 		return
 
 
 	syncRow: (row, position) ->
-		if row.getIndex() isnt position
-			if position is 0
-				row.inject(@tbody, 'top')
-			else
-				prevRow = @tbody.getElement('tr:nth-child("'+position+'")')
-				row.inject(prevRow, 'after')
-		return
+		if row.getIndex() is position
+			return false
+		if position is 0
+			row.inject(@tbody, 'top')
+		else
+			prevRow = @tbody.getChildren('tr:nth-child("'+position+'")')[0]
+			row.inject(prevRow, 'after')
+		return true
 
 
-	reindexRows: () ->
+	reindexRows: ->
 		index = 0
-		for row in @tbody.getChildren()
-			if row.hasClass('grid-row-data')
-				row.set('row-index', index++)
+		for row in @tbody.getChildren('tr.grid-row-data')
+			row.set('row-index', index++)
 		return
 
 
@@ -366,8 +415,8 @@ class GridRenderer extends Miwo.Object
 		if td.get('disableclick') then return
 		if e.target.tagName is 'A' then return
 
-		clearTimeout(@cellclickTimeoutId)
-		@cellclickTimeoutId = (=>
+		clearTimeout(@cellClickTimeoutId)
+		@cellClickTimeoutId = (=>
 			info = @getCellInfo(td)
 			@grid.emit('cellclick', @grid, td, info.record, info, e)
 			@grid.emit('rowclick', @grid, info.record, info, e)
@@ -380,7 +429,7 @@ class GridRenderer extends Miwo.Object
 		if td.get('disableclick') then return
 		if e.target.tagName is "A" then return
 
-		clearTimeout(@cellclickTimeoutId)
+		clearTimeout(@cellClickTimeoutId)
 		info = @getCellInfo(td)
 		@grid.emit('celldblclick', @grid, td, info.record, info, e)
 		@grid.emit('rowdblclick', @grid, info.record, info, e)
@@ -403,22 +452,23 @@ class GridRenderer extends Miwo.Object
 
 
 	getRowById: (id) ->
-		for tr in @tbody.getElements('tr')
+		for tr in @tbody.getChildren('tr')
 			if tr.retrieve('rowid') is id
 				return tr
 		return null
 
 
 	getRowByRecord: (record) ->
-		for tr in @tbody.getElements('tr')
+		for tr in @tbody.getChildren('tr')
 			if tr.retrieve('record') is record
 				return tr
 		return null
 
 
 	onGridParentShown: ->
-		@widthManager.widths = null # reset widths
-		@widthManager.actualize()
+		wm = @widthManager
+		wm.widths = null # reset widths
+		wm.actualize()
 		return
 
 
@@ -428,7 +478,8 @@ class GridRenderer extends Miwo.Object
 		@grid.un('selectionchange', @bound('onSelectionChanged'))
 		@destroyRows(@tbody)
 		@grid = @tbody = @tfilters = @thead = @tfoot = null
-		super
+		super()
+		return
 
 
 module.exports = GridRenderer

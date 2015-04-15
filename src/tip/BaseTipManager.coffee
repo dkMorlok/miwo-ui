@@ -10,6 +10,7 @@ class BaseTipManager extends Miwo.Object
 
 	show: (target, config) ->
 		if @target is target then return
+		if @tip is @tipToHide then @tipToHide = null
 		if @tip then @hide()
 
 		tip = @create(target, config)
@@ -25,7 +26,7 @@ class BaseTipManager extends Miwo.Object
 			target.set("title", null)
 
 		target.on("mouseleave", @bound('onTargetLeave'))
-		target.on("click", @bound('onTargetClick'))
+		target.on("mousedown", @bound('onTargetClick'))
 		return
 
 
@@ -34,7 +35,7 @@ class BaseTipManager extends Miwo.Object
 		return
 
 
-	hide: () ->
+	hide: ->
 		if !@tip then return
 		@tip.destroy()
 		@tip = null
@@ -44,19 +45,20 @@ class BaseTipManager extends Miwo.Object
 		return
 
 
-	onTargetLeave: () ->
+	onTargetLeave: ->
+		@tipToHide = @tip
+		@target.un("mouseleave", @bound('onTargetLeave'))
 		# wait until user move by cursor (user can move on tip - tip should not be destroyed)
 		setTimeout((=>
-			if @tip and !@tip.isHover()
+			if @tipToHide and !@tipToHide.isHover()
 				# if hover on tip, then tip is destroyed when hover is lose
 				@hide()
 			return
 		), 200)
-		@target.un("mouseleave", @bound('onTargetLeave'))
 		return
 
 
-	onTargetClick: () ->
+	onTargetClick: ->
 		@toggle(@target)
 		return
 

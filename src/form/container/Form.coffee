@@ -4,6 +4,7 @@ BaseContainer = require './BaseContainer'
 class Form extends BaseContainer
 
 	xtype: 'form'
+	el: 'form'
 	buttonsEl: null
 	record: null
 	submitBtn: null
@@ -14,23 +15,24 @@ class Form extends BaseContainer
 
 
 	beforeInit: ->
-		super
+		super()
 		@form = this
-		@el = 'form'
 		return
 
 
 	afterInit: ->
-		super
+		super()
 		@keyListener = new Miwo.utils.KeyListener(@el, 'keydown')
-		@keyListener.on 'enter', =>
-			@submit()
-			return true
+		@keyListener.on 'enter', (e)=>
+			if e.target.tagName isnt 'TEXTAREA'
+				@submit()
+				return true
+			return false
 		return
 
 
 	reset: (btn, silent) ->
-		super
+		super()
 		@emit('reset', this, btn) if !silent
 		return
 
@@ -127,14 +129,19 @@ class Form extends BaseContainer
 
 
 	onSuccess: ->
+		return
+
 
 	onFailure: ->
+		return
+
 
 	onSubmit: ->
+		return
 
 
-	renderContainer: () ->
-		super
+	renderContainer: ->
+		super()
 		contentEl = @getContentEl()
 		@getRenderer().renderForm(this)
 
@@ -219,7 +226,7 @@ class Form extends BaseContainer
 
 	doDestroy: ->
 		@keyListener.destroy()
-		super
+		super()
 
 
 module.exports = Form

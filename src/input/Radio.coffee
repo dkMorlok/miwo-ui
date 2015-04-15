@@ -43,7 +43,7 @@ class Radio extends Miwo.Component
 
 		@checkerEl.on 'keydown', (e) =>
 			if @disabled then return
-			if e.key is 'space' or e.key is 'enter'
+			if e.key is 'space'
 				e.stop()
 				@setChecked(!@isChecked())
 			return

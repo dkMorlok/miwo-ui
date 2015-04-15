@@ -9,8 +9,21 @@ class TabPanel extends Pane
 	role: 'tabpanel'
 
 
+	doInit: ->
+		super()
+		@tab = new Element('li', {role: 'presentation'})
+		return
+
+
+	doRender: ->
+		super()
+		link = new Element('a', {'aria-controls': @id, href:'#'+@name, role:'tab', html:@title})
+		link.inject(@tab)
+		return
+
+
 	setTitle: (@title) ->
-		@tab.set('html', title) if @tab
+		@tab.set('html', title)
 		return
 
 
@@ -25,6 +38,11 @@ class TabPanel extends Pane
 	setActive: ->
 		@getParent().setActive(@name)
 		return
+
+
+	doDestroy: ->
+		@tab.destroy()
+		super()
 
 
 

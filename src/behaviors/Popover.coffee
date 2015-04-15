@@ -11,9 +11,4 @@ class Popover extends Miwo.Object
 		return
 
 
-	apply: (element) ->
-		# not supported
-		return
-
-
 module.exports = Popover

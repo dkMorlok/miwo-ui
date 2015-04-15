@@ -7,6 +7,7 @@ LoadMask = require '../utils/LoadMask'
 Paginator = require '../pagination/Paginator'
 Pane = require '../panel/Pane'
 
+
 class Grid extends Pane
 
 	# @event render (grid)
@@ -22,6 +23,9 @@ class Grid extends Pane
 	# @event refresh (grid)
 	# @event action (grid, name, records)
 	# @event selectionchange (grid, sm, selection)
+	# @event beforesync (grid, groups)
+	# @event sync (grid, positions)
+	# @event aftersync (grid)
 
 	isGrid: true
 	xtype: 'grid'
@@ -206,39 +210,42 @@ class Grid extends Pane
 
 
 	onStoreAdd: (store, record) ->
-		index = store.indexOf(record, true) # find real index (if filtered, then filtered index)
-		@renderer.recordAdded(record, index) if @rendered
+		@renderer.recordAdded(record)  if @rendered
 		return
 
 
 	onStoreRemove: (store, record) ->
-		@renderer.recordRemoved(record) if @rendered
+		@renderer.recordRemoved(record)  if @rendered
 		return
 
 
 	onStoreUpdate: (store, record) ->
-		index = store.indexOf(record, true) # find real index (if filtered, then filtered index)
-		@renderer.recordUpdated(record, index) if @rendered
+		@renderer.recordUpdated(record)  if @rendered
 		return
 
 
-	onStoreRefresh: (store) ->
+	setAutoSync: (autoSync) ->
+		@getRenderer().setAutoSync(autoSync)
+		return
+
+
+	onStoreRefresh: ->
 		@refresh()
 		return
 
 
-	onStoreBeforeload: (store) ->
+	onStoreBeforeload: ->
 		@loadMask.show()  if @loadMask
 		return
 
 
-	onStoreLoad: (store) ->
+	onStoreLoad: ->
 		@refresh()
 		@loadMask.hide()  if @loadMask
 		return
 
 
-	onStoreReload: (store) ->
+	onStoreReload: ->
 		@refresh()
 		@loadMask.hide()  if @loadMask
 		return
@@ -246,6 +253,11 @@ class Grid extends Pane
 
 	refresh: ->
 		@renderer.refresh()  if @rendered
+		return
+
+
+	sync: ->
+		@renderer.syncRows()  if @rendered
 		return
 
 

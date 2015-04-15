@@ -41,6 +41,7 @@ class Pager extends Miwo.Component
 		@paginator.setItemsPerPage(@store.pageSize)
 		@paginator.setItemCount(@store.totalCount)
 		@paginator.setPage(@store.page)
+		@redraw()
 		return
 
 
@@ -75,6 +76,7 @@ class Pager extends Miwo.Component
 	onClick: (event, el)->
 		event.preventDefault()
 		if @disabled then return
+		if el.getParent('li').hasClass('disabled') then return
 		page = el.get('data-page')
 		@emit('page', this, page)
 		if @store then @store.loadNestedPage(page)

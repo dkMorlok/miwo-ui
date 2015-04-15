@@ -60,7 +60,7 @@ class BaseControl extends Miwo.Component
 
 
 	afterInit: ->
-		super
+		super()
 		@errors = []
 		@defaultValue = @originalValue = @lastValue = @value
 
@@ -438,6 +438,9 @@ class BaseControl extends Miwo.Component
 		if @inputWidth
 			@el.addClass('input-fill')
 			ct.setStyle('width', @inputWidth)
+
+		if @controlCls
+			ct.addClass(@controlCls)
 
 		if @prepend || @append || @buttons.length>0 || @tip
 			ct.addClass('input-group')

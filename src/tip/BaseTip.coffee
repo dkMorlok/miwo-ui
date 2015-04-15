@@ -37,7 +37,7 @@ class BaseTip extends Miwo.Container
 		if @delay then @el.show.delay(@delay, @el) else @el.show()
 		@updatePosition()
 		@emit('show', this)
-		return
+		return this
 
 
 	hide: ->
@@ -45,7 +45,7 @@ class BaseTip extends Miwo.Container
 		@visible = false
 		@emit('hide', this)
 		@el.hide()
-		return
+		return this
 
 
 	close: ->
@@ -53,7 +53,7 @@ class BaseTip extends Miwo.Container
 		@hide()
 		@emit('close', this)
 		@destroy()
-		return
+		return this
 
 
 	isHover: ->

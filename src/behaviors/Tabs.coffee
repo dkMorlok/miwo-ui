@@ -8,9 +8,4 @@ class Tabs extends Miwo.Object
 		return
 
 
-	apply: (element) ->
-		# not supported yet
-		return
-
-
 module.exports = Tabs

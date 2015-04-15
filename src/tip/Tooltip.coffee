@@ -9,10 +9,10 @@ class Tooltip extends BaseTip
 
 
 	setText: (@text) ->
-		if !@rendered then return
-		@contentEl.set('html', text)
-		@updatePosition()
-		return
+		if @rendered
+			@contentEl.set('html', text)
+			@updatePosition()
+		return this
 
 
 	beforeRender: () ->

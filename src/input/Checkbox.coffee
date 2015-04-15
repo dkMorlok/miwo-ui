@@ -60,6 +60,7 @@ class Checkbox extends Miwo.Component
 
 		@focusEl = @checkerEl
 		@setChecked(@checked)
+		@setDisabled(@disabled)
 		return
 
 
@@ -67,8 +68,7 @@ class Checkbox extends Miwo.Component
 		if !@rendered then return
 		@el.toggleClass('checked', checked)
 		@inputEl.set('checked', checked)
-		@iconEl.removeClass('fa-check-square-o').removeClass('fa-square-o')
-		@iconEl.addClass(if checked then 'fa-check-square-o' else 'fa-square-o')
+		@updateIconCls()
 		return
 
 
@@ -81,6 +81,18 @@ class Checkbox extends Miwo.Component
 		@el.toggleClass('disabled', @disabled)
 		@inputEl.set('disabled', @disabled)
 		@checkerEl.set('tabindex', -@disabled)
+		@updateIconCls()
+		return
+
+
+	updateIconCls: ->
+		@iconEl.removeClass('fa-check-square-o').removeClass('fa-square-o').removeClass('fa-square')
+		if @disabled
+			@iconEl.addClass('fa-square')
+		else if @checked
+			@iconEl.addClass('fa-check-square-o')
+		else
+			@iconEl.addClass('fa-square-o')
 		return
 
 

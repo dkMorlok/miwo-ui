@@ -10,8 +10,8 @@ class Tabs extends Miwo.Container
 	scrollable: false
 
 
-	doInit: () ->
-		super
+	doInit: ->
+		super()
 		if @align is 'vertical'
 			@html =
 			'<ul miwo-reference="tabsEl" class="nav nav-tabs" role="tablist"></ul>'+
@@ -74,17 +74,11 @@ class Tabs extends Miwo.Container
 
 	renderComponent: (component) ->
 		super(component)
-		# render tab
-		tab = new Element('li', {role: 'presentation'})
-		tab.inject(@tabsEl)
-		link = new Element('a', {'aria-controls': component.id, href:'#'+component.name, role:'tab', html:component.title})
-		link.inject(tab)
-		component.tab = tab
+		component.tab.inject(@tabsEl)
 		return
 
 
 	removedComponent: (component) ->
-		component.tab.destroy()
 		@setActive()  if @active is component.name
 		return
 

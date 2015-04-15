@@ -27,35 +27,25 @@ class Paginator extends Miwo.Component
 
 		@mon store, 'load', ()=>
 			@setDisabled(false)
-			@syncStore()
+			@syncPaginator()
 			return
 
 		if store.loading
 			@setDisabled(true)
 		else if store.loaded
-			@syncStore()
+			@syncPaginator()
 		return
 
 
-	syncStore: ->
+	syncPaginator: ->
 		@paginator.setItemsPerPage(@store.pageSize)
 		@paginator.setItemCount(@store.totalCount)
 		@paginator.setPage(@store.page)
+		@redraw()
 		return
 
 
 	doRender: ->
-		@renderPages()
-		return
-
-
-	afterRender: ->
-		super
-		@mon(@el, 'click:relay(a)', 'onClick')
-		return
-
-
-	renderPages: ->
 		@el.empty()
 		if @paginator.itemCount is null then return
 		if @paginator.getPageCount() < 2 then return
@@ -89,9 +79,16 @@ class Paginator extends Miwo.Component
 		return
 
 
+	afterRender: ->
+		super
+		@mon(@el, 'click:relay(a)', 'onClick')
+		return
+
+
 	onClick: (event, el) ->
 		event.preventDefault()
 		if @disabled then return
+		if el.getParent('li').hasClass('disabled') then return
 		page = parseInt(el.get('data-page'))
 		@emit('page', this, page)
 		if @store then @store.loadPage(page)

@@ -28,7 +28,7 @@ class ButtonGroupControl extends BaseControl
 
 
 	setItems: (items) ->
-		@input.removeAllComponents()
+		@input.removeComponents()
 		for name,text of items
 			@input.addButton name,
 				text: text
