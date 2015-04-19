@@ -1,45 +1,46 @@
-BaseControl = require './BaseControl'
+BaseInputControl = require './BaseInputControl'
 ColorInput = require '../../input/Color'
 
 
-class ColorControl extends BaseControl
+class ColorControl extends BaseInputControl
 
 	xtype: 'colorfield'
 	readonly: false
-
+	resettable: false
 
 
 	doInit: ->
 		super
-		if @value then @value = @value.toUpperCase()
+		if @value then @value = @value.toLowerCase()
 		return
-
-
-	createInput: ->
-		picker = new ColorInput
-			id: @id
-			disabled: @disabled
-			readonly: @readonly
-			resettable: false
-		picker.on 'changed', (picker, hex) =>
-			@setValue('#'+hex)
-			return
-		picker.on 'reset', =>
-			@reset()
-			return
-		return picker
 
 
 	setValue: (value) ->
-		if value then value = value.toUpperCase()
+		value = value.toLowerCase() if value
 		super(value)
-		@input.setValue(value)
-		return
+		return this
+
+
+	createInput: ->
+		input = new ColorInput
+			id: @id+'Input'
+			disabled: @disabled
+			readonly: @readonly
+		input.on 'changed', (input, value) =>
+			@emit('inputchange', this, value)
+			return
+		input.on 'selected', (input, value) =>
+			@setValue(value)
+			return
+		input.on 'reset', =>
+			@reset()
+			return
+		return input
 
 
 	onDirtyChange: (isDirty) ->
 		super(isDirty)
-		@input.setResettable(isDirty)
+		@input.setResettable(isDirty) if @resettable
 		return
 
 

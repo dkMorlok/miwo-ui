@@ -1,74 +1,96 @@
 Button = require '../buttons/Button'
+BaseInput = require './BaseInput'
 
 
-class ColorInput extends Miwo.Component
+class ColorInput extends BaseInput
 
 	xtype: "colorinput"
+	baseCls: 'colorfield'
 	value: '#ffffff'
 	readonly: false
 	resettable: false
+	pickerPlacement: 'bottom'
 
-	resetBtn: null
 	popover: null
 
 
 	doRender: ->
-		@el.addClass('colorfield')
+		@el.addClass('clearfix')
 
 		@inputEl = new Element 'input',
 			id: @getInputId()
-			cls: 'form-control'
+			cls: 'form-control '+@getBaseCls('color')
 			type: 'color'
 			tabindex: 0
-		@inputEl.inject(@el)
+			parent: @el
+
+		@textEl = new Element 'input',
+			id: @getInputId('color')
+			cls: 'form-control '+@getBaseCls('text')
+			type: 'text'
+			tabindex: -1
+			parent: @el
 
 		@resetBtn = new Button
 			icon: 'remove'
-			handler: => @emit('reset', this); @setFocus()
+			visible: @resettable
+			handler: =>
+				@emit('reset', this)
+				@setFocus()
+				return
 		@resetBtn.render(@el)
 
-		@inputEl.on 'click', (event) =>
-			event.stop()
-			@openPicker()
-			return
+		@inputEl.on 'click', @bound('onInputClick')
+		@textEl.on 'mousedown', @bound('onInputClick')
+		return
+
+
+	onInputClick: (event) ->
+		event.stop()
+		@setFocus() if @focus
+		@openPicker()
 		return
 
 
 	afterRender: ->
 		super()
-		@focusEl = @inputEl
-		@setDisabled(@disabled)
-		@setResettable(@resettable)
-		@inputEl.on 'keydown', (e)=>
-			if e.key is 'space' or e.key is 'enter'
-				e.stop()
+		@inputEl.on 'keydown', (event)=>
+			if event.key is 'space' or event.key is 'enter'
+				event.stop()
 				@openPicker()
+			return
+
+		@inputEl.on 'focus', =>
+			@setFocus()
+			return
+
+		@inputEl.on 'blur', =>
+			@blur()
 			return
 		return
 
 
-	setValue: (@value) ->
-		if !@rendered then return
+	setValue: (value) ->
 		@inputEl.set("value", value)
-		return
+		@textEl.set("value", value)
+		return this
 
 
 	getValue: ->
-		return if @rendered then @inputEl.get("value") else @value
+		return @inputEl.get("value")
 
 
 	setDisabled: (disabled) ->
 		super(disabled)
-		if !@rendered then return
-		@inputEl.toggleClass('disabled', disabled)
-		@resetBtn.setDisabled(disabled) if @resetBtn
-		return
+		@inputEl.set('disabled', disabled)
+		@textEl.set('disabled', disabled)
+		@resetBtn.setDisabled(disabled)
+		return this
 
 
 	setResettable: (@resettable) ->
-		if !@rendered then return
-		@resetBtn.setVisible(resettable)  if @resetBtn
-		return
+		@resetBtn.setVisible(@resettable)
+		return this
 
 
 	openPicker: ->
@@ -87,34 +109,34 @@ class ColorInput extends Miwo.Component
 	createPicker: ->
 		popover = miwo.pickers.createPopoverPicker 'color',
 			target: @inputEl
+			placement: @pickerPlacement
 		picker = popover.get('picker')
 		picker.on 'changed', (picker, hex) =>
-			@emit("changed", this, hex)
-			@setValue("#" + hex)
+			value = @formatColor(hex)
+			@emit("changed", this, value)
 			return
 		picker.on 'selected', (picker, hex) =>
-			@emit('changed', this, hex)
-			@setValue("#" + hex)
+			value = @formatColor(hex)
+			@setValue(value)
+			@emit('selected', this, value)
 			@hidePicker()
 			return
 		popover.on 'close', =>
 			@popover = null
 			@setFocus()
+			@emit("changed", this, @getValue())
 			return
 		return popover
 
 
-	getInputEl: ->
-		return @inputEl
-
-
-	getInputId: ->
-		return @id+'-input'
+	formatColor: (color) ->
+		return '#' + color.toLowerCase()
 
 
 	doDestroy: ->
 		@popover.destroy() if @popover
-		super
+		@resetBtn.destroy() if @resetBtn
+		super()
 
 
 module.exports = ColorInput

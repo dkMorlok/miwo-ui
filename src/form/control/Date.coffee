@@ -32,7 +32,7 @@ class DateControl extends TextControl
 
 	createInput: ->
 		input = new DateInput
-			id: @id
+			id: @id+'-input'
 			name: @name
 			type: @type
 			disabled: @disabled

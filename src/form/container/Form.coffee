@@ -9,7 +9,7 @@ class Form extends BaseContainer
 	record: null
 	submitBtn: null
 	renderer: null
-	rendererType: 'horizontal'
+	rendererType: 'default'
 	rendererOptions: null
 	preventAutoLogin: false
 

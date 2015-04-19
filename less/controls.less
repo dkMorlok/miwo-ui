@@ -1,8 +1,15 @@
 .colorfield {
-	.form-control {
-		width: 60px;
+	&-color {
+		width: 40px;
 		padding: 2px 5px;
 		float: left;
+		border-radius: @border-radius-base 0 0 @border-radius-base;
+	}
+	&-text {
+		width: 100px;
+		float: left;
+		border-radius: 0 @border-radius-base @border-radius-base 0;
+		border-left: none;
 	}
 	.btn {
 		margin-left: 5px;
@@ -11,6 +18,7 @@
 }
 
 .checkbox, .radio {
+	padding-top: 0px;
 	.checker {
 		width: 24px;
 		height: 28px;
@@ -22,13 +30,16 @@
 		.transition(all 0.2s);
 		&:focus { color: @brand-primary; }
 	}
-	.label-text {
-		line-height: 2;
-		display: inline;
+	label {
+		padding-left: 0px;
 	}
 	input {
 		position: absolute;
 		opacity: 0;
+	}
+	.label-text {
+		line-height: 2;
+		display: inline;
 	}
 	&.checked {
 		.checker {
@@ -215,9 +226,9 @@
 	}
 	&.disabled {
 		opacity: 0.8;
-		cursor: text;
+		cursor: @cursor-disabled;
 		.slider-knob {
-			&:hover, &.active {
+			&:hover, &.active, &:focus {
 				background: @btn-default-bg;
 				border: 1px solid @btn-default-border;
 			}
@@ -263,6 +274,8 @@
 		filter: alpha(opacity=50);
 		cursor: @cursor-disabled;
 		background: @input-bg-disabled;
+		border-color: @input-border;
+		color: @input-color;
 	}
 	&-text {
 		padding-left: @padding-small-horizontal;

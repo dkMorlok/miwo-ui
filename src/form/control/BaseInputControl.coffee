@@ -16,4 +16,27 @@ class BaseInputControl extends BaseControl
 		return this
 
 
+	setReadonly: (@readonly) ->
+		@input.setReadonly(@readonly)  if @input && @input.setReadonly
+		return this
+
+
+	afterRenderControl: ->
+		input = @getInput()
+		input.on('focus', @bound('onInputFocus'))
+		input.on('blur', @bound('onInputBlur'))
+		return
+
+
+	onInputFocus: ->
+		@setFocus()
+		return
+
+
+	onInputBlur: ->
+		@validate()
+		@blur()
+		return
+
+
 module.exports = BaseInputControl

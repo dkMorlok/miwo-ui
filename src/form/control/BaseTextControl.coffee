@@ -1,8 +1,8 @@
-BaseControl = require './BaseControl'
-Text = require '../../input/Text'
+BaseInputControl = require './BaseInputControl'
+TextInput = require '../../input/Text'
 
 
-class BaseTextControl extends BaseControl
+class BaseTextControl extends BaseInputControl
 
 	placeholder: null
 	minLength: null
@@ -30,8 +30,8 @@ class BaseTextControl extends BaseControl
 
 
 	createInput: ->
-		return new Text
-			id: @id+'-input'
+		return new TextInput
+			id: @id+'Input'
 			type: @type || 'text'
 			name: 'input'
 			cls: @inputCls
@@ -40,24 +40,6 @@ class BaseTextControl extends BaseControl
 			placeholder: @placeholder
 			readonly: @readonly
 			disabled: @disabled
-
-
-	setValue: (value, ignoreInputChange) ->
-		super(value)
-		@input.setValue(value)  if @input and !ignoreInputChange
-		return this
-
-
-	setDisabled: (disabled) ->
-		super(disabled)
-		@input.setDisabled(disabled)  if @input
-		return this
-
-
-	setReadonly: (readonly) ->
-		@readonly = readonly
-		@input.setReadonly(readonly)  if @input
-		return this
 
 
 	afterRenderControl: ->
@@ -123,25 +105,18 @@ class BaseTextControl extends BaseControl
 
 
 	onSpecialkey: (control, key, e) ->
-
-
-	onKeydown: (control, key, e) ->
-
-
-	onSpecialkeyup: (control, key, e) ->
-
-
-	onKeyup: (control, key, e) ->
-
-
-	onInputFocus: (e) ->
-		@setFocus()
 		return
 
 
-	onInputBlur: (e) ->
-		@validate()
-		@emit('blur', this)
+	onKeydown: (control, key, e) ->
+		return
+
+
+	onSpecialkeyup: (control, key, e) ->
+		return
+
+
+	onKeyup: (control, key, e) ->
 		return
 
 

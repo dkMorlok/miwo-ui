@@ -1,41 +1,33 @@
-BaseControl = require './BaseControl'
+BaseInputControl = require './BaseInputControl'
 Checkbox = require '../../input/Checkbox'
 
 
-class CheckboxControl extends BaseControl
+class CheckboxControl extends BaseInputControl
 
 	xtype: "checkbox"
 	value: false
 	isBoxControl: true
 
 
-	createInput: () ->
-		return new Checkbox
-			id: @id
+	createInput: ->
+		checkbox = new Checkbox
+			id: @id+'Input'
 			label: @label
+		checkbox.on 'change', =>
+			@setValue(!@getValue())
+			return
+		return checkbox
 
 
-	setValue: (value) ->
-		super(value)
-		@input.setChecked(!!value)
-		return
-
-
-	isChecked: () ->
+	isChecked: ->
 		return @value is true
 
 
-	isFilled: () ->
+	isFilled: ->
 		return @isChecked()
 
 
-	setDisabled: (disabled) ->
-		super(disabled)
-		@input.setDisabled(disabled)
-		return
-
-
-	renderLabel: (ct) ->
+	renderLabel: ->
 		return
 
 
@@ -43,14 +35,7 @@ class CheckboxControl extends BaseControl
 		ct.addClass('input-control')
 		input = @getInput()
 		input.render(ct)
-
-		input.setChecked(@isChecked())
-		input.setDisabled(@disabled)
-
-		input.on 'change', ()=> @setValue(!@getValue())
-		input.on 'focus', ()=> @setFocus()
 		return
-
 
 
 module.exports = CheckboxControl

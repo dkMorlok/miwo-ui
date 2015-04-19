@@ -14,7 +14,7 @@ class ToggleControl extends BaseControl
 
 	createInput: ->
 		return new ToggleInput
-			id: @id
+			id: @id+'-input'
 			inputName: @name
 			size: @size
 			onState: @onState

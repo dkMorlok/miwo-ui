@@ -15,7 +15,7 @@ class DropSelectControl extends BaseControl
 
 	createInput: ->
 		return new DropSelectInput
-			id: @id
+			id: @id+'-input'
 			store: @store
 			keyProperty: @keyProperty
 			textProperty: @textProperty

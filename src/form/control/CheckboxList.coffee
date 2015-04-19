@@ -13,7 +13,7 @@ class CheckboxListControl extends BaseControl
 
 	createInput: () ->
 		return new CheckboxList
-			id: @id
+			id: @id+'-input'
 			inline: @inline
 
 

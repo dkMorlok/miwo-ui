@@ -13,7 +13,7 @@ class RadioListControl extends BaseControl
 
 	createInput: ->
 		return new RadioList
-			id: @id
+			id: @id+'-input'
 			inline: @inline
 			radioName: @name
 

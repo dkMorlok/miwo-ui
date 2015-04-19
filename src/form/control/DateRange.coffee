@@ -28,7 +28,7 @@ class DateRangeControl extends BaseControl
 
 	createInput: ->
 		input = new DateRangeInput
-			id: @id
+			id: @id+'-input'
 			name: @name
 			disabled: @disabled
 			readonly: @readonly

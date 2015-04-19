@@ -4,7 +4,7 @@ WindowManager = require './window/WindowManager'
 
 # forms
 FormRendererFactory = require './form/render/FormRendererFactory'
-HorizontalRenderer = require './form/render/HorizontalRenderer'
+DefaultRenderer = require './form/render/DefaultRenderer'
 InlineRenderer = require './form/render/InlineRenderer'
 
 # behaviors
@@ -54,7 +54,7 @@ class MiwoUiExtension extends Miwo.di.InjectorExtension
 
 		# forms
 		injector.define 'formRendererFactory', FormRendererFactory, (service)=>
-			service.register('horizontal', HorizontalRenderer)
+			service.register('default', DefaultRenderer)
 			service.register('inline', InlineRenderer)
 			return
 

@@ -1,14 +1,19 @@
-class BaseTextInput extends Miwo.Component
+BaseInput = require './BaseInput'
 
-	isInput: true
+
+class BaseTextInput extends BaseInput
+
 	el: 'input'
-	focusEl: true
 	disabled: false
 	readonly: false
 	placeholder: null
 	tabindex: 0
 	inputName: null
 	componentCls: 'form-control'
+
+
+	getInputEl: ->
+		return @el
 
 
 	setValue: (value) ->
@@ -33,14 +38,6 @@ class BaseTextInput extends Miwo.Component
 	setPlaceholder: (@placeholder) ->
 		@el.set("placeholder", @placeholder)
 		return
-
-
-	getInputEl: ->
-		return @el
-
-
-	getInputId: ->
-		return @id
 
 
 	doRender: ->

@@ -11,15 +11,15 @@ class ComboControl extends BaseSelectControl
 	placeholder: ''
 	prompt: false
 
+
 	createInput: ->
 		return new Combo
-			id: @id
+			id: @id+'Input'
 			hideSelected: @hideSelected
 			multiple: @multiple
 			height: @height
 			placeholder: @placeholder
 			prompt: @prompt
-
 
 
 module.exports = ComboControl

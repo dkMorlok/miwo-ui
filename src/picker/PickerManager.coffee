@@ -16,6 +16,7 @@ class PickerManager
 	createColorPicker: (config) ->
 		popover = new Popover
 			target: config.target
+			placement: config.placement
 			closeMode: config.closeMode || 'close'
 			title: miwo.tr('miwo.pickers.selectColor')
 			styles: {maxWidth: 500}
@@ -26,6 +27,7 @@ class PickerManager
 	createDatePicker: (config) ->
 		popover = new Popover
 			target: config.target
+			placement: config.placement
 			closeMode: config.closeMode || 'close'
 			title: ''
 			styles: {width:260}

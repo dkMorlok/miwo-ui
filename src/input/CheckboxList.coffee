@@ -53,17 +53,14 @@ class CheckboxList extends Miwo.Container
 			cls: if @inline then 'checkbox-inline' else null
 
 		checkbox.on 'change', =>
-			if @disabled then return
 			@emit('change', this)
 			return
 
 		checkbox.on 'blur', =>
-			if @disabled then return
 			@emit('blur', this)
 			return
 
 		checkbox.on 'focus', =>
-			if @disabled then return
 			@emit('focus', this)
 			return
 

@@ -8,7 +8,7 @@ exports =
 	# renderer
 	render:
 		FormRendererFactory: require './render/FormRendererFactory'
-		HorizontalRenderer: require './render/HorizontalRenderer'
+		DefaultRenderer: require './render/DefaultRenderer'
 		InlineRenderer: require './render/InlineRenderer'
 
 	# controls
@@ -38,6 +38,7 @@ exports =
 
 # register add method
 BaseContainer = exports.container.BaseContainer
+BaseContainer.registerControl('container', BaseContainer)
 BaseContainer.registerControl('date', exports.control.Date)
 BaseContainer.registerControl('dateRange', exports.control.DateRange)
 BaseContainer.registerControl('text', exports.control.Text)

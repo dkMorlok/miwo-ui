@@ -10,7 +10,7 @@ class SelectControl extends BaseSelectControl
 
 	createInput: () ->
 		return new Select
-			id: @id
+			id: @id+'-input'
 
 
 module.exports = SelectControl

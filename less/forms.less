@@ -25,22 +25,21 @@
 }
 
 .form-horizontal {
-	.radio, .checkbox {
-		padding-top: 0px;
-		label {
-			padding-left: 0px;
-		}
-	}
 	.control-label-required {
 		position: absolute;
 		right: 0px;
 		color: @state-danger-text;
 	}
 	.checkbox-inline, .radio-inline {
-		margin-left: -15px;
+		margin-left: -20px;
 	}
 	.form-actions button {
 		margin-right: @padding-base-horizontal;
+	}
+	&.form-label-left {
+		.control-label {
+			text-align: left;
+		}
 	}
 }
 

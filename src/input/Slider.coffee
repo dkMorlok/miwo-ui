@@ -53,6 +53,7 @@ class SliderInput extends Miwo.Component
 
 		@trackEl.on 'click', (event)=>
 			if @disabled then return
+			@emit('focus', this)
 			@setValueByEvent(event)
 			@selectionTooltip.setText(@formatSelectionTooltip(@getValue()))
 			@emit('change', this, @getValue())
@@ -114,6 +115,7 @@ class SliderInput extends Miwo.Component
 		@activeKnobEl.retrieve('tooltip').setText(@formatKnobTooltip(@getValue(@activeKnobEl.retrieve('index')))).show()
 		miwo.body.on 'mousemove', @bound('onMouseMove')
 		miwo.body.on 'mouseup', @bound('onMouseUp')
+		@emit('focus', this)
 		return
 
 
@@ -140,6 +142,7 @@ class SliderInput extends Miwo.Component
 	onMouseMove: (event) ->
 		@setValueByEvent(event)
 		@activeKnobEl.retrieve('tooltip').setText(@formatKnobTooltip(@getValue(@activeKnobEl.retrieve('index'))))
+		@emit('slide', this, @getValue())
 		return
 
 
@@ -174,8 +177,7 @@ class SliderInput extends Miwo.Component
 			@value[0] = @value[1]
 			@value[1] = tmp
 
-		if @rendered
-			@updateSlider(true)
+		@updateSlider(true)
 		return this
 
 
@@ -224,6 +226,8 @@ class SliderInput extends Miwo.Component
 	setDisabled: (@disabled) ->
 		if !@rendered then return
 		@el.toggleClass('disabled', @disabled)
+		@knob0El.set('tabindex', -@disabled)
+		@knob1El.set('tabindex', -@disabled)
 		return this
 
 

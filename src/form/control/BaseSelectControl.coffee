@@ -1,8 +1,8 @@
-BaseControl = require './BaseControl'
+BaseInputControl = require './BaseInputControl'
 Helpers = require './Helpers'
 
 
-class BaseSelectControl extends BaseControl
+class BaseSelectControl extends BaseInputControl
 
 	items: null
 	store: null
@@ -42,11 +42,9 @@ class BaseSelectControl extends BaseControl
 
 
 	afterRenderControl: () ->
+		@setItems(@getItems())
 		inputEl = @input.getInputEl()
 		inputEl.on 'change', ()=> if !@disabled then @setValue(@input.getValue())
-		inputEl.on 'focus', ()=> if !@disabled then @setFocus()
-		inputEl.on 'blur', ()=> if !@disabled then @validate()
-		@setItems(@getItems())
 		@focusEl = inputEl
 		return
 

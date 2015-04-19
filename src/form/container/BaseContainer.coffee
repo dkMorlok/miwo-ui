@@ -155,6 +155,8 @@ class BaseContainer extends Miwo.Container
 
 
 	setOriginals: (values, erase) ->
+		if !values
+			values = @getValues()
 		for control in @controls
 			name = control.getName()
 			if values.hasOwnProperty(name)

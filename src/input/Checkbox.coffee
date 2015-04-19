@@ -1,6 +1,8 @@
-class Checkbox extends Miwo.Component
+BaseInput = require './BaseInput'
 
-	isInput: true
+
+class Checkbox extends BaseInput
+
 	xtype: 'checkboxinput'
 	baseCls: 'checkbox'
 	label: ''
@@ -27,11 +29,11 @@ class Checkbox extends Miwo.Component
 
 
 	afterRender: ->
-		super
+		super()
 		@inputEl.on 'change', =>
 			if @disabled then return
-			@setChecked(this.getValue())
-			@emit('change', this, this.getValue())
+			@setChecked(@getValue())
+			@emit('change', this, @getValue())
 			@setFocus()
 			return
 
@@ -54,30 +56,32 @@ class Checkbox extends Miwo.Component
 
 		@inputEl.on 'blur', =>
 			if @disabled then return
-			@el.removeClass('focus')
-			@emit('blur', this)
+			@blur()
 			return
 
 		@focusEl = @checkerEl
 		@setChecked(@checked)
-		@setDisabled(@disabled)
+		return
+
+
+	blur: ->
+		super()
+		@el.removeClass('focus')
 		return
 
 
 	setChecked: (@checked) ->
-		if !@rendered then return
-		@el.toggleClass('checked', checked)
-		@inputEl.set('checked', checked)
+		@el.toggleClass('checked', @checked)
+		@inputEl.set('checked', @checked)
 		@updateIconCls()
 		return
 
 
 	isChecked: ->
-		return if @rendered then @inputEl.get('checked') else @checked
+		return @checked
 
 
 	setDisabled: (@disabled) ->
-		if !@rendered then return
 		@el.toggleClass('disabled', @disabled)
 		@inputEl.set('disabled', @disabled)
 		@checkerEl.set('tabindex', -@disabled)
@@ -86,38 +90,26 @@ class Checkbox extends Miwo.Component
 
 
 	updateIconCls: ->
-		@iconEl.removeClass('fa-check-square-o').removeClass('fa-square-o').removeClass('fa-square')
+		@iconEl.removeClass('fa-check-square-o').removeClass('fa-square-o').removeClass('fa-check-square').removeClass('fa-square')
 		if @disabled
-			@iconEl.addClass('fa-square')
-		else if @checked
-			@iconEl.addClass('fa-check-square-o')
+			@iconEl.addClass(if @checked then 'fa-check-square' else 'fa-square')
 		else
-			@iconEl.addClass('fa-square-o')
+			@iconEl.addClass(if @checked then 'fa-check-square-o' else 'fa-square-o')
 		return
 
 
-	setLabel: (@label) ->
-		if !@rendered then return
+	setLabel: (label) ->
 		@textEl.set('text', label)
 		return
 
 
 	setValue: (checked) ->
-		@setChecked(checked)
+		@setChecked(!!checked)
 		return
 
 
 	getValue: ->
 		return @isChecked()
-
-
-	getInputEl: ->
-		return @inputEl
-
-
-	getInputId: ->
-		return @id+'-input'
-
 
 
 module.exports = Checkbox

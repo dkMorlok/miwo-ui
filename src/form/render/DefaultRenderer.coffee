@@ -1,15 +1,12 @@
-class HorizontalRenderer
+class DefaultRenderer extends Miwo.Object
 
-	options: null
-
-
-	constructor: (options = {}) ->
-		@options =
-			baseColSize: options.baseColSize || 8
+	formCls: 'horizontal'
+	baseColSize: 8
 
 
 	renderForm: (form) ->
-		form.el.addClass('form-horizontal')
+		if @formCls
+			form.el.addClass('form-'+@formCls)
 		if form.preventAutoLogin
 			username = new Element('input', {name:'_username', styles:{display:'none'}})
 			username.inject(form.el)
@@ -20,9 +17,9 @@ class HorizontalRenderer
 
 	renderButtons: (buttons, ct) ->
 		ct.addClass('form-actions')
-		if ct.generated
-			ct.addClass("col-sm-offset-#{12-@options.baseColSize}")
-			ct.addClass("col-sm-#{@options.baseColSize}")
+		if ct.generated && @baseColSize
+			ct.addClass("col-sm-offset-#{12-@baseColSize}")
+			ct.addClass("col-sm-#{@baseColSize}")
 		for button in buttons
 			button.render(ct)
 		return
@@ -52,7 +49,8 @@ class HorizontalRenderer
 		labelEl = control.renderLabel(ct)
 		if labelEl
 			labelEl.addClass('control-label')
-			labelEl.addClass('col-sm-'+(12-@options.baseColSize))
+			if @baseColSize
+				labelEl.addClass('col-sm-'+(12-@baseColSize))
 		return
 
 
@@ -60,14 +58,15 @@ class HorizontalRenderer
 		if !control.controlsEl
 			controlsEl = new Element('div')
 			controlsEl.inject(ct)
-			controlsEl.addClass('col-sm-'+@options.baseColSize)
 			controlsEl.addClass('form-controls')
+			if @baseColSize
+				controlsEl.addClass('col-sm-'+@baseColSize)
 			control.controlsEl = controlsEl
 		controlsEl = control.controlsEl
 
 		# label was not rendered
-		if !controlsEl.getPrevious('.control-label')
-			controlsEl.addClass('col-sm-offset-'+(12-@options.baseColSize))
+		if !controlsEl.getPrevious('.control-label') && @baseColSize
+			controlsEl.addClass('col-sm-offset-'+(12-@baseColSize))
 
 		if control.help
 			helpEl = new Element "span",
@@ -97,4 +96,4 @@ class HorizontalRenderer
 		return
 
 
-module.exports = HorizontalRenderer
+module.exports = DefaultRenderer

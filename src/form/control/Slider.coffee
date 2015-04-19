@@ -1,8 +1,8 @@
-BaseControl = require './BaseControl'
+BaseInputControl = require './BaseInputControl'
 Slider = require '../../input/Slider'
 
 
-class SliderControl extends BaseControl
+class SliderControl extends BaseInputControl
 
 	xtype: "slider"
 	min: 0
@@ -22,6 +22,7 @@ class SliderControl extends BaseControl
 
 	createInput: ->
 		input = new Slider
+			id: @id+'Input'
 			mode: @mode
 			inputName: @name
 			step: @step
@@ -32,6 +33,10 @@ class SliderControl extends BaseControl
 
 		input.on 'change', (slider, value)=>
 			@setValue(value)
+			return
+
+		input.on 'slide', (slider, value)=>
+			@emit('inputchange', this, value)
 			return
 
 		return input
