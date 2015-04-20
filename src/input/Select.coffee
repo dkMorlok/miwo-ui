@@ -1,3 +1,6 @@
+BaseInput = require './BaseInput'
+
+
 class OptionGroup extends Miwo.Object
 
 	select: null
@@ -22,12 +25,17 @@ class OptionGroup extends Miwo.Object
 
 
 
-class SelectInput extends Miwo.Component
+class SelectInput extends BaseInput
 
 	xtype: 'selectinput'
-	isInput: true
 	el: 'select',
 	componentCls: 'form-control'
+
+
+	afterRender: ->
+		super()
+		@el.on 'change', ()=> @emit('change', this, @getValue())
+		return
 
 
 	addOption: (value, text) ->
@@ -42,13 +50,13 @@ class SelectInput extends Miwo.Component
 
 	clear: ->
 		@el.empty()
-		return
+		return this
 
 
 	setDisabled: (disabled) ->
 		super(disabled)
 		@el.toggleClass('disabled', disabled)
-		return
+		return this
 
 
 	setValue: (value) ->
@@ -62,10 +70,6 @@ class SelectInput extends Miwo.Component
 
 	getInputEl: ->
 		return @el
-
-
-	getInputId: ->
-		return @id
 
 
 module.exports = SelectInput

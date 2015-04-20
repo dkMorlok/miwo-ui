@@ -13,7 +13,7 @@ class BaseInput extends Miwo.Component
 
 	afterRender: ->
 		super()
-		@focusEl = @getInputEl()
+		@focusEl = @getInputEl() if !@focusEl
 		@setDisabled(@disabled)
 		return
 

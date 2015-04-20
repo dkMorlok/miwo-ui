@@ -1,9 +1,9 @@
 ScreenMask = require '../utils/ScreenMask'
+BaseInput = require './BaseInput'
 
 
-class ComboInput extends Miwo.Component
+class ComboInput extends BaseInput
 
-	isInput: true
 	xtype: 'comboinput'
 	role: 'combobox'
 	hideSelected: false
@@ -63,7 +63,6 @@ class ComboInput extends Miwo.Component
 	doRender: ->
 		@el.addClass('form-control combo combo-empty')
 		@el.setStyle('height', @height) if @height
-		@el.addClass('disabled') if @disabled
 
 		# bind events
 		@el.on 'mousedown', (event) =>
@@ -169,14 +168,6 @@ class ComboInput extends Miwo.Component
 		return
 
 
-	getInputEl: ->
-		return @inputEl
-
-
-	getInputId: ->
-		return @id+'-input'
-
-
 	setValue: (value, silent) ->
 		if value is undefined || value is null
 			value = ''
@@ -200,7 +191,7 @@ class ComboInput extends Miwo.Component
 		if @inputEl.get('value') isnt inputValue
 			@inputEl.set('value', inputValue)
 			@inputEl.emit('change')  if !silent
-			@emit('change', this)  if !silent
+			@emit('change', this, inputValue)  if !silent
 
 		@activeValueIndex = -1
 

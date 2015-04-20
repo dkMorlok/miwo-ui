@@ -31,6 +31,9 @@ class DefaultRenderer extends Miwo.Object
 			control.groupEl.inject(ct)
 			control.groupEl.addClass('form-group')
 
+		if !control.visible
+			control.groupEl.setVisible(false)
+
 		control.el = control.groupEl
 
 		if !control.labelRendered

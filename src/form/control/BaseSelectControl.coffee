@@ -41,11 +41,11 @@ class BaseSelectControl extends BaseInputControl
 		return if @rowBuilder then @rowBuilder(row) else null
 
 
-	afterRenderControl: () ->
+	afterRenderControl: ->
+		super()
 		@setItems(@getItems())
-		inputEl = @input.getInputEl()
-		inputEl.on 'change', ()=> if !@disabled then @setValue(@input.getValue())
-		@focusEl = inputEl
+		@input.on 'change', (input, value)=> @setValue(value)
+		@focusEl = @input.focusEl
 		return
 
 
