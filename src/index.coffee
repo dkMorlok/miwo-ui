@@ -18,6 +18,7 @@ Miwo.tabs = require './tabs'
 Miwo.selection = require './selection'
 Miwo.grid = require './grid'
 Miwo.tip = require './tip'
+Miwo.mask = require './mask'
 Miwo.progress = require './progress'
 Miwo.ui.utils = require './utils'
 

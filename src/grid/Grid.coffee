@@ -3,7 +3,6 @@ GridRenderer = require './renderer/GridRenderer'
 CheckerColumn = require './column/CheckerColumn'
 ActionColumn = require './column/ActionColumn'
 Operations = require './Operations'
-LoadMask = require '../utils/LoadMask'
 Paginator = require '../pagination/Paginator'
 Pane = require '../panel/Pane'
 
@@ -33,7 +32,7 @@ class Grid extends Pane
 	stripe: false
 	nowrap: true
 	rowclickable: false
-	loadMask: false
+	maskOnLoad: false
 	verticalAlign: null # top or middle(by default)
 	store: null
 	renderer: null
@@ -69,8 +68,8 @@ class Grid extends Pane
 
 	afterInit: ->
 		super
-		if @loadMask
-			@setLoadMask(@loadMask)
+		if @maskOnLoad
+			@showMask()
 
 		if @store
 			if Type.isString(@store)
@@ -186,10 +185,16 @@ class Grid extends Pane
 		return
 
 
-	setLoadMask: (config) ->
-		if config is true then config = {}
-		config.target = @el
-		@loadMask = new LoadMask(config)
+	showMask: ->
+		if !@loadMask
+			@loadMask = miwo.mask.create(this)
+		@loadMask.show()
+		return
+
+
+	hideMask: ->
+		if @loadMask
+			@loadMask.hide()
 		return
 
 
@@ -235,7 +240,7 @@ class Grid extends Pane
 
 
 	onStoreBeforeload: ->
-		@loadMask.show()  if @loadMask
+		@loadMask.show()  if @loadMask && @maskOnLoad
 		return
 
 

@@ -23,6 +23,10 @@ RowSelector = require './selection/RowSelector'
 # utils
 Notificator = require './notify/Notificator'
 
+# masks
+LoadingMaskFactory = require './mask/LoadingMaskFactory'
+LoadingMask = require './mask/LoadingMask'
+
 # pickers
 PickerManager = require './picker/PickerManager'
 
@@ -42,6 +46,8 @@ class MiwoUiExtension extends Miwo.di.InjectorExtension
 			selectors:
 				row: RowSelector
 				check: CheckSelector
+			mask:
+				instanceCls: LoadingMask
 		return
 
 
@@ -88,6 +94,13 @@ class MiwoUiExtension extends Miwo.di.InjectorExtension
 		# utils
 		injector.define 'notificator', Notificator
 			.setGlobal()
+
+		# masks
+		injector.define 'mask', LoadingMaskFactory
+			.setGlobal()
+			.setup (service)=>
+				service.instanceCls = @config.mask.instanceCls
+				return
 
 		# pickers
 		injector.define 'pickers', PickerManager
