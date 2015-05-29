@@ -86,7 +86,7 @@ class Scrollable extends Miwo.Object
 		el = @scrollableBody
 		# Stops the entire page from scrolling when mouse is located over the element
 		if e.wheel < 0 and el.scrollTop < el.scrollHeight - el.offsetHeight or e.wheel > 0 and el.scrollTop > 0
-			el.scrollTop = el.scrollTop - e.wheel * 30
+			el.scrollTop = el.scrollTop - e.wheel * 5
 			@actualize()
 		return
 
