@@ -1,6 +1,6 @@
 Validators =
 
-	mailRe: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+	emailRe: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 	urlRe: /^(ftp|http|https)?:\/\/[A-Za-z0-9\.-]{1,}\.[A-Za-z]{2}/
 	intRe: /^\d+$/
 	colorRe: /^\#[a-z0-9A-Z]{6}/
@@ -23,11 +23,11 @@ Validators =
 
 
 	valid: (control) ->
-		return control.rules.validate true
+		return control.rules.validate(true)
 
 
 	minLength: (control, length) ->
-		reutrn control.getStringValue().length >= length
+		return control.getStringValue().length >= length
 
 
 	maxLength: (control, length) ->
@@ -45,7 +45,7 @@ Validators =
 
 
 	email: (control) ->
-		return @mailRe.test(control.getStringValue())
+		return @emailRe.test(control.getStringValue())
 
 
 	url: (control) ->

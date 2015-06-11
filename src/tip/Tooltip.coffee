@@ -10,20 +10,20 @@ class Tooltip extends BaseTip
 
 	setText: (@text) ->
 		if @rendered
-			@contentEl.set('html', text)
+			@contentEl.set('html', @text)
 			@updatePosition()
 		return this
 
 
-	beforeRender: () ->
-		super
+	beforeRender: ->
+		super()
 		@el.addClass("in #{@placement} tooltip-#{@type}")
 		@el.set 'html', '<div class="tooltip-arrow"></div><div miwo-reference="contentEl" class="tooltip-inner"></div>'
 		return
 
 
-	afterRender: () ->
-		super
+	afterRender: ->
+		super()
 		@setText(@text) if @text
 		return
 

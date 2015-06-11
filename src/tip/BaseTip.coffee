@@ -1,11 +1,10 @@
 class BaseTip extends Miwo.Container
 
 	xtype: 'tip'
-	placement: "top"
+	placement: 'top'
 	distance: 0
 	target: null
 	type: 'default'
-	container: null
 	delay: null
 	visible: false
 
@@ -34,10 +33,18 @@ class BaseTip extends Miwo.Container
 		if @visible then return
 		@visible = true
 		@render() if !@rendered
-		if @delay then @el.show.delay(@delay, @el) else @el.show()
+		if @delay
+			@doShow.delay(@delay, this)
+		else
+			@doShow()
+		return this
+
+
+	doShow: ->
+		@el.show()
 		@updatePosition()
 		@emit('show', this)
-		return this
+		return
 
 
 	hide: ->

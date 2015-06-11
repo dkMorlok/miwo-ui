@@ -51,12 +51,41 @@ miwo.ready(function() {
 		placeholder: 'your email',
 		prepend: '@'
 	});
+	form.addNumber('number', {
+		label: 'Number',
+		min: 10,
+		max: 20
+	});
+	form.addText('personalName', {
+		label: 'Your name',
+		required: true,
+		minLength: 3
+	});
 	form.addCheckbox('check', {
 		required: true,
 		label: 'I want to be checked'
 	});
 	form.addSubmit('submit', {
 		label: 'Submit me!'
+	});
+	form.addTextarea('emails', {
+		label: 'Emails',
+		type: 'email',
+		placeholder: 'your emails separated by ;',
+		prepend: '@',
+		rules: [{
+			message: "Emails are not valid. Multiple emails separate by ';'.",
+			operation: function(control) {
+				var emails = control.getStringValue().split(';');
+				for (var i=0; i<emails.length; i++) {
+					var email = emails[i].trim();
+					if (!email || !Miwo.form.Validators.emailRe.test(email)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}]
 	});
 	form.render('form');
 	form.on('success', onFormSuccess);

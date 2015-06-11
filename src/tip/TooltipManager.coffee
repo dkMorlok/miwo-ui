@@ -5,25 +5,25 @@ Tooltip = require './Tooltip'
 class TooltipManager extends BaseTipManager
 
 
-	create: (target, config={}) ->
-		title = config.title or target.get("data-title") or target.get("title")
-		container = config.container or target.get("data-container")
-		placement = config.placement or target.get("data-placement") or @placement
-		distance = config.distance or target.get("data-distance") or @distance
-		delay = config.delay or target.get("data-delay") or @delay
+	create: (target, config = {}) ->
+		config.target = target
 
-		if !title && (selector = target.get('data-title-el')) && (item = target.getElement(selector))
-			title = item.get('html')
+		if !config.text
+			config.text = target.get("data-title") or target.get("title")
 
-		if !title
-			return
+		if !config.placement
+			config.placement = target.get("data-placement") or @placement
 
-		tooltip = new Tooltip
-			target: target
-			text: title
-			placement: placement
-			distance: distance
+		if !config.distance
+			config.distance = target.get("data-distance") or @distance
 
+		if !config.hasOwnProperty('delay')
+			config.delay = target.get("data-delay") or @delay
+
+		if !config.text && (selector = target.get('data-title-el')) && (item = target.getElement(selector))
+			config.text = item.get('html')
+
+		tooltip = new Tooltip(config)
 		return tooltip
 
 

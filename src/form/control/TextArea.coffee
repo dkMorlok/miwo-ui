@@ -19,8 +19,9 @@ class TextAreaControl extends BaseTextControl
 			disabled: @disabled
 			resize: @resize
 			placeholder: @placeholder
-		return input
 
+		@height = null
+		return input
 
 
 module.exports = TextAreaControl

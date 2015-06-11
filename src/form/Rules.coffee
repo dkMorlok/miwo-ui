@@ -87,10 +87,17 @@ class Rules
 
 	@formatMessage: (rule) ->
 		message = rule.message
+
+		# replace macros
 		message = message.replace("%name", rule.control.getName())
 		message = message.replace("%label", rule.control.label)
 		message = message.replace("%value", rule.control.getValue())
-		#message = Miwo.Strings.vsprintf(message, rule.param)
+
+		# replace params
+		params = {param: rule.param}
+		if Type.isArray(rule.param)
+			params['param'+i] = value  for value,i in rule.param
+		message = message.substitute(params)
 		return message
 
 
@@ -153,7 +160,7 @@ class Rules
 	elseCondition: ->
 		rule = new Condition this,
 			operation: @condition.operation
-			isNegative: not @condition.isNegative
+			isNegative: !@condition.isNegative
 			param: @condition.param
 		@rules.push(rule)
 		return rule.subRules
@@ -163,19 +170,17 @@ class Rules
 		return @parent
 
 
-	validate: (onlyCheck) ->
+	validate: ->
+		errors = []
 		for rule in @rules
 			if rule.getControl().isDisabled()
 				continue
 			success = rule.validate()
 			if rule.isCondition and success
-				if !rule.subRules.validate(onlyCheck)
-					return false
-			else if rule.isRule and not success
-				if !onlyCheck
-					return rule.getControl().addError(Rules.formatMessage(rule))
-				return false
-		return true
+				errors.append(rule.subRules.validate())
+			else if rule.isRule and !success
+				errors.push(Rules.formatMessage(rule))
+		return errors
 
 
 module.exports = Rules

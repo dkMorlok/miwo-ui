@@ -8,7 +8,7 @@ class TextControl extends BaseTextControl
 
 
 	initRules:  ->
-		super
+		super()
 		switch @type
 			when 'email' then @rules.addRule('email')
 			when 'url' then @rules.addRule('url')

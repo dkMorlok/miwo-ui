@@ -38,4 +38,10 @@ class CheckboxControl extends BaseInputControl
 		return
 
 
+	afterRenderControl: ->
+		super()
+		@errorTargetEl = @input.labelEl
+		return
+
+
 module.exports = CheckboxControl

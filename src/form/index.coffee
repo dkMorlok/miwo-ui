@@ -1,4 +1,8 @@
 exports =
+	# common
+	Rules: require './Rules'
+	Validators: require './Validators'
+
 	# containers
 	container:
 		BaseContainer: require './container/BaseContainer'

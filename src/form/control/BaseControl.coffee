@@ -15,6 +15,7 @@ class BaseControl extends Miwo.Component
 	tip: null
 	help: null
 	desc: null
+	controlCls: null
 	inputTag: "input"
 	inputName: null
 	inputCls: null
@@ -41,7 +42,7 @@ class BaseControl extends Miwo.Component
 	rules: null
 	form: null
 	labelEl: null
-	labeltextEl: null
+	labelTextEl: null
 	input: null
 	controlsEl: null
 	descEl: null
@@ -51,11 +52,8 @@ class BaseControl extends Miwo.Component
 	suspendCheckChange: true
 	originalValue: undefined
 	lastValue: undefined
-	errors: undefined
 	wasDirty: false
 	wasValid: true
-	notifyErrors: false
-	preventUpdateErrors: false
 	submitValue: true
 
 
@@ -85,15 +83,19 @@ class BaseControl extends Miwo.Component
 		return
 
 
-	# Returns the current data value of the field. The type of value returned
-	# is particular to the type of the particular field
-	# @return {Object} value The field value
+	###
+		Returns the current data value of the field. The type of value returned
+		is particular to the type of the particular field
+		@return {Object} value The field value
+	###
 	getValue: ->
 		return @value
 
 
-	# Returns the current data value of the fields input.
-	# @return {Object} The fields input value
+	###
+		Returns the current data value of the fields input.
+		@return {Object} The fields input value
+	###
 	getRawValue: ->
 		return (if @input then @input.getValue() else undefined)
 
@@ -103,8 +105,10 @@ class BaseControl extends Miwo.Component
 		return (if val isnt null and val isnt `undefined` then val.toString() else "")
 
 
-	# Sets a data value into the field and runs the change detection and validation.
-	# @param {Object} value The value to set
+	###
+		Sets a data value into the field and runs the change detection and validation.
+		@param {Object} value The value to set
+	###
 	setValue: (value) ->
 		@value = value
 		@checkChange()
@@ -142,37 +146,41 @@ class BaseControl extends Miwo.Component
 		return @getStringValue() isnt ""
 
 
-	# Returns whether two field {@link #getValue values} are logically equal. Field implementations may override this
-	# to provide custom comparison logic appropriate for the particular field's data type.
-	# @param {Object} value1 The first value to compare
-	# @param {Object} value2 The second value to compare
-	# @return {Boolean} True if the values are equal, false if inequal.
+	###
+		Returns whether two field {@link #getValue values} are logically equal. Field implementations may override this
+		to provide custom comparison logic appropriate for the particular field's data type.
+		@param {Object} value1 The first value to compare
+		@param {Object} value2 The second value to compare
+		@return {Boolean} True if the values are equal, false if not equal.
+	###
 	isEqual: (value1, value2) ->
 		return value1 is value2
 
 
-	###*
-	  Returns the parameter(s) that would be included in a standard form submit for this field. Typically this will be
-	  an object with a single name-value pair, the name being this field's {@link #getName name} and the value being
-	  its current stringified value. More advanced field implementations may return more than one name-value pair.
-
-	  Note that the values returned from this method are not guaranteed to have been successfully {@link #validate
-	  validated}.
-
-	  @param {Boolean} submitable Only submitable values
-	  @return {Object} A mapping of submit parameter names to values; each value should be a string, or an array of
-	  strings if that particular name has multiple values. It can also return null if there are no parameters to be
-	  submitted.
 	###
-	getData: (submitable) ->
+		Returns the parameter(s) that would be included in a standard form submit for this field. Typically this will be
+		an object with a single name-value pair, the name being this field's {@link #getName name} and the value being
+		its current stringified value. More advanced field implementations may return more than one name-value pair.
+
+		Note that the values returned from this method are not guaranteed to have been successfully {@link #validate
+		validated}.
+
+		@param {Boolean} submittable Only submittable values
+		@return {Object} A mapping of submit parameter names to values; each value should be a string, or an array of
+		strings if that particular name has multiple values. It can also return null if there are no parameters to be
+		submitted.
+	###
+	getData: (submittable) ->
 		data = null
-		if !@disabled and (!submitable or !@omitted) and !@isFileUpload
+		if !@disabled and (!submittable or !@omitted) and !@isFileUpload
 			data = {}
 			data[@getName()] = "" + @getValue()
 		return data
 
 
-	# Resets the current field value to the originally loaded value and clears any validation messages.
+	###
+		Resets the current field value to the originally loaded value and clears any validation messages.
+	###
 	reset: ->
 		@beforeReset()
 		@setValue(@originalValue)
@@ -181,28 +189,33 @@ class BaseControl extends Miwo.Component
 
 
 	beforeReset: ->
+		return
 
 
 	clearInvalid: ->
 		delete @wasValid
 		@notifyErrors = false
 		@wasInputFocused = false
-		@cleanErrors()
+		@clearErrors()
 		return this
 
 
-	# Resets the field's {@link #originalValue} property so it matches the current {@link #getValue value}.
+	###
+		Resets the field's {@link #originalValue} property so it matches the current {@link #getValue value}.
+	###
 	resetOriginalValue: ->
 		@originalValue = @getValue()
 		@checkDirty()
 		return this
 
 
-	# Checks whether the value of the field has changed since the last time it was checked.
-	# If the value has changed, it:
-	# 1. Fires the {@link #change change event},
-	# 2. Performs validation if the {@link #validateOnChange} config is enabled, firing the validitychange event if the validity has changed, and
-	# 3. Checks the {@link #isDirty dirty state} of the field and fires the dirtychange event if it has changed.
+	###
+		Checks whether the value of the field has changed since the last time it was checked.
+		If the value has changed, it:
+		1. Fires the {@link #change change event},
+		2. Performs validation if the {@link #validateOnChange} config is enabled, firing the validitychange event if the validity has changed, and
+		3. Checks the {@link #isDirty dirty state} of the field and fires the dirtychange event if it has changed.
+	###
 	checkChange: ->
 		if @suspendCheckChange
 			return
@@ -215,23 +228,29 @@ class BaseControl extends Miwo.Component
 		return
 
 
-	# @private
-	# Called when the field's value changes. Performs validation if the {@link #validateOnChange}
-	# config is enabled, and invokes the dirty check.
+	###
+		@private
+		Called when the field's value changes. Performs validation if the {@link #validateOnChange}
+		config is enabled, and invokes the dirty check.
+	###
 	onChange: (newVal, oldVal) ->
 		@validate()  if @validateOnChange
 		@checkDirty()
 		return
 
 
-	# Returns true if the value of this Field has been changed from its {@link #originalValue}.
-	# Will always return false if the field is disabled.
+	###
+		Returns true if the value of this Field has been changed from its {@link #originalValue}.
+		Will always return false if the field is disabled.
+	###
 	isDirty: ->
 		return !@disabled and !@isEqual(@getValue(), @originalValue)
 
 
-	# Checks the isDirty state of the field and if it has changed since the last time it was checked,
-	# fires the dirtychange event.
+	###
+		Checks the isDirty state of the field and if it has changed since the last time it was checked,
+		fires the dirtychange event.
+	###
 	checkDirty: ->
 		isDirty = @isDirty()
 		if isDirty isnt @wasDirty
@@ -241,16 +260,26 @@ class BaseControl extends Miwo.Component
 		return
 
 
-	# @private Called when the field's dirty state changes.
-	# @param {Boolean} isDirty
+	###
+		@private
+		Called when the field's dirty state changes.
+		@param {Boolean} isDirty
+	###
 	onDirtyChange: (isDirty) ->
+		return
 
 
 	getRules: ->
 		return @rules
 
 
-	# Returns last errors
+	###
+		Returns first error
+	###
+	getError: ->
+		return @errors[0]
+
+
 	getErrors: ->
 		return @errors
 
@@ -259,31 +288,23 @@ class BaseControl extends Miwo.Component
 		return @errors.length > 0
 
 
-	addError: (error) ->
-		@errors.include(error)
-		@updateErrors()
-		return
-
-
 	addErrors: (errors) ->
-		for error in errors
-			@errors.include(error)
-		@updateErrors()
+		@errors.append(errors)
 		return
 
 
-	cleanErrors: ->
+	setErrors: (errors) ->
+		@clearErrors()
+		@addErrors(errors)
+		return
+
+
+	clearErrors: ->
 		@errors.empty()
-		@updateErrors()
 		return
 
 
-	updateErrors: ->
-		if @preventUpdateErrors
-			return
-
-		@emit("errorsupdate", this)
-
+	updateErrors: (silentErrors) ->
 		if @input
 			@input.el.removeClass('has-error')
 			@input.el.addClass('has-error') if @hasErrors()
@@ -291,53 +312,41 @@ class BaseControl extends Miwo.Component
 		if @el.hasClass('form-group')
 			@el.removeClass('has-error')
 			@el.addClass('has-error') if @hasErrors()
-			###
-			if @hasErrors() and @notifyErrors
-				if !@errorTip
-					@errorTip = new Element('div', {cls:'help-block has-error'})
-					@errorTip.inject(@inputEl.getParent('.form-controls'))
-				@errorTip.set('text', @errors[0])
-			else
-				if @errorTip
-					@errorTip.destroy()
-					@errorTip = null
-    		###
+
+		if @hasErrors() && !silentErrors
+			@errorTip = miwo.tooltip.create(@errorTargetEl || @input.el, {type:'danger', delay:0, renderTo:@el})  if !@errorTip
+			@errorTip.setText(@getError())
+			@errorTip.show()
+		else if @errorTip
+			@errorTip.hide()
+
+		@emit("errors:update", this)
 		return
 
 
 	isValid: (onlyCheck) ->
 		if @disabled
 			return true
-		if @wasValid is null or !onlyCheck
-			@cleanErrors()
-			@doValidate()
+		if @wasValid is null || !onlyCheck
+			@setErrors(@getRules().validate()) # collect all errors
 		return !@hasErrors()
 
 
-	# Provide validation. By default validation is providet by Rules, but method can by
-	# changed and implemented custom validation.
-	doValidate: ->
-		@preventUpdateErrors = true
-		@getRules().validate() # rules provide validation
-		@preventUpdateErrors = false
-		@updateErrors()
-		return
-
-
-	###*
-	  Returns whether or not the field value is currently valid by {@link #getErrors validating} the field's current
-	  value, and fires the {@link #validitychange} event if the field's validity has changed since the last validation.
-	  Note**: {@link #disabled} fields are always treated as valid.
-
-	  Custom implementations of this method are allowed to have side-effects such as triggering error message display.
-	  To validate without side-effects, use {@link #isValid}.
-
-	  @param {Boolean} notifyErrors Notifikovat uzivatela o chybach
-	  @return {Boolean} True if the value is valid, else false
 	###
-	validate: (notifyErrors) ->
-		@notifyErrors = notifyErrors  if notifyErrors
-		isValid = @isValid()
+		Returns whether or not the field value is currently valid by {@link #getErrors validating} the field's current
+		value, and fires the {@link #validitychange} event if the field's validity has changed since the last validation.
+		Note**: {@link #disabled} fields are always treated as valid.
+
+		Custom implementations of this method are allowed to have side-effects such as triggering error message display.
+		To validate without side-effects, use {@link #isValid}.
+
+		@param {Boolean} [onlyCheck] Only check valid state, don't validate control
+		@param {Boolean} [silentErrors] True if you don't want show error tip
+		@return {Boolean} True if the value is valid, else false
+	###
+	validate: (onlyCheck, silentErrors) ->
+		isValid = @isValid(onlyCheck)
+		@updateErrors(silentErrors)
 		if isValid isnt @wasValid
 			@wasValid = isValid
 			@emit("validitychange", this, isValid)
@@ -359,10 +368,9 @@ class BaseControl extends Miwo.Component
 		return @form
 
 
-	setLabel: (label) ->
-		@label = label
-		@labeltextEl.set('text', label) if @labeltextEl
-		return
+	setLabel: (@label) ->
+		@labelTextEl.set('text', @label) if @labelTextEl
+		return this
 
 
 	getLabel: ->
@@ -378,16 +386,15 @@ class BaseControl extends Miwo.Component
 	getInput: ->
 		if !@input
 			@input = @createInput()
-			if !@input
-				throw new Error("Input was not created in createInput() in class #{this}")
+			if !@input then throw new Error("Input was not created in createInput() in class #{this}")
 		return @input
 
 
 	addButton: (name, config) ->
 		button = new Button(config)
-		button.getControl = ()=> return this
+		button.getControl = => return this
 		button.render(@buttonsCt)  if @buttonsCt
-		button.on 'click', (btn, event)=>
+		button.on 'click', (btn, event) =>
 			@emit('buttonclick', this, btn, event)
 			return
 		@buttons.set(name, button)
@@ -407,7 +414,7 @@ class BaseControl extends Miwo.Component
 
 
 	createInput: ->
-		# must implement in descandent
+		# must implement in child
 		return
 
 
@@ -420,8 +427,8 @@ class BaseControl extends Miwo.Component
 		labelEl = @getLabelEl()
 		labelEl.inject(ct)
 
-		@labeltextEl = new Element('span', {cls:'control-label-text', html:@getLabel()})
-		@labeltextEl.inject(labelEl)
+		@labelTextEl = new Element('span', {cls:'control-label-text', html:@getLabel()})
+		@labelTextEl.inject(labelEl)
 
 		if @isRequired()
 			requiredEl = new Element('span', {cls:'control-label-required', html: '*', 'data-toggle':'tooltip', 'data-title':'Required field'})
@@ -474,7 +481,7 @@ class BaseControl extends Miwo.Component
 
 
 	afterRender: ->
-		super
+		super()
 		@afterRenderLabel()
 		@afterRenderControl()
 		@initializeControl()
@@ -499,7 +506,7 @@ class BaseControl extends Miwo.Component
 
 	doDestroy: ->
 		@input.destroy() if @input
-		super
+		super()
 		return
 
 

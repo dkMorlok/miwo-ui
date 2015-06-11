@@ -1,12 +1,31 @@
 /* Tooltips */
+
 .tooltip {
 	display: none;
 	z-index: 100000;
 	margin: 0px !important;
 	&-inner {
 		max-width: 250px;
+		border: 1px solid transparent;
+	}
+	&-info {
+		.tooltip-border(@alert-info-border);
+		.tooltip-variant(@alert-info-bg; @alert-info-border; @alert-info-text);
+	}
+	&-danger {
+		.tooltip-border(@alert-danger-border);
+		.tooltip-variant(@alert-danger-bg; @alert-danger-border; @alert-danger-text);
+	}
+	&-warning {
+		.tooltip-border(@alert-warning-border);
+		.tooltip-variant(@alert-warning-bg; @alert-warning-border; @alert-warning-text);
+	}
+	&-success {
+		.tooltip-border(@alert-success-border);
+		.tooltip-variant(@alert-success-bg; @alert-success-border; @alert-success-text);
 	}
 }
+
 .popover {
 	.btn {
 		margin-left: 5px;
