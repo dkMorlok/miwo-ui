@@ -185,8 +185,8 @@ class ComboInput extends BaseInput
 			content = @getItemText(value[0])
 			inputValue = value[0]
 
-		@el.toggleClass('combo-empty', !inputValue)
-		@textEl.set('html', if inputValue then content else @placeholder)
+		@el.toggleClass('combo-empty', inputValue is '')
+		@textEl.set('html', if inputValue isnt '' then content else @placeholder)
 
 		if @inputEl.get('value') isnt inputValue
 			@inputEl.set('value', inputValue)

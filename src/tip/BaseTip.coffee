@@ -72,7 +72,8 @@ class BaseTip extends Miwo.Container
 
 
 	updatePosition: ->
-		pos = @target.getPosition()
+		pos = @target.getPosition(@target.getParent())
+		window.tipTarget = @target
 		sizeTarget = @target.getSize()
 		size = @el.getSize()
 		distance = @distance

@@ -32,8 +32,7 @@ class Checkbox extends BaseInput
 		super()
 		@inputEl.on 'change', =>
 			if @disabled then return
-			@setChecked(@getValue())
-			@emit('change', this, @getValue())
+			@setChecked(@isChecked())
 			@setFocus()
 			return
 
@@ -51,7 +50,7 @@ class Checkbox extends BaseInput
 			if @disabled then return
 			if e.key is 'space' or e.key is 'enter'
 				e.stop()
-				@setChecked(!@checked)
+				@toggle()
 			return
 
 		@inputEl.on 'blur', =>
@@ -60,7 +59,7 @@ class Checkbox extends BaseInput
 			return
 
 		@focusEl = @checkerEl
-		@setChecked(@checked)
+		@setChecked(@checked, true)
 		return
 
 
@@ -70,15 +69,22 @@ class Checkbox extends BaseInput
 		return
 
 
-	setChecked: (@checked) ->
+	setChecked: (@checked, silent) ->
 		@el.toggleClass('checked', @checked)
 		@inputEl.set('checked', @checked)
 		@updateIconCls()
+		@emit('change', this, @checked) if !silent
 		return
 
 
 	isChecked: ->
-		return @checked
+		return @inputEl.get('checked')
+
+
+	toggle: (silent) ->
+		@setChecked(!@isChecked())
+		@emit('change', this, @isChecked()) if !silent
+		return
 
 
 	setDisabled: (@disabled) ->
@@ -103,8 +109,8 @@ class Checkbox extends BaseInput
 		return
 
 
-	setValue: (checked) ->
-		@setChecked(!!checked)
+	setValue: (checked, silent) ->
+		@setChecked(!!checked, silent)
 		return
 
 

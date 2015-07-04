@@ -18,6 +18,7 @@ class SelectionModel extends Miwo.Object
 	constructor: (config) ->
 		super(config)
 		@selected = []
+		return
 
 
 	setStore: (@store) ->

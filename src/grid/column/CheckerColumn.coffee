@@ -57,7 +57,7 @@ class CheckerColumn extends Column
 
 
 	setCheckedRow: (record, checked) ->
-		@getRowChecker(record).setChecked(checked)
+		@getRowChecker(record).setChecked(checked, true)
 		return
 
 
@@ -67,7 +67,7 @@ class CheckerColumn extends Column
 
 
 	setCheckedHeader: (checked) ->
-		@getHeadChecker().setChecked(checked)
+		@getHeadChecker().setChecked(checked, true)
 		return
 
 

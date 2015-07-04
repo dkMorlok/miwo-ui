@@ -13,15 +13,9 @@ class BaseSelectControl extends BaseInputControl
 	input: null
 
 
-	setValue: (value) ->
-		super(value)
-		@setSelected(value)
-		return
-
-
-	setSelected: (value) ->
-		if value or @prompt
-			@input.setValue(value) if @input
+	setValue: (value, onlyControl) ->
+		if (value isnt null && value isnt undefined && value isnt "") or @prompt
+			super(value, onlyControl)
 			@emit('selected', this, value)
 		return
 
@@ -32,7 +26,7 @@ class BaseSelectControl extends BaseInputControl
 
 	setItems: (items) ->
 		Helpers.setSelectItems(this, items)
-		if !@prompt and @value isnt null
+		if !@prompt and @value isnt null and @value isnt @input.getValue()
 			@input.setValue(@getValue())
 		return
 
@@ -44,7 +38,7 @@ class BaseSelectControl extends BaseInputControl
 	afterRenderControl: ->
 		super()
 		@setItems(@getItems())
-		@input.on 'change', (input, value)=> @setValue(value)
+		@input.on 'change', (input, value)=> @setValue(value, true)
 		@focusEl = @input.focusEl
 		return
 

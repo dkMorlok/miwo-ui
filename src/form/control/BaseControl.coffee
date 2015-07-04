@@ -197,6 +197,7 @@ class BaseControl extends Miwo.Component
 		@notifyErrors = false
 		@wasInputFocused = false
 		@clearErrors()
+		@updateErrors()
 		return this
 
 
@@ -290,18 +291,18 @@ class BaseControl extends Miwo.Component
 
 	addErrors: (errors) ->
 		@errors.append(errors)
-		return
+		return this
 
 
 	setErrors: (errors) ->
 		@clearErrors()
 		@addErrors(errors)
-		return
+		return this
 
 
 	clearErrors: ->
 		@errors.empty()
-		return
+		return this
 
 
 	updateErrors: (silentErrors) ->
@@ -314,14 +315,15 @@ class BaseControl extends Miwo.Component
 			@el.addClass('has-error') if @hasErrors()
 
 		if @hasErrors() && !silentErrors
-			@errorTip = miwo.tooltip.create(@errorTargetEl || @input.el, {type:'danger', delay:0, renderTo:@el})  if !@errorTip
+			renderTo = @el.getElement('.form-controls') || @el
+			@errorTip = miwo.tooltip.create(@errorTargetEl || @input.el, {type:'danger', delay:0, renderTo:renderTo})  if !@errorTip
 			@errorTip.setText(@getError())
 			@errorTip.show()
 		else if @errorTip
 			@errorTip.hide()
 
 		@emit("errors:update", this)
-		return
+		return this
 
 
 	isValid: (onlyCheck) ->

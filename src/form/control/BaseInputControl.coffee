@@ -6,7 +6,7 @@ class BaseInputControl extends BaseControl
 
 	setValue: (value, onlyControl) ->
 		super(value)
-		@input.setValue(value)  if @input && !onlyControl
+		@input.setValue(value, true)  if @input && !onlyControl
 		return this
 
 
